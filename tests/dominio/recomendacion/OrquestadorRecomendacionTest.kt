@@ -83,7 +83,8 @@ class OrquestadorRecomendacionTest {
         val respuesta = orquestador(IaFalsa { listOf(inseguro, 123_456) }).recomendar(sesion, "algo picante")
 
         assertEquals("fallback", respuesta.motor)
-        assertEquals(listOf(seguro, otroSeguro), respuesta.recomendaciones.map { it.productoId })
+        // Solo el plato seguro que coincide con «picante»; el otro seguro no tiene relación con la consulta.
+        assertEquals(listOf(seguro), respuesta.recomendaciones.map { it.productoId })
     }
 
     @Test

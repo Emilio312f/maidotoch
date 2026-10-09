@@ -43,6 +43,17 @@ class RankingPorReglasTest {
     }
 
     @Test
+    fun `si algun plato coincide no se rellena con platos sin relacion`() {
+        val ceviche = candidato(1, nombre = "Ceviche ficticio")
+        val postre = candidato(2, nombre = "Postre ficticio")
+        val sinPreferencias = perfil.copy(preferencias = emptyMap())
+
+        assertEquals(listOf(ceviche), RankingPorReglas.seleccionar(listOf(postre, ceviche), sinPreferencias, "un ceviche"))
+        // Sin ninguna coincidencia se ofrecen todos los candidatos seguros, en orden estable.
+        assertEquals(listOf(ceviche, postre), RankingPorReglas.seleccionar(listOf(postre, ceviche), sinPreferencias, "algo rico"))
+    }
+
+    @Test
     fun `el validador conserva solo ids enviados y sin duplicados`() {
         assertEquals(listOf(3L, 1L), ValidadorRespuestaIA.filtrar(listOf(3, 99, 1, 3, -5), setOf(1, 2, 3)))
     }

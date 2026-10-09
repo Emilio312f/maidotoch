@@ -165,7 +165,7 @@ class OrquestadorRecomendacion(
                 log.warn("Falla del proveedor de IA ({}); se usa el ranking por reglas", e.javaClass.simpleName)
             }
         }
-        return RankingPorReglas.ordenar(preparacion.candidatos, preparacion.contexto, consulta) to Motor.FALLBACK
+        return RankingPorReglas.seleccionar(preparacion.candidatos, preparacion.contexto, consulta) to Motor.FALLBACK
     }
 
     private fun persistir(

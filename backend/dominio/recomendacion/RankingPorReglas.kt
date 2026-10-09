@@ -15,6 +15,13 @@ object RankingPorReglas {
                 .thenBy { it.productoId },
         )
 
+    /** Como [ordenar], pero si algún plato coincide con preferencias o consulta, descarta los que no coinciden. */
+    fun seleccionar(candidatos: List<CandidatoRecomendable>, perfil: ContextoPerfil, consulta: String): List<CandidatoRecomendable> {
+        val ordenados = ordenar(candidatos, perfil, consulta)
+        val conCoincidencia = ordenados.filter { puntaje(it, perfil, consulta) > 0 }
+        return conCoincidencia.ifEmpty { ordenados }
+    }
+
     fun puntaje(candidato: CandidatoRecomendable, perfil: ContextoPerfil, consulta: String): Int =
         PESO_PREFERENCIA * candidato.preferencias.keys.count { it in perfil.preferencias } +
             Texto.coincidencias(consulta, candidato).size
