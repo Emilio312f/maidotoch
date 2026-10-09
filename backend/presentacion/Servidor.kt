@@ -79,7 +79,7 @@ fun Application.moduloMaidoTouch(app: Aplicacion, programarTareas: Boolean = tru
     routing {
         route("/api") {
             get("/salud") {
-                call.respond(Salud("ok", app.ordenador != null, app.ordenador?.estaAbierto() ?: false))
+                call.respond(Salud("ok", app.configuracion.version, app.ordenador != null, app.ordenador?.estaAbierto() ?: false))
             }
             rutasComensal(app)
             route("/backoffice") { rutasBackoffice(app) }

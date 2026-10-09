@@ -133,7 +133,10 @@ private fun migrar(configuracion: Configuracion) {
 
 private fun servir(configuracion: Configuracion) {
     migrar(configuracion)
+    // También tras restaurar un respaldo, que se guarda en modo de diario clásico.
+    ArchivoSqlite(configuracion.rutaBaseDatos).activarWal()
     val app = Aplicacion(configuracion, ArchivoSqlite(configuracion.rutaBaseDatos))
+    println("MaidoTouch ${configuracion.version} en el puerto ${configuracion.puerto}")
     if (app.ordenador == null) println("ANTHROPIC_API_KEY no definida: el asistente usará solo el ranking por reglas.")
     // HTTP local: en staging y producción el TLS lo termina el proxy inverso del servidor (ver README).
     embeddedServer(CIO, port = configuracion.puerto, host = "0.0.0.0") { moduloMaidoTouch(app) }.start(wait = true)

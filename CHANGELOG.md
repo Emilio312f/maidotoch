@@ -23,4 +23,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); v
   de `recomendaciones.motor`.
 - Importador del catálogo y catálogo FICTICIO para desarrollo y pruebas; comandos de operación.
 - Web-app responsive del comensal y back-office (React + Vite).
-- 88 pruebas de backend (casos críticos de alergias y de IA) y pruebas de textos es/en.
+- Administración de cuentas del personal desde el back-office.
+- Alerta para sala de comandas sin recepción tras 2 minutos (respaldo manual, RNF03).
+- Mediciones de línea base y piloto, reporte diario y verificación de Go/No-Go (API, back-office y consola).
+- Hoja imprimible con el QR de respaldo de cada puesto.
+- `/api/salud` informa la versión desplegada.
+- Integración continua y despliegue en GitHub Actions; scripts de empaquetado, despliegue con
+  reversión automática, reversión manual, respaldos, servicio systemd y Caddy con HTTPS.
+- Script de medición de latencia P95; manual de operación; matriz de QA; plantillas de solicitud de
+  cambio, defecto y pull request.
+- 94 pruebas de backend (casos críticos de alergias y de IA) y pruebas de textos es/en.

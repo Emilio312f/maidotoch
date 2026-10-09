@@ -53,7 +53,13 @@ maidotouch migrar                          # respalda el archivo SQLite y aplica
 maidotouch crear-personal cocina-01 cocina # roles: administrador, cocina, barra, sala
 maidotouch cambiar-clave cocina-01
 maidotouch importar-catalogo catalogo.json cocina-01
+maidotouch verificar                       # criterios de Go/No-Go; sale con código 1 si hay FALLA
+maidotouch reporte-diario [AAAA-MM-DD]     # monitoreo diario del piloto
 ```
+
+El uso diario del sistema por sala, cocina, barra y administración está en
+[docs/manual-operacion.md](docs/manual-operacion.md), y la verificación de cada requisito en
+[docs/matriz-qa.md](docs/matriz-qa.md).
 
 Las claves se leen de `MAIDOTOUCH_CLAVE` o se piden por consola. Usa identificadores de usuario
 (`cocina-01`), no nombres de personas.
@@ -71,28 +77,28 @@ cada restricción con su evidencia. El importador:
 Después, cocina revisa y valida cada producto en *Back-office → Validación de carta*, y lo activa en
 *Disponibilidad*. Un producto sin validar no aparece en la carta, no se recomienda y no se puede pedir.
 
-## Despliegue
+## Integración continua y despliegue
 
-Un solo servidor (monolito modular). El backend sirve la API y la web-app compilada:
+- [.github/workflows/ci.yml](.github/workflows/ci.yml): pruebas del backend y del frontend en cada
+  pull request; falla si alguna prueba se omite. En cada push arma el paquete desplegable.
+- [.github/workflows/desplegar.yml](.github/workflows/desplegar.yml): `develop` → staging
+  automático; etiqueta `vX.Y.Z` → producción, con aprobación en el entorno `produccion`. Necesita los
+  secretos `SSH_HOST`, `SSH_USUARIO` y `SSH_CLAVE` en cada entorno de GitHub.
+- Ramas `main` y `develop` protegidas en GitHub (Settings → Branches): pull request obligatorio,
+  CI en verde y una revisión.
 
-```bash
-cd frontend && npm ci && npm run build && cd ..
-./gradlew installDist
-# Variables de .env.example en el entorno del servicio; luego:
-build/install/maidotouch/bin/maidotouch servir
-```
+Un solo servidor (monolito modular) con [ops/](ops/):
 
-El backend escucha HTTP en `MAIDOTOUCH_PUERTO`. HTTPS lo termina un proxy inverso en el mismo
-servidor, por ejemplo Caddy, que obtiene el certificado automáticamente:
+| Archivo | Uso |
+|---|---|
+| `preparar-servidor.sh` | Instalación única: Java, SQLite, Caddy con HTTPS automático, systemd y respaldo diario |
+| `desplegar.sh` | Rechaza el horario de servicio, respalda la base, instala, verifica la versión y revierte solo si falla |
+| `revertir.sh` | Vuelve a la versión anterior; `--restaurar-base` restaura además el último respaldo |
+| `respaldar.sh` | Respaldo consistente de SQLite en caliente (30 días) |
+| `maidotouch.service`, `Caddyfile` | Servicio con reinicio automático y proxy HTTPS |
 
-```
-maidotouch.example {
-    reverse_proxy localhost:8080
-}
-```
-
-Antes de cada despliegue: respaldar el archivo SQLite y conservar la versión anterior etiquetada.
-Desplegar solo fuera del horario de servicio (Plan §7.2).
+`scripts/empaquetar.sh` arma el paquete y `scripts/medir_latencia.py` mide el P95 contra el
+presupuesto del diseño.
 
 ## Estructura
 

@@ -71,7 +71,7 @@ data class Verificacion(val chequeos: List<aplicacion.Chequeo>, val manuales: Li
 data class ErrorRespuesta(val error: String, val mensaje: String, val detalle: List<Long> = emptyList())
 
 @Serializable
-data class Salud(val estado: String, val ia: Boolean, val circuitoIaAbierto: Boolean)
+data class Salud(val estado: String, val version: String, val ia: Boolean, val circuitoIaAbierto: Boolean)
 
 @Serializable
 data class Ok(val ok: Boolean = true)

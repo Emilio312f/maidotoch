@@ -1,0 +1,39 @@
+name: Solicitud de cambio
+description: Cambio sobre la versión en producción (Plan §8)
+labels: ["solicitud de cambio"]
+body:
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de cambio
+      options:
+        - Menor (texto, foto, estilo; sin impacto funcional) — autoriza el Director de Proyecto
+        - Normal (funcionalidad o regla de negocio/ranking) — Director; Sponsor si afecta alcance, costo o plazo
+        - Datos críticos (receta, ingrediente o alérgeno) — Responsable de Datos con cocina y revisión de Calidad
+        - Emergencia (impide pedir o hay riesgo de recomendación insegura) — Director, se documenta en 24 h
+    validations:
+      required: true
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción y motivo
+    validations:
+      required: true
+  - type: dropdown
+    id: urgencia
+    attributes:
+      label: Urgencia
+      options: [Baja, Media, Alta, Inmediata]
+    validations:
+      required: true
+  - type: textarea
+    id: impacto
+    attributes:
+      label: Análisis de impacto (lo completan Analista-Diseñador y Programador-Tester)
+      description: Requisitos, base de datos, costo y cronograma afectados.
+  - type: checkboxes
+    id: alergenos
+    attributes:
+      label: Seguridad alimentaria
+      options:
+        - label: Si es un dato de alérgeno mal registrado, el plato ya se desactivó en el back-office antes de corregirlo (Plan §8.3)

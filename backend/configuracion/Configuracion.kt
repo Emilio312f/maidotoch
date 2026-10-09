@@ -22,6 +22,8 @@ data class Configuracion(
     /** Una sesión de comensal abierta más de estas horas se cierra y su perfil se descarta (RNF02). */
     val horasSesionComensal: Long = 6,
     val horasSesionPersonal: Long = 12,
+    /** Versión desplegada (archivo VERSION del paquete); la usa el despliegue para verificar el arranque. */
+    val version: String = "desarrollo",
 ) {
     companion object {
         fun desdeEntorno(entorno: Map<String, String> = System.getenv()): Configuracion {
@@ -40,6 +42,7 @@ data class Configuracion(
                 recomendacionesMaximas = texto("MAIDOTOUCH_RECOMENDACIONES_MAX")?.toInt() ?: base.recomendacionesMaximas,
                 horasSesionComensal = texto("MAIDOTOUCH_SESION_HORAS")?.toLong() ?: base.horasSesionComensal,
                 horasSesionPersonal = texto("MAIDOTOUCH_PERSONAL_SESION_HORAS")?.toLong() ?: base.horasSesionPersonal,
+                version = java.io.File("VERSION").takeIf { it.isFile }?.readText()?.trim()?.ifEmpty { null } ?: base.version,
             )
         }
     }
