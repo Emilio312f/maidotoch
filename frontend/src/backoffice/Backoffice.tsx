@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ErrorApi, apiBackoffice, login, type Personal } from "../api";
 import { Comandas, Disponibilidad, Llamados, Metricas, Puestos, Validacion } from "./Paneles";
+import { Cuentas, Piloto } from "./PanelesAdministracion";
 
 // Back-office del personal de Maido. Solo en español: lo usa el personal del local.
 
@@ -23,7 +24,7 @@ function guardarToken(token: string | null) {
   }
 }
 
-type Panel = "cocina" | "barra" | "llamados" | "disponibilidad" | "validacion" | "puestos" | "metricas";
+type Panel = "cocina" | "barra" | "llamados" | "disponibilidad" | "validacion" | "puestos" | "cuentas" | "metricas" | "piloto";
 
 const NOMBRES: Record<Panel, string> = {
   cocina: "Comandas · cocina",
@@ -32,11 +33,13 @@ const NOMBRES: Record<Panel, string> = {
   disponibilidad: "Disponibilidad",
   validacion: "Validación de carta",
   puestos: "Puestos NFC/QR",
-  metricas: "Métricas del piloto",
+  cuentas: "Cuentas del personal",
+  metricas: "Métricas",
+  piloto: "Piloto y Go/No-Go",
 };
 
 const PANELES: Record<Personal["rol"], Panel[]> = {
-  administrador: ["cocina", "barra", "llamados", "disponibilidad", "validacion", "puestos", "metricas"],
+  administrador: ["cocina", "barra", "llamados", "disponibilidad", "validacion", "puestos", "cuentas", "metricas", "piloto"],
   cocina: ["cocina", "disponibilidad", "validacion"],
   barra: ["barra", "disponibilidad"],
   sala: ["llamados"],
@@ -104,6 +107,8 @@ export function Backoffice() {
       {panel === "validacion" && <Validacion {...props} />}
       {panel === "puestos" && <Puestos {...props} />}
       {panel === "metricas" && <Metricas {...props} />}
+      {panel === "cuentas" && <Cuentas {...props} />}
+      {panel === "piloto" && <Piloto {...props} />}
     </div>
   );
 }

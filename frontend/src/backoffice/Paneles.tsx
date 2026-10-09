@@ -110,10 +110,24 @@ const MOTIVOS: Record<Llamado["motivo"], string> = {
 export function Llamados({ api, manejarError }: PropsPanel) {
   const cargar = useCallback(() => api.llamados(), [api]);
   const { datos, error, refrescar } = useSondeo(cargar, 3000, manejarError);
+  const cargarAtrasadas = useCallback(() => api.comandasAtrasadas(), [api]);
+  const { datos: atrasadas } = useSondeo(cargarAtrasadas, 10000, manejarError);
 
   return (
     <section>
       {error && <p className="aviso peligro">{error}</p>}
+      {atrasadas && atrasadas.length > 0 && (
+        <div className="aviso peligro">
+          <strong>Comandas sin recibir en cocina o barra.</strong> Revisa la pantalla del destino o lleva el pedido a mano:
+          <ul>
+            {atrasadas.map((c) => (
+              <li key={c.id}>
+                {c.puesto} → {c.destino} (hace {minutosDesde(c.creadaEn)} min): {c.items.map((i) => `${i.cantidad} × ${i.nombre}`).join(", ")}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {datos && datos.length === 0 && <p className="suave">Sin llamados pendientes.</p>}
       <div className="rejilla">
         {datos?.map((l) => (
@@ -402,12 +416,28 @@ export function Puestos({ api, manejarError }: PropsPanel) {
     }
   };
 
+  const activos = puestos?.filter((p) => p.puesto.activo && p.enlaceQr) ?? [];
+
   return (
     <section>
       <p className="suave">
         Cada puesto tiene un enlace para programar su tag NFC y otro para el QR de respaldo. Desactivar un puesto lo devuelve al pedido tradicional
         sin afectar a los demás.
       </p>
+      <button className="boton secundario peque" style={{ marginBottom: 12 }} onClick={() => window.print()} disabled={activos.length === 0}>
+        Imprimir QR de los puestos activos
+      </button>
+      {/* Solo visible al imprimir: una tarjeta por puesto para colocar junto al tag NFC. */}
+      <div className="hoja-qr" aria-hidden="true">
+        {activos.map((p) => (
+          <div key={p.puesto.id} className="tarjeta-qr">
+            <strong>{p.puesto.codigo}</strong>
+            <Qr texto={p.enlaceQr!} />
+            <p>Acerca tu celular o escanea el código para ver la carta.</p>
+            <p lang="en">Tap your phone or scan the code to see the menu.</p>
+          </div>
+        ))}
+      </div>
       <form className="tarjeta fila" style={{ flexWrap: "wrap", alignItems: "end", marginBottom: 16 }} onSubmit={crear}>
         <label className="campo" style={{ margin: 0 }}>
           Código

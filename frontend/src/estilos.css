@@ -192,4 +192,16 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 .cifras { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 .cifra strong { display: block; font-size: 1.6rem; font-family: var(--serif); }
 .qr { width: 132px; height: 132px; background: #fff; border-radius: 8px; }
+.hoja-qr { display: none; }
+@media print {
+  body { background: #fff; }
+  body * { visibility: hidden; }
+  .hoja-qr, .hoja-qr * { visibility: visible; }
+  .hoja-qr { display: grid; position: absolute; inset: 0; grid-template-columns: repeat(2, 1fr); gap: 12mm; padding: 10mm; }
+  .tarjeta-qr { border: 1px dashed #999; border-radius: 6mm; padding: 6mm; text-align: center; break-inside: avoid; font-size: 11pt; }
+  .tarjeta-qr strong { display: block; font-size: 20pt; font-family: var(--serif); }
+  .tarjeta-qr .qr { width: 50mm; height: 50mm; margin: 4mm auto; display: block; }
+  .tarjeta-qr p { margin: 1mm 0; }
+}
+
 code { font-size: 0.82rem; word-break: break-all; background: #efe9e2; padding: 2px 6px; border-radius: 6px; }

@@ -211,6 +211,65 @@ export interface Metricas {
   satisfaccionPromedio?: number;
 }
 
+export interface CuentaPersonal {
+  id: number;
+  identificador: string;
+  rol: Personal["rol"];
+  activo: boolean;
+  tieneClave: boolean;
+}
+
+export type Fase = "linea_base" | "piloto" | "post_lanzamiento";
+
+export interface Medicion {
+  id: number;
+  fase: Fase;
+  fecha: string;
+  comensales: number;
+  importeCentimos: number;
+  tiempoPedidoSegundos: number;
+  consultasMozo: number;
+  fuente: string;
+  registradoPor: string;
+}
+
+export interface ResumenFase {
+  fase: Fase;
+  registros: number;
+  comensales: number;
+  ticketPorComensalCentimos: number;
+  tiempoPedidoPromedioSegundos: number;
+  consultasMozoPorComensal: number;
+}
+
+export interface ReporteDiario {
+  fecha: string;
+  sesiones: number;
+  consultasPorMotor: Record<string, number>;
+  latenciaP95Ms?: number;
+  latenciaMaximaMs?: number;
+  consultasSobrePresupuesto: number;
+  mostradas: number;
+  aceptadas: number;
+  rechazadas: number;
+  pedidosConfirmados: number;
+  ticketPromedioCentimos?: number;
+  comandas: number;
+  comandasSinRecibir: number;
+  recepcionP95Segundos?: number;
+  llamadosPorMotivo: Record<string, number>;
+  atencionPromedioSegundos?: number;
+  cambiosDisponibilidad: number;
+  encuestas: number;
+  satisfaccionPromedio?: number;
+}
+
+export interface Verificacion {
+  chequeos: { criterio: string; resultado: "OK" | "AVISO" | "FALLA"; detalle: string }[];
+  manuales: string[];
+  apto: boolean;
+}
+
 // ---------- Comensal ----------
 
 export const apiComensal = (sesion: string) => {
@@ -267,6 +326,17 @@ export const apiBackoffice = (token: string) => {
     crearPuesto: (codigo: string, tipo: "mesa" | "barra") => pedir<PuestoConEnlaces>("POST", "/backoffice/puestos", { codigo, tipo }, c),
     activarPuesto: (id: number, activo: boolean) => pedir<PuestoConEnlaces>("POST", `/backoffice/puestos/${id}/activo`, { activo }, c),
     metricas: () => pedir<Metricas>("GET", "/backoffice/metricas", undefined, c),
+    comandasAtrasadas: () => pedir<Comanda[]>("GET", "/backoffice/comandas-atrasadas", undefined, c),
+    cuentas: () => pedir<CuentaPersonal[]>("GET", "/backoffice/personal", undefined, c),
+    crearCuenta: (identificador: string, rol: Personal["rol"], clave: string) =>
+      pedir<CuentaPersonal>("POST", "/backoffice/personal", { identificador, rol, clave }, c),
+    activarCuenta: (id: number, activo: boolean) => pedir<CuentaPersonal>("POST", `/backoffice/personal/${id}/activo`, { activo }, c),
+    restablecerClave: (id: number, clave: string) => pedir<unknown>("POST", `/backoffice/personal/${id}/clave`, { clave }, c),
+    mediciones: () => pedir<{ mediciones: Medicion[]; resumen: ResumenFase[] }>("GET", "/backoffice/mediciones", undefined, c),
+    registrarMedicion: (m: Omit<Medicion, "id" | "registradoPor">) =>
+      pedir<{ mediciones: Medicion[]; resumen: ResumenFase[] }>("POST", "/backoffice/mediciones", m, c),
+    reporteDiario: (fecha: string) => pedir<ReporteDiario>("GET", `/backoffice/reporte-diario?fecha=${fecha}`, undefined, c),
+    verificacion: () => pedir<Verificacion>("GET", "/backoffice/verificacion", undefined, c),
   };
 };
 
