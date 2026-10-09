@@ -1,0 +1,22 @@
+.gradle/
+build/
+.kotlin/
+.idea/
+*.iml
+.DS_Store
+
+# Frontend
+node_modules/
+frontend/dist/
+
+# Bases SQLite locales y respaldos
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+
+# Secretos: solo .env.example va al repositorio
+.env
+.env.*
+!.env.example
