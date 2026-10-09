@@ -11,6 +11,9 @@ data class PersonalRegistrado(val id: Long, val identificador: String, val rol: 
 data class PersonalAutenticado(val id: Long, val identificador: String, val rol: String)
 
 @Serializable
+data class CuentaPersonal(val id: Long, val identificador: String, val rol: String, val activo: Boolean, val tieneClave: Boolean)
+
+@Serializable
 data class AccesoPuestoInfo(val id: Long, val canal: String, val token: String, val activo: Boolean)
 
 @Serializable
@@ -41,6 +44,27 @@ class RepositorioPersonal(private val conn: Connection) {
             """.trimIndent(),
             personalId, credencial.hash, credencial.sal, credencial.iteraciones,
         )
+    }
+
+    fun listar(): List<CuentaPersonal> = conn.consultar(
+        """
+        SELECT p.id, p.identificador, p.rol, p.activo, c.personal_id IS NOT NULL
+        FROM personal p LEFT JOIN personal_credenciales c ON c.personal_id = p.id
+        ORDER BY p.rol, p.identificador
+        """.trimIndent(),
+    ) { CuentaPersonal(it.getLong(1), it.getString(2), it.getString(3), it.getInt(4) == 1, it.getInt(5) == 1) }
+
+    fun porId(id: Long): PersonalRegistrado? =
+        conn.consultar("SELECT identificador FROM personal WHERE id = ?", id) { it.getString(1) }.singleOrNull()?.let(::buscar)
+
+    /** Desactivar a alguien también cierra sus sesiones abiertas del back-office. */
+    fun cambiarActivo(id: Long, activo: Boolean) {
+        conn.ejecutar("UPDATE personal SET activo = ? WHERE id = ?", if (activo) 1 else 0, id)
+        if (!activo) conn.ejecutar("DELETE FROM personal_sesiones WHERE personal_id = ?", id)
+    }
+
+    fun cerrarSesionesDe(id: Long) {
+        conn.ejecutar("DELETE FROM personal_sesiones WHERE personal_id = ?", id)
     }
 
     fun crearSesion(tokenHash: String, personalId: Long, horas: Long) {

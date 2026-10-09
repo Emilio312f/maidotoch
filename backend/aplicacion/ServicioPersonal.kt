@@ -1,6 +1,7 @@
 package aplicacion
 
 import datos.Credencial
+import datos.CuentaPersonal
 import datos.FuenteConexiones
 import datos.PersonalAutenticado
 import datos.RepositorioPersonal
@@ -45,6 +46,42 @@ class ServicioPersonal(private val fuente: FuenteConexiones, private val horasSe
             val repo = RepositorioPersonal(conn)
             val personal = repo.buscar(identificador) ?: throw NoEncontrado("personal_no_encontrado", "No existe $identificador")
             repo.guardarCredencial(personal.id, derivar(clave))
+        }
+    }
+
+    // ---- Administración de cuentas desde el back-office (Plan §5) ----
+
+    fun listar(admin: PersonalAutenticado): List<CuentaPersonal> {
+        admin.exigirRol()
+        return fuente.usar { RepositorioPersonal(it).listar() }
+    }
+
+    fun crearDesdeBackoffice(admin: PersonalAutenticado, identificador: String, rol: String, clave: String): CuentaPersonal {
+        admin.exigirRol()
+        val id = crear(identificador.trim(), rol, clave)
+        return fuente.usar { RepositorioPersonal(it).listar().single { c -> c.id == id } }
+    }
+
+    fun cambiarActivo(admin: PersonalAutenticado, personalId: Long, activo: Boolean): CuentaPersonal {
+        admin.exigirRol()
+        if (personalId == admin.id && !activo) throw Conflicto("auto_desactivacion", "No puedes desactivar tu propia cuenta")
+        return fuente.usar { conn ->
+            val repo = RepositorioPersonal(conn)
+            repo.porId(personalId) ?: throw NoEncontrado("personal_no_encontrado", "Cuenta inexistente")
+            repo.cambiarActivo(personalId, activo)
+            repo.listar().single { it.id == personalId }
+        }
+    }
+
+    /** Asigna una clave nueva y cierra las sesiones abiertas de esa cuenta. */
+    fun restablecerClave(admin: PersonalAutenticado, personalId: Long, clave: String) {
+        admin.exigirRol()
+        validarClave(clave)
+        fuente.usar { conn ->
+            val repo = RepositorioPersonal(conn)
+            repo.porId(personalId) ?: throw NoEncontrado("personal_no_encontrado", "Cuenta inexistente")
+            repo.guardarCredencial(personalId, derivar(clave))
+            repo.cerrarSesionesDe(personalId)
         }
     }
 

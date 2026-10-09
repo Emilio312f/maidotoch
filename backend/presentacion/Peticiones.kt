@@ -48,6 +48,26 @@ data class PuestoPeticion(val codigo: String, val tipo: String)
 data class ActivoPeticion(val activo: Boolean)
 
 @Serializable
+data class CuentaPeticion(val identificador: String, val rol: String, val clave: String)
+
+@Serializable
+data class ClavePeticion(val clave: String)
+
+@Serializable
+data class MedicionPeticion(
+    val fase: String,
+    val fecha: String,
+    val comensales: Int,
+    val importeCentimos: Long,
+    val tiempoPedidoSegundos: Int,
+    val consultasMozo: Int,
+    val fuente: String,
+)
+
+@Serializable
+data class Verificacion(val chequeos: List<aplicacion.Chequeo>, val manuales: List<String>, val apto: Boolean)
+
+@Serializable
 data class ErrorRespuesta(val error: String, val mensaje: String, val detalle: List<Long> = emptyList())
 
 @Serializable

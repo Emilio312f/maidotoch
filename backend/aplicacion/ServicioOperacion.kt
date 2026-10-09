@@ -66,6 +66,12 @@ class ServicioComandas(private val fuente: FuenteConexiones) {
         }
     }
 
+    /** Comandas sin recepción tras [minutos]: alerta para sala, que puede llevarla a mano (RNF03). */
+    fun atrasadas(personal: PersonalAutenticado, minutos: Int = MINUTOS_ATRASO): List<Comanda> {
+        personal.exigirRol("sala")
+        return fuente.usar { RepositorioOperacion(it).comandasAtrasadas(minutos) }
+    }
+
     fun avanzar(personal: PersonalAutenticado, comandaId: Long, estado: String) {
         if (estado !in estados) throw SolicitudInvalida("estado_invalido", "Estado no válido: $estado")
         fuente.usar { conn ->
@@ -86,5 +92,10 @@ class ServicioComandas(private val fuente: FuenteConexiones) {
     private fun exigirDestino(personal: PersonalAutenticado, destino: String) {
         if (destino !in destinos) throw SolicitudInvalida("destino_invalido", "Destino no válido: $destino")
         personal.exigirRol(destino)
+    }
+
+    companion object {
+        /** El presupuesto es de 2 s hasta cocina/barra; a los 2 minutos sin recepción algo falló. */
+        const val MINUTOS_ATRASO = 2
     }
 }

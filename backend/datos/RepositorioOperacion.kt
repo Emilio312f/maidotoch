@@ -54,6 +54,24 @@ class RepositorioOperacion(private val conn: Connection) {
             )
         }
 
+    /** Comandas que ninguna pantalla confirmó en [minutos]: sala las toma a mano (respaldo manual, RNF03). */
+    fun comandasAtrasadas(minutos: Int): List<Comanda> = conn.consultar(
+        """
+        SELECT c.id, c.pedido_id, c.destino, c.estado, $puestoDePedido, c.creada_en, c.recibida_en, c.intentos
+        FROM comandas c WHERE c.estado = 'pendiente' AND c.creada_en < strftime('%Y-%m-%dT%H:%M:%fZ','now', ?)
+        ORDER BY c.creada_en
+        """.trimIndent(),
+        "${-minutos} minutes",
+    ) { Comanda(it.getLong(1), it.getString(2), it.getString(3), it.getString(4), it.getString(5), it.getString(6), it.getString(7), it.getInt(8), emptyList()) }
+        .map { c ->
+            c.copy(
+                items = conn.consultar(
+                    "SELECT nombre_snapshot, cantidad FROM pedido_items WHERE pedido_id = ? AND destino = ? ORDER BY id",
+                    c.pedidoId, c.destino,
+                ) { ItemComanda(it.getString(1), it.getInt(2)) },
+            )
+        }
+
     /** Cada entrega a la pantalla de una comanda aún no recibida cuenta como un intento. */
     fun registrarIntentos(destino: String) {
         conn.ejecutar("UPDATE comandas SET intentos = intentos + 1 WHERE destino = ? AND estado = 'pendiente'", destino)

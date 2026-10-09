@@ -2,6 +2,7 @@ package presentacion
 
 import aplicacion.Conflicto
 import aplicacion.ErrorNegocio
+import aplicacion.exigirRol
 import datos.PersonalAutenticado
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
@@ -234,5 +235,61 @@ private fun Route.rutasBackoffice(app: Aplicacion) {
     get("/metricas") {
         val personal = call.personal()
         call.respond(io { app.backoffice.metricas(personal) })
+    }
+
+    get("/comandas-atrasadas") {
+        val personal = call.personal()
+        call.respond(io { app.comandas.atrasadas(personal) })
+    }
+
+    route("/personal") {
+        get {
+            val admin = call.personal()
+            call.respond(io { app.personal.listar(admin) })
+        }
+        post {
+            val admin = call.personal()
+            val p = call.receive<CuentaPeticion>()
+            call.respond(HttpStatusCode.Created, io { app.personal.crearDesdeBackoffice(admin, p.identificador, p.rol, p.clave) })
+        }
+        post("/{id}/activo") {
+            val admin = call.personal()
+            val p = call.receive<ActivoPeticion>()
+            call.respond(io { app.personal.cambiarActivo(admin, call.id(), p.activo) })
+        }
+        post("/{id}/clave") {
+            val admin = call.personal()
+            val p = call.receive<ClavePeticion>()
+            io { app.personal.restablecerClave(admin, call.id(), p.clave) }
+            call.respond(Ok())
+        }
+    }
+
+    route("/mediciones") {
+        get {
+            val admin = call.personal()
+            call.respond(io { app.piloto.mediciones(admin) })
+        }
+        post {
+            val admin = call.personal()
+            val p = call.receive<MedicionPeticion>()
+            call.respond(
+                HttpStatusCode.Created,
+                io { app.piloto.registrarMedicion(admin, p.fase, p.fecha, p.comensales, p.importeCentimos, p.tiempoPedidoSegundos, p.consultasMozo, p.fuente) },
+            )
+        }
+    }
+
+    get("/reporte-diario") {
+        val admin = call.personal()
+        val fecha = call.request.queryParameters["fecha"] ?: java.time.LocalDate.now(java.time.ZoneId.of("America/Lima")).toString()
+        call.respond(io { app.piloto.reporteDiario(admin, fecha) })
+    }
+
+    get("/verificacion") {
+        val admin = call.personal()
+        admin.exigirRol()
+        val chequeos = io { app.piloto.verificar() }
+        call.respond(Verificacion(chequeos, aplicacion.ServicioPiloto.VERIFICACIONES_MANUALES, chequeos.none { it.resultado == aplicacion.ResultadoChequeo.FALLA }))
     }
 }

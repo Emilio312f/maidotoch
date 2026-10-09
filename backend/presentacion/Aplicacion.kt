@@ -8,6 +8,7 @@ import aplicacion.ServicioCatalogo
 import aplicacion.ServicioComandas
 import aplicacion.ServicioPedido
 import aplicacion.ServicioPersonal
+import aplicacion.ServicioPiloto
 import aplicacion.ServicioSesion
 import aplicacion.ServicioTrazabilidad
 import configuracion.Configuracion
@@ -35,4 +36,5 @@ class Aplicacion(
     val personal = ServicioPersonal(fuente, configuracion.horasSesionPersonal)
     val backoffice = ServicioBackoffice(fuente, catalogo, configuracion.urlPublica)
     val importador = ImportadorCatalogo(fuente)
+    val piloto = ServicioPiloto(fuente, configuracion)
 }

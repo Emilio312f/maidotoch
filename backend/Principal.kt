@@ -1,4 +1,8 @@
 import aplicacion.ErrorNegocio
+import aplicacion.ResultadoChequeo
+import aplicacion.ServicioPiloto
+import java.time.LocalDate
+import java.time.ZoneId
 import configuracion.Configuracion
 import datos.ArchivoSqlite
 import datos.BaseDatos
@@ -29,6 +33,8 @@ Uso: maidotouch <comando>
   importar-catalogo <archivo.json> <evaluador>
                                           Carga el catálogo validado por cocina; <evaluador> es el identificador
                                           de cocina que hizo las evaluaciones de restricciones
+  verificar                               Revisa los criterios de Go/No-Go comprobables (sale con código 1 si alguno falla)
+  reporte-diario [AAAA-MM-DD]             Resumen del día (hora de Lima) para el monitoreo del piloto
   demo                                    Crea datos FICTICIOS de desarrollo en una base vacía
 
 La clave se lee de MAIDOTOUCH_CLAVE o se pide por consola. Ver .env.example para la configuración.
@@ -60,6 +66,22 @@ fun main(args: Array<String>) {
                 if (resumen.productosPorValidar.isNotEmpty()) {
                     println("Pendientes de validación por cocina en el back-office: ${resumen.productosPorValidar.joinToString()}")
                 }
+            }
+            "verificar" -> {
+                migrar(configuracion)
+                val chequeos = Aplicacion(configuracion, ArchivoSqlite(configuracion.rutaBaseDatos), null).piloto.verificar()
+                chequeos.forEach { println("[%-5s] %s — %s".format(it.resultado, it.criterio, it.detalle)) }
+                println("\nVerificar a mano antes del Go/No-Go:")
+                ServicioPiloto.VERIFICACIONES_MANUALES.forEach { println("  [ ] $it") }
+                if (chequeos.any { it.resultado == ResultadoChequeo.FALLA }) {
+                    println("\nNO-GO: hay criterios en FALLA.")
+                    exitProcess(1)
+                }
+                println("\nSin fallas en los criterios comprobables.")
+            }
+            "reporte-diario" -> {
+                val dia = args.getOrNull(1)?.let(LocalDate::parse) ?: LocalDate.now(ZoneId.of("America/Lima"))
+                print(Aplicacion(configuracion, ArchivoSqlite(configuracion.rutaBaseDatos), null).piloto.reporteDiario(dia).aTexto())
             }
             "demo" -> demo(configuracion)
             "ayuda", "--help", "-h" -> println(AYUDA.trimIndent())

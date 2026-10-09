@@ -20,7 +20,60 @@ data class Metricas(
     val satisfaccionPromedio: Double?,
 )
 
+@Serializable
+data class Medicion(
+    val id: Long,
+    val fase: String,
+    val fecha: String,
+    val comensales: Int,
+    val importeCentimos: Long,
+    val tiempoPedidoSegundos: Int,
+    val consultasMozo: Int,
+    val fuente: String,
+    val registradoPor: String,
+)
+
+/** Promedios por comensal de una fase (línea base, piloto, post-lanzamiento) para comparar el impacto. */
+@Serializable
+data class ResumenFase(
+    val fase: String,
+    val registros: Int,
+    val comensales: Long,
+    val ticketPorComensalCentimos: Long,
+    val tiempoPedidoPromedioSegundos: Long,
+    val consultasMozoPorComensal: Double,
+)
+
 class RepositorioMetricas(private val conn: Connection) {
+
+    fun registrarMedicion(fase: String, fecha: String, comensales: Int, importeCentimos: Long, tiempoSegundos: Int, consultasMozo: Int, fuente: String, personalId: Long): Long =
+        conn.insertar(
+            """
+            INSERT INTO mediciones_piloto(fase, fecha, comensales, importe_centimos, tiempo_pedido_segundos, consultas_mozo, fuente, registrado_por)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """.trimIndent(),
+            fase, fecha, comensales, importeCentimos, tiempoSegundos, consultasMozo, fuente, personalId,
+        )
+
+    fun mediciones(): List<Medicion> = conn.consultar(
+        """
+        SELECT m.id, m.fase, m.fecha, m.comensales, m.importe_centimos, m.tiempo_pedido_segundos, m.consultas_mozo, m.fuente, p.identificador
+        FROM mediciones_piloto m JOIN personal p ON p.id = m.registrado_por ORDER BY m.fecha DESC, m.id DESC
+        """.trimIndent(),
+    ) { Medicion(it.getLong(1), it.getString(2), it.getString(3), it.getInt(4), it.getLong(5), it.getInt(6), it.getInt(7), it.getString(8), it.getString(9)) }
+
+    /** El tiempo de pedido se pondera por comensales: cada registro resume a varios comensales. */
+    fun resumenPorFase(): List<ResumenFase> = conn.consultar(
+        """
+        SELECT fase, count(*), sum(comensales),
+               CAST(sum(importe_centimos) / sum(comensales) AS INTEGER),
+               CAST(sum(tiempo_pedido_segundos * comensales) / sum(comensales) AS INTEGER),
+               CAST(sum(consultas_mozo) AS REAL) / sum(comensales)
+        FROM mediciones_piloto GROUP BY fase
+        ORDER BY CASE fase WHEN 'linea_base' THEN 1 WHEN 'piloto' THEN 2 ELSE 3 END
+        """.trimIndent(),
+    ) { ResumenFase(it.getString(1), it.getInt(2), it.getLong(3), it.getLong(4), it.getLong(5), it.getDouble(6)) }
+
     fun metricas(): Metricas {
         val (recomendaciones, mostradas, aceptadas, rechazadas) = conn.consultar(
             "SELECT recomendaciones, mostradas, aceptadas, rechazadas FROM v_aceptacion_recomendaciones",
