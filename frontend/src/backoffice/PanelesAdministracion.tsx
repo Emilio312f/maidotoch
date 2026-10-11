@@ -211,7 +211,7 @@ function Reporte({ api, manejarError }: PropsPanel) {
               <tr>
                 <th>Latencia del asistente</th>
                 <td>
-                  P95 {reporte.latenciaP95Ms ?? "—"} ms · máx. {reporte.latenciaMaximaMs ?? "—"} ms · sobre 3 s: {reporte.consultasSobrePresupuesto}
+                  P95 {reporte.latenciaP95Ms == null ? "—" : `${reporte.latenciaP95Ms} ms`} · máx. {reporte.latenciaMaximaMs == null ? "—" : `${reporte.latenciaMaximaMs} ms`} · sobre 3 s: {reporte.consultasSobrePresupuesto}
                 </td>
               </tr>
               <tr>
@@ -230,13 +230,13 @@ function Reporte({ api, manejarError }: PropsPanel) {
               <tr>
                 <th>Comandas</th>
                 <td>
-                  {reporte.comandas} · sin recibir {reporte.comandasSinRecibir} · recepción P95 {reporte.recepcionP95Segundos ?? "—"} s
+                  {reporte.comandas} · sin recibir {reporte.comandasSinRecibir} · recepción P95 {reporte.recepcionP95Segundos == null ? "—" : `${reporte.recepcionP95Segundos} s`}
                 </td>
               </tr>
               <tr>
                 <th>Llamados al mozo</th>
                 <td>
-                  {motor(reporte.llamadosPorMotivo)} · atención promedio {reporte.atencionPromedioSegundos ?? "—"} s
+                  {motor(reporte.llamadosPorMotivo)} · atención promedio {reporte.atencionPromedioSegundos == null ? "—" : `${reporte.atencionPromedioSegundos} s`}
                 </td>
               </tr>
               <tr><th>Cambios de disponibilidad</th><td>{reporte.cambiosDisponibilidad}</td></tr>

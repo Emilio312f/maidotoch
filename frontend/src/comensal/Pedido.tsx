@@ -58,7 +58,7 @@ export function Pedido() {
       {error && <p className="aviso peligro">{error}</p>}
 
       {!borrador || borrador.items.length === 0 ? (
-        <p className="suave">{t("pedido.vacio")}</p>
+        carrito.enviados.length === 0 && <p className="suave">{t("pedido.vacio")}</p>
       ) : (
         <div className="tarjeta">
           {borrador.items.map((item) => (

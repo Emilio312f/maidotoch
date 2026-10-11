@@ -111,6 +111,7 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
   min-height: 40px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--borde);
   background: var(--superficie); font-size: 0.95rem;
 }
+.pestanas .chip { white-space: nowrap; flex: none; }
 .chip[aria-pressed="true"] { background: var(--tinta); color: #fff; border-color: var(--tinta); }
 
 .pestanas { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin: 0 -16px 12px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
@@ -151,7 +152,7 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 .item-pedido { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
 .item-pedido:last-child { border-bottom: none; }
 .item-pedido.invalido { background: var(--peligro-fondo); margin: 0 -14px; padding: 10px 14px; }
-.cantidad { display: inline-flex; align-items: center; border: 1px solid var(--borde); border-radius: 999px; }
+.cantidad { justify-self: start; display: inline-flex; align-items: center; border: 1px solid var(--borde); border-radius: 999px; }
 .cantidad button { width: 40px; height: 40px; border: none; background: none; font-size: 1.2rem; }
 .cantidad span { min-width: 24px; text-align: center; font-weight: 600; }
 .total { font-size: 1.15rem; font-weight: 700; }
@@ -175,6 +176,7 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 .bo { max-width: 1200px; margin: 0 auto; padding: 16px; }
 .bo-cabecera { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-bottom: 16px; }
 .bo-cabecera h1 { margin: 0; flex: 1; }
+@media (max-width: 600px) { .bo-cabecera h1 { font-size: 1.2rem; flex-basis: 100%; } }
 .bo-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .bo-tabs button { min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--borde); background: var(--superficie); font-weight: 600; }
 .bo-tabs button[aria-pressed="true"] { background: var(--tinta); color: #fff; border-color: var(--tinta); }
