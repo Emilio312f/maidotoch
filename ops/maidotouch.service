@@ -13,6 +13,8 @@ EnvironmentFile=/etc/maidotouch/maidotouch.env
 Environment=MAIDOTOUCH_DB_PATH=/opt/maidotouch/datos/maidotouch.db
 Environment=MAIDOTOUCH_FRONTEND_DIR=/opt/maidotouch/actual/web
 Environment=MAIDOTOUCH_MIGRACIONES_DIR=/opt/maidotouch/actual/migraciones
+# Fotos de la carta: fuera de las versiones, para que sobrevivan a cada despliegue.
+Environment=MAIDOTOUCH_FOTOS_DIR=/opt/maidotouch/datos/fotos
 ExecStart=/opt/maidotouch/actual/bin/maidotouch servir
 # Disponibilidad durante el servicio (RNF05): si el proceso cae, systemd lo levanta.
 Restart=always

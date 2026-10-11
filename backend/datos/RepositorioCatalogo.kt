@@ -36,6 +36,7 @@ data class ProductoBackoffice(
     val disponible: Boolean,
     val validado: Boolean,
     val revision: Long,
+    val fotoUrl: String? = null,
 )
 
 @Serializable
@@ -127,7 +128,7 @@ class RepositorioCatalogo(private val conn: Connection) {
     fun productosBackoffice(): List<ProductoBackoffice> = conn.consultar(
         """
         SELECT p.id, p.codigo, COALESCE(t.nombre, p.codigo), c.nombre_es, p.destino, p.precio_centimos,
-               p.activo, p.disponible, p.validado_en IS NOT NULL, p.revision
+               p.activo, p.disponible, p.validado_en IS NOT NULL, p.revision, p.foto_url
         FROM productos p JOIN categorias c ON c.id = p.categoria_id
         LEFT JOIN producto_textos t ON t.producto_id = p.id AND t.idioma = 'es'
         ORDER BY c.orden, p.id
@@ -135,7 +136,7 @@ class RepositorioCatalogo(private val conn: Connection) {
     ) {
         ProductoBackoffice(
             it.getLong(1), it.getString(2), it.getString(3), it.getString(4), it.getString(5), it.getLong(6),
-            it.getInt(7) == 1, it.getInt(8) == 1, it.getInt(9) == 1, it.getLong(10),
+            it.getInt(7) == 1, it.getInt(8) == 1, it.getInt(9) == 1, it.getLong(10), it.getString(11),
         )
     }
 
@@ -211,6 +212,11 @@ class RepositorioCatalogo(private val conn: Connection) {
             validadoPor = validacion.first,
             validadoEn = validacion.second,
         )
+    }
+
+    /** El trigger invalidar_datos_producto anula la validación al cambiar la foto. */
+    fun cambiarFoto(productoId: Long, url: String) {
+        conn.ejecutar("UPDATE productos SET foto_url = ? WHERE id = ?", url, productoId)
     }
 
     /** Los triggers exigen personal activo de cocina o administración, textos es/en e ingredientes. */

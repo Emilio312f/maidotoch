@@ -167,6 +167,7 @@ export interface ProductoBackoffice {
   disponible: boolean;
   validado: boolean;
   revision: number;
+  fotoUrl?: string;
 }
 
 export interface CambioDisponibilidad {
@@ -318,6 +319,21 @@ export const apiBackoffice = (token: string) => {
       pedir<ProductoBackoffice>("POST", `/backoffice/productos/${id}/disponibilidad`, { disponible, motivo }, c),
     historial: () => pedir<CambioDisponibilidad[]>("GET", "/backoffice/disponibilidad/historial", undefined, c),
     validar: (id: number) => pedir<DetalleProducto>("POST", `/backoffice/productos/${id}/validar`, undefined, c),
+    subirFoto: async (id: number, archivo: File): Promise<DetalleProducto> => {
+      let respuesta: Response;
+      try {
+        respuesta = await fetch(`/api/backoffice/productos/${id}/foto`, {
+          method: "POST",
+          headers: { ...c, "Content-Type": archivo.type || "application/octet-stream" },
+          body: archivo,
+        });
+      } catch {
+        throw new ErrorApi(0, "sin_conexion", "Sin conexión");
+      }
+      const datos = await respuesta.json().catch(() => undefined);
+      if (!respuesta.ok) throw new ErrorApi(respuesta.status, datos?.error ?? "error_interno", datos?.mensaje ?? respuesta.statusText);
+      return datos as DetalleProducto;
+    },
     comandas: (destino: "cocina" | "barra") => pedir<Comanda[]>("GET", `/backoffice/comandas?destino=${destino}`, undefined, c),
     avanzarComanda: (id: number, estado: string) => pedir<unknown>("POST", `/backoffice/comandas/${id}/estado`, { estado }, c),
     llamados: () => pedir<Llamado[]>("GET", "/backoffice/llamados", undefined, c),

@@ -21,4 +21,10 @@ sqlite3 "$archivo" "PRAGMA integrity_check;" | grep -qx ok || { echo "Respaldo c
 rm -f "$archivo-wal" "$archivo-shm"
 echo "Respaldo: $archivo"
 
-find "$destino" -name 'maidotouch-*.db' -mtime +30 -delete
+# Fotos de la carta: no están en la base, se respaldan aparte.
+fotos="${MAIDOTOUCH_FOTOS_DIR:-$base/datos/fotos}"
+if [ -d "$fotos" ]; then
+  tar -czf "$destino/fotos-$(date -u +%Y%m%dT%H%M%SZ).tar.gz" -C "$(dirname "$fotos")" "$(basename "$fotos")"
+fi
+
+find "$destino" \( -name 'maidotouch-*.db' -o -name 'fotos-*.tar.gz' \) -mtime +30 -delete

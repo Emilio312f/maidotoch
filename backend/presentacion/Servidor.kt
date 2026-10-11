@@ -9,7 +9,9 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
+import io.ktor.http.CacheControl
 import io.ktor.server.http.content.singlePageApplication
+import io.ktor.server.http.content.staticFiles
 import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.statuspages.StatusPages
@@ -83,6 +85,13 @@ fun Application.moduloMaidoTouch(app: Aplicacion, programarTareas: Boolean = tru
             }
             rutasComensal(app)
             route("/backoffice") { rutasBackoffice(app) }
+        }
+
+        // Fotos de la carta: el nombre incluye un hash del contenido, por eso se pueden cachear sin vencimiento.
+        File(app.configuracion.directorioFotos).also { it.mkdirs() }.let { dir ->
+            staticFiles(aplicacion.ServicioFotos.RUTA_PUBLICA, dir) {
+                cacheControl { listOf(CacheControl.MaxAge(maxAgeSeconds = 31_536_000, visibility = CacheControl.Visibility.Public)) }
+            }
         }
 
         app.configuracion.directorioFrontend?.let(::File)?.takeIf { it.resolve("index.html").exists() }?.let { dir ->
@@ -186,6 +195,15 @@ private fun Route.rutasBackoffice(app: Aplicacion) {
         val personal = call.personal()
         val p = call.receive<DisponibilidadPeticion>()
         call.respond(io { app.backoffice.cambiarDisponibilidad(personal, call.id(), p.disponible, p.motivo) })
+    }
+    post("/productos/{id}/foto") {
+        val personal = call.personal()
+        val largo = call.request.headers["Content-Length"]?.toLongOrNull()
+        if (largo != null && largo > aplicacion.ServicioFotos.TAMANO_MAXIMO) {
+            throw aplicacion.SolicitudInvalida("foto_invalida", "La foto supera el tamaño máximo")
+        }
+        val contenido = call.receive<ByteArray>()
+        call.respond(io { app.fotos.subir(personal, call.id(), contenido) })
     }
     post("/productos/{id}/validar") {
         val personal = call.personal()

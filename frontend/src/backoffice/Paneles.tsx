@@ -278,6 +278,17 @@ export function Validacion({ api, manejarError }: PropsPanel) {
     }
   };
 
+  const subirFoto = async (archivo: File) => {
+    if (!detalle) return;
+    setError(null);
+    try {
+      setDetalle(await api.subirFoto(detalle.producto.id, archivo));
+      cargar();
+    } catch (e) {
+      setError(manejarError(e));
+    }
+  };
+
   const ordenados = [...(productos ?? [])].sort((a, b) => Number(a.validado) - Number(b.validado));
 
   return (
@@ -297,15 +308,15 @@ export function Validacion({ api, manejarError }: PropsPanel) {
             </div>
           ))}
         </div>
-        {detalle && <FichaProducto detalle={detalle} validar={validar} />}
+        {detalle && <FichaProducto detalle={detalle} validar={validar} subirFoto={subirFoto} />}
       </div>
     </section>
   );
 }
 
-function FichaProducto({ detalle, validar }: { detalle: DetalleProducto; validar: () => void }) {
+function FichaProducto({ detalle, validar, subirFoto }: { detalle: DetalleProducto; validar: () => void; subirFoto: (f: File) => void }) {
   return (
-    <div className="tarjeta" style={{ gridColumn: "span 2", minWidth: 0 }}>
+    <div className="tarjeta ficha" style={{ minWidth: 0 }}>
       <div className="fila entre">
         <h2>{detalle.producto.nombre}</h2>
         {detalle.producto.validado ? (
@@ -320,6 +331,26 @@ function FichaProducto({ detalle, validar }: { detalle: DetalleProducto; validar
         {detalle.producto.codigo} · {detalle.producto.categoria} · {soles(detalle.producto.precioCentimos)} · destino {detalle.producto.destino} · revisión{" "}
         {detalle.producto.revision}
       </p>
+      <div className="fila" style={{ flexWrap: "wrap", alignItems: "flex-start", marginBottom: 12 }}>
+        {detalle.producto.fotoUrl ? (
+          <img src={detalle.producto.fotoUrl} alt={detalle.producto.nombre} className="foto-ficha" />
+        ) : (
+          <div className="foto-ficha vacia">Sin foto</div>
+        )}
+        <label className="campo" style={{ margin: 0 }}>
+          {detalle.producto.fotoUrl ? "Cambiar foto" : "Subir foto"} (JPEG o PNG)
+          <input
+            type="file"
+            accept="image/jpeg,image/png"
+            onChange={(e) => {
+              const archivo = e.target.files?.[0];
+              if (archivo) subirFoto(archivo);
+              e.target.value = "";
+            }}
+          />
+          <span className="suave">Cambiar la foto anula la validación: revisa la ficha y vuelve a validar.</span>
+        </label>
+      </div>
       {detalle.textos.map((t) => (
         <p key={t.idioma}>
           <strong>{t.idioma.toUpperCase()}:</strong> {t.nombre} — {t.descripcion}

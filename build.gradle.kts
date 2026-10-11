@@ -45,6 +45,8 @@ sourceSets {
 application {
     mainClass.set("PrincipalKt")
     applicationName = "maidotouch"
+    // Procesamiento de fotos sin pantalla (servidor y CI).
+    applicationDefaultJvmArgs = listOf("-Djava.awt.headless=true")
 }
 
 tasks.named<JavaExec>("run") {
@@ -53,6 +55,7 @@ tasks.named<JavaExec>("run") {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("java.awt.headless", "true")
     // Las pruebas crean una base nueva desde las migraciones reales del repositorio.
     systemProperty("maidotouch.migraciones", layout.projectDirectory.dir("db/migrations").asFile.absolutePath)
     systemProperty("maidotouch.catalogoFicticio", layout.projectDirectory.file("db/catalogo/ficticio.json").asFile.absolutePath)

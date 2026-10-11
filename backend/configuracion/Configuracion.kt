@@ -11,6 +11,8 @@ data class Configuracion(
     val urlPublica: String = "http://localhost:5173",
     val directorioFrontend: String? = "frontend/dist",
     val directorioMigraciones: String = "db/migrations",
+    /** Fotos de la carta subidas desde el back-office; se sirven en /fotos/. */
+    val directorioFotos: String = "fotos",
     /** Sin clave no hay proveedor de IA y el asistente opera siempre con el ranking por reglas. */
     val iaApiKey: String? = null,
     val iaModelo: String = "claude-opus-5-5",
@@ -35,6 +37,7 @@ data class Configuracion(
                 urlPublica = (texto("MAIDOTOUCH_URL_PUBLICA") ?: base.urlPublica).trimEnd('/'),
                 directorioFrontend = texto("MAIDOTOUCH_FRONTEND_DIR") ?: base.directorioFrontend,
                 directorioMigraciones = texto("MAIDOTOUCH_MIGRACIONES_DIR") ?: base.directorioMigraciones,
+                directorioFotos = texto("MAIDOTOUCH_FOTOS_DIR") ?: base.directorioFotos,
                 iaApiKey = texto("ANTHROPIC_API_KEY"),
                 iaModelo = texto("MAIDOTOUCH_IA_MODELO") ?: base.iaModelo,
                 iaTimeoutMs = texto("MAIDOTOUCH_IA_TIMEOUT_MS")?.toLong() ?: base.iaTimeoutMs,

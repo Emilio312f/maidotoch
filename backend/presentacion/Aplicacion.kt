@@ -8,6 +8,7 @@ import aplicacion.ServicioCatalogo
 import aplicacion.ServicioComandas
 import aplicacion.ServicioPedido
 import aplicacion.ServicioPersonal
+import aplicacion.ServicioFotos
 import aplicacion.ServicioPiloto
 import aplicacion.ServicioSesion
 import aplicacion.ServicioTrazabilidad
@@ -37,4 +38,5 @@ class Aplicacion(
     val backoffice = ServicioBackoffice(fuente, catalogo, configuracion.urlPublica)
     val importador = ImportadorCatalogo(fuente)
     val piloto = ServicioPiloto(fuente, configuracion)
+    val fotos = ServicioFotos(fuente, java.io.File(configuracion.directorioFotos), catalogo)
 }

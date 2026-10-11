@@ -191,6 +191,10 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 .login { max-width: 380px; margin: 10dvh auto; }
 .cifras { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 .cifra strong { display: block; font-size: 1.6rem; font-family: var(--serif); }
+.ficha { grid-column: span 2; }
+@media (max-width: 700px) { .ficha { grid-column: auto; } }
+.foto-ficha { width: 160px; height: 120px; object-fit: cover; border-radius: 10px; background: #e9e1d8; }
+.foto-ficha.vacia { display: grid; place-items: center; color: var(--tinta-suave); font-size: 0.9rem; }
 .qr { width: 132px; height: 132px; background: #fff; border-radius: 8px; }
 .hoja-qr { display: none; }
 @media print {

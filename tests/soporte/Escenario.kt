@@ -12,7 +12,13 @@ import java.io.File
  * Escenario completo con el catálogo FICTICIO de db/catalogo/ficticio.json cargado por el importador,
  * validado por cocina y disponible; cuentas del back-office y un puesto de mesa y uno de barra.
  */
-class Escenario(proveedorIa: OrdenadorExterno? = null, configuracion: Configuracion = Configuracion(directorioFrontend = null)) : AutoCloseable {
+class Escenario(
+    proveedorIa: OrdenadorExterno? = null,
+    configuracion: Configuracion = Configuracion(
+        directorioFrontend = null,
+        directorioFotos = java.nio.file.Files.createTempDirectory("maidotouch-fotos").toString(),
+    ),
+) : AutoCloseable {
     val db = BaseDePrueba()
     val app = Aplicacion(configuracion, db.fuente, proveedorIa)
 
