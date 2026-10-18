@@ -1,0 +1,194 @@
+{
+  "aviso": "CATALOGO FICTICIO PARA DESARROLLO Y PRUEBAS. No representa platos, ingredientes ni alergenos reales de Maido. El catalogo real lo carga y valida el Responsable de Datos con cocina.",
+  "categorias": [
+    { "codigo": "FICTICIO-entradas", "nombre_es": "Entradas [FICTICIO]", "nombre_en": "Starters [FICTITIOUS]", "orden": 1 },
+    { "codigo": "FICTICIO-fondos", "nombre_es": "Fondos [FICTICIO]", "nombre_en": "Mains [FICTITIOUS]", "orden": 2 },
+    { "codigo": "FICTICIO-postres", "nombre_es": "Postres [FICTICIO]", "nombre_en": "Desserts [FICTITIOUS]", "orden": 3 },
+    { "codigo": "FICTICIO-bebidas", "nombre_es": "Bebidas [FICTICIO]", "nombre_en": "Drinks [FICTITIOUS]", "orden": 4 }
+  ],
+  "alergenos": [
+    { "codigo": "FICTICIO-mani", "nombre_es": "Maní", "nombre_en": "Peanut" },
+    { "codigo": "FICTICIO-pescado", "nombre_es": "Pescado", "nombre_en": "Fish" },
+    { "codigo": "FICTICIO-mariscos", "nombre_es": "Mariscos", "nombre_en": "Shellfish" },
+    { "codigo": "FICTICIO-gluten", "nombre_es": "Gluten", "nombre_en": "Gluten" },
+    { "codigo": "FICTICIO-soya", "nombre_es": "Soya", "nombre_en": "Soy" },
+    { "codigo": "FICTICIO-lacteos", "nombre_es": "Lácteos", "nombre_en": "Dairy" }
+  ],
+  "ingredientes": [
+    { "codigo": "FICTICIO-pescado-blanco", "nombre_es": "Pescado blanco", "nombre_en": "White fish", "alergenos": ["FICTICIO-pescado"] },
+    { "codigo": "FICTICIO-limon", "nombre_es": "Limón", "nombre_en": "Lime", "alergenos": [] },
+    { "codigo": "FICTICIO-aji", "nombre_es": "Ají", "nombre_en": "Chili pepper", "alergenos": [] },
+    { "codigo": "FICTICIO-salsa-soya", "nombre_es": "Salsa de soya", "nombre_en": "Soy sauce", "alergenos": ["FICTICIO-soya", "FICTICIO-gluten"] },
+    { "codigo": "FICTICIO-langostino", "nombre_es": "Langostino", "nombre_en": "Prawn", "alergenos": ["FICTICIO-mariscos"] },
+    { "codigo": "FICTICIO-arroz", "nombre_es": "Arroz", "nombre_en": "Rice", "alergenos": [] },
+    { "codigo": "FICTICIO-quinua", "nombre_es": "Quinua", "nombre_en": "Quinoa", "alergenos": [] },
+    { "codigo": "FICTICIO-palta", "nombre_es": "Palta", "nombre_en": "Avocado", "alergenos": [] },
+    { "codigo": "FICTICIO-masa-trigo", "nombre_es": "Masa de trigo", "nombre_en": "Wheat dough", "alergenos": ["FICTICIO-gluten"] },
+    { "codigo": "FICTICIO-cerdo", "nombre_es": "Cerdo", "nombre_en": "Pork", "alergenos": [] },
+    { "codigo": "FICTICIO-chocolate", "nombre_es": "Chocolate", "nombre_en": "Chocolate", "alergenos": [] },
+    { "codigo": "FICTICIO-crema", "nombre_es": "Crema de leche", "nombre_en": "Cream", "alergenos": ["FICTICIO-lacteos"] },
+    { "codigo": "FICTICIO-maracuya", "nombre_es": "Maracuyá", "nombre_en": "Passion fruit", "alergenos": [] },
+    { "codigo": "FICTICIO-te-verde", "nombre_es": "Té verde", "nombre_en": "Green tea", "alergenos": [] }
+  ],
+  "restricciones": [
+    { "codigo": "FICTICIO-alergia-mani", "tipo": "alergia", "nombre_es": "Alergia al maní", "nombre_en": "Peanut allergy", "alergeno": "FICTICIO-mani" },
+    { "codigo": "FICTICIO-alergia-mariscos", "tipo": "alergia", "nombre_es": "Alergia a mariscos", "nombre_en": "Shellfish allergy", "alergeno": "FICTICIO-mariscos" },
+    { "codigo": "FICTICIO-alergia-gluten", "tipo": "alergia", "nombre_es": "Alergia al gluten", "nombre_en": "Gluten allergy", "alergeno": "FICTICIO-gluten" },
+    { "codigo": "FICTICIO-alergia-lacteos", "tipo": "alergia", "nombre_es": "Alergia a lácteos", "nombre_en": "Dairy allergy", "alergeno": "FICTICIO-lacteos" },
+    { "codigo": "FICTICIO-vegetariana", "tipo": "dieta", "nombre_es": "Vegetariana", "nombre_en": "Vegetarian" },
+    { "codigo": "FICTICIO-vegana", "tipo": "dieta", "nombre_es": "Vegana", "nombre_en": "Vegan" }
+  ],
+  "preferencias": [
+    { "codigo": "FICTICIO-picante", "nombre_es": "Picante", "nombre_en": "Spicy" },
+    { "codigo": "FICTICIO-pescados", "nombre_es": "Pescados", "nombre_en": "Fish dishes" },
+    { "codigo": "FICTICIO-carnes", "nombre_es": "Carnes", "nombre_en": "Meat" },
+    { "codigo": "FICTICIO-ligero", "nombre_es": "Algo ligero", "nombre_en": "Something light" },
+    { "codigo": "FICTICIO-dulce", "nombre_es": "Dulce", "nombre_en": "Sweet" },
+    { "codigo": "FICTICIO-sin-alcohol", "nombre_es": "Sin alcohol", "nombre_en": "Alcohol-free" }
+  ],
+  "productos": [
+    {
+      "codigo": "FICTICIO-P01", "categoria": "FICTICIO-entradas", "tipo": "plato", "destino": "cocina", "precio_centimos": 5800,
+      "textos": {
+        "es": { "nombre": "Ceviche de prueba [FICTICIO]", "descripcion": "Pescado blanco marinado en limón con ají. Plato ficticio de prueba." },
+        "en": { "nombre": "Test ceviche [FICTITIOUS]", "descripcion": "White fish cured in lime with chili pepper. Fictitious test dish." }
+      },
+      "ingredientes": ["FICTICIO-pescado-blanco", "FICTICIO-limon", "FICTICIO-aji"],
+      "alergenos": [{ "alergeno": "FICTICIO-pescado", "origen": "contiene" }],
+      "preferencias": ["FICTICIO-picante", "FICTICIO-pescados", "FICTICIO-ligero"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin maní" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin mariscos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin gluten" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin lácteos" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene pescado" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene pescado" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-P02", "categoria": "FICTICIO-entradas", "tipo": "plato", "destino": "cocina", "precio_centimos": 5200,
+      "textos": {
+        "es": { "nombre": "Tiradito de prueba [FICTICIO]", "descripcion": "Láminas de pescado con salsa de soya. Plato ficticio de prueba." },
+        "en": { "nombre": "Test tiradito [FICTITIOUS]", "descripcion": "Sliced fish with soy sauce. Fictitious test dish." }
+      },
+      "ingredientes": ["FICTICIO-pescado-blanco", "FICTICIO-salsa-soya", "FICTICIO-limon"],
+      "alergenos": [{ "alergeno": "FICTICIO-pescado", "origen": "contiene" }, { "alergeno": "FICTICIO-mani", "origen": "trazas" }],
+      "preferencias": ["FICTICIO-pescados", "FICTICIO-ligero"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "incompatible", "evidencia": "FICTICIO: trazas de maní en la línea" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin mariscos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "incompatible", "evidencia": "FICTICIO: la salsa de soya contiene trigo" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin lácteos" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene pescado" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene pescado" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-P03", "categoria": "FICTICIO-fondos", "tipo": "plato", "destino": "cocina", "precio_centimos": 6900,
+      "textos": {
+        "es": { "nombre": "Arroz salteado con langostinos de prueba [FICTICIO]", "descripcion": "Arroz salteado al wok con langostinos y salsa de soya. Plato ficticio de prueba." },
+        "en": { "nombre": "Test prawn fried rice [FICTITIOUS]", "descripcion": "Wok-fried rice with prawns and soy sauce. Fictitious test dish." }
+      },
+      "ingredientes": ["FICTICIO-arroz", "FICTICIO-langostino", "FICTICIO-salsa-soya"],
+      "alergenos": [{ "alergeno": "FICTICIO-mariscos", "origen": "contiene" }],
+      "preferencias": ["FICTICIO-picante"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "desconocido", "evidencia": "FICTICIO: proveedor de la salsa sin ficha técnica" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "incompatible", "evidencia": "FICTICIO: contiene langostinos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "incompatible", "evidencia": "FICTICIO: la salsa de soya contiene trigo" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin lácteos" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene langostinos" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene langostinos" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-P04", "categoria": "FICTICIO-entradas", "tipo": "plato", "destino": "cocina", "precio_centimos": 4200,
+      "textos": {
+        "es": { "nombre": "Ensalada de quinua de prueba [FICTICIO]", "descripcion": "Quinua, palta y limón. Plato ficticio de prueba." },
+        "en": { "nombre": "Test quinoa salad [FICTITIOUS]", "descripcion": "Quinoa, avocado and lime. Fictitious test dish." }
+      },
+      "ingredientes": ["FICTICIO-quinua", "FICTICIO-palta", "FICTICIO-limon"],
+      "alergenos": [],
+      "preferencias": ["FICTICIO-ligero"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin maní" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin mariscos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin gluten" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin lácteos" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "compatible", "evidencia": "FICTICIO: solo vegetales" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "compatible", "evidencia": "FICTICIO: sin productos animales" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-P05", "categoria": "FICTICIO-fondos", "tipo": "plato", "destino": "cocina", "precio_centimos": 4800,
+      "textos": {
+        "es": { "nombre": "Empanaditas de cerdo de prueba [FICTICIO]", "descripcion": "Masa de trigo rellena de cerdo con salsa de soya. Plato ficticio de prueba." },
+        "en": { "nombre": "Test pork dumplings [FICTITIOUS]", "descripcion": "Wheat dough filled with pork, served with soy sauce. Fictitious test dish." }
+      },
+      "ingredientes": ["FICTICIO-masa-trigo", "FICTICIO-cerdo", "FICTICIO-salsa-soya"],
+      "alergenos": [],
+      "preferencias": ["FICTICIO-carnes"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin maní" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin mariscos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "incompatible", "evidencia": "FICTICIO: masa de trigo" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin lácteos" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene cerdo" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene cerdo" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-P06", "categoria": "FICTICIO-postres", "tipo": "plato", "destino": "cocina", "precio_centimos": 3200,
+      "textos": {
+        "es": { "nombre": "Postre de chocolate de prueba [FICTICIO]", "descripcion": "Chocolate con crema de leche. Postre ficticio de prueba." },
+        "en": { "nombre": "Test chocolate dessert [FICTITIOUS]", "descripcion": "Chocolate with cream. Fictitious test dessert." }
+      },
+      "ingredientes": ["FICTICIO-chocolate", "FICTICIO-crema"],
+      "alergenos": [{ "alergeno": "FICTICIO-mani", "origen": "trazas" }],
+      "preferencias": ["FICTICIO-dulce"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "incompatible", "evidencia": "FICTICIO: trazas de maní" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin mariscos" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "compatible", "evidencia": "FICTICIO: receta de prueba sin gluten" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "incompatible", "evidencia": "FICTICIO: contiene crema" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "compatible", "evidencia": "FICTICIO: sin carne ni pescado" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "incompatible", "evidencia": "FICTICIO: contiene lácteos" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-B01", "categoria": "FICTICIO-bebidas", "tipo": "bebida", "destino": "barra", "precio_centimos": 1800,
+      "textos": {
+        "es": { "nombre": "Refresco de maracuyá de prueba [FICTICIO]", "descripcion": "Maracuyá natural sin alcohol. Bebida ficticia de prueba." },
+        "en": { "nombre": "Test passion fruit drink [FICTITIOUS]", "descripcion": "Alcohol-free fresh passion fruit. Fictitious test drink." }
+      },
+      "ingredientes": ["FICTICIO-maracuya"],
+      "alergenos": [],
+      "preferencias": ["FICTICIO-sin-alcohol", "FICTICIO-dulce"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" },
+        { "restriccion": "FICTICIO-vegana", "resultado": "compatible", "evidencia": "FICTICIO: solo fruta" }
+      ]
+    },
+    {
+      "codigo": "FICTICIO-B02", "categoria": "FICTICIO-bebidas", "tipo": "bebida", "destino": "barra", "precio_centimos": 1500,
+      "textos": {
+        "es": { "nombre": "Té verde de prueba [FICTICIO]", "descripcion": "Infusión de té verde. Bebida ficticia de prueba." },
+        "en": { "nombre": "Test green tea [FICTITIOUS]", "descripcion": "Green tea infusion. Fictitious test drink." }
+      },
+      "ingredientes": ["FICTICIO-te-verde"],
+      "alergenos": [],
+      "preferencias": ["FICTICIO-sin-alcohol", "FICTICIO-ligero"],
+      "evaluaciones": [
+        { "restriccion": "FICTICIO-alergia-mani", "resultado": "compatible", "evidencia": "FICTICIO: solo té" },
+        { "restriccion": "FICTICIO-alergia-mariscos", "resultado": "compatible", "evidencia": "FICTICIO: solo té" },
+        { "restriccion": "FICTICIO-alergia-gluten", "resultado": "compatible", "evidencia": "FICTICIO: solo té" },
+        { "restriccion": "FICTICIO-alergia-lacteos", "resultado": "compatible", "evidencia": "FICTICIO: solo té" },
+        { "restriccion": "FICTICIO-vegetariana", "resultado": "compatible", "evidencia": "FICTICIO: solo té" }
+      ]
+    }
+  ]
+}

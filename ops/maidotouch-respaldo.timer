@@ -1,0 +1,11 @@
+# /etc/systemd/system/maidotouch-respaldo.timer
+# Respaldo diario a las 05:00 de Lima (10:00 UTC), fuera del horario de servicio.
+[Unit]
+Description=Respaldo diario de la base de MaidoTouch
+
+[Timer]
+OnCalendar=*-*-* 10:00:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

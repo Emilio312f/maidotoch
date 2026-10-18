@@ -1,0 +1,37 @@
+name: Defecto
+description: Error encontrado en QA, staging o el piloto
+labels: ["defecto"]
+body:
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      options:
+        - Crítico (seguridad alimentaria, pedido perdido o imposible de enviar)
+        - Mayor (función principal con alternativa manual)
+        - Menor (presentación, textos)
+    validations:
+      required: true
+  - type: input
+    id: requisito
+    attributes:
+      label: Requisito afectado
+      placeholder: RF10
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      description: Sin datos personales de comensales.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado y resultado obtenido
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versión y entorno
+      placeholder: v1.0.0-rc.2 en staging

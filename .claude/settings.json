@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node recorrido.mjs /private/tmp/claude-501/-Users-helcorp-maidotoch-maidotoch/224c97ef-890d-47e4-a298-c1f9eaca972c/scratchpad/visual/capturas /private/tmp/claude-501/-Users-helcorp-maidotoch-maidotoch/224c97ef-890d-47e4-a298-c1f9eaca972c/scratchpad/visual/token)",
+      "Bash(sed -i '' 's/await sala.getByText\\(\"Pide atención\"\\).waitFor\\(\\);/await sala.getByText\\(\"Pide atención\"\\).first\\(\\).waitFor\\(\\);/' recorrido.mjs)",
+      "Bash(rm -rf /private/tmp/claude-501/-Users-helcorp-maidotoch-maidotoch/224c97ef-890d-47e4-a298-c1f9eaca972c/scratchpad/visual/capturas)",
+      "Bash(sed -i '' '136s/admin.locator\\(\"img.qr\"\\)/admin.locator\\(\".rejilla img.qr\"\\)/' recorrido.mjs)"
+    ]
+  }
+}

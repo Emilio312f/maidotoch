@@ -1,0 +1,52 @@
+# Despliegue (Plan §3.4 y §7):
+#   - push a develop      → staging, automático cuando CI termina bien.
+#   - etiqueta v*.*.*      → producción, con aprobación del Director de Proyecto en el entorno
+#                            "produccion" (Settings → Environments → Required reviewers).
+# Secretos por entorno: SSH_HOST, SSH_USUARIO, SSH_CLAVE (clave privada). Sin ellos, se omite.
+name: Desplegar
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+jobs:
+  desplegar:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      (github.event.workflow_run.head_branch == 'develop' || startsWith(github.event.workflow_run.head_branch, 'v'))
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.workflow_run.head_branch == 'develop' && 'staging' || 'produccion' }}
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USUARIO: ${{ secrets.SSH_USUARIO }}
+      SSH_CLAVE: ${{ secrets.SSH_CLAVE }}
+    steps:
+      - name: Secretos configurados
+        id: secretos
+        run: |
+          if [ -z "$SSH_HOST" ] || [ -z "$SSH_USUARIO" ] || [ -z "$SSH_CLAVE" ]; then
+            echo "Sin secretos SSH en este entorno: no se despliega."
+            echo "listos=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "listos=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/download-artifact@v4
+        if: steps.secretos.outputs.listos == 'true'
+        with:
+          name: paquete
+          path: paquete
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Copiar e instalar
+        if: steps.secretos.outputs.listos == 'true'
+        run: |
+          install -m 600 /dev/null clave
+          printf '%s\n' "$SSH_CLAVE" > clave
+          ssh_opts="-i clave -o StrictHostKeyChecking=accept-new"
+          archivo="$(ls paquete/*.tar.gz)"
+          scp $ssh_opts "$archivo" "$SSH_USUARIO@$SSH_HOST:/tmp/"
+          # desplegar.sh rechaza el horario de servicio, respalda la base y revierte si falla.
+          ssh $ssh_opts "$SSH_USUARIO@$SSH_HOST" "sudo /opt/maidotouch/ops/desplegar.sh /tmp/$(basename "$archivo")"
+          rm -f clave
