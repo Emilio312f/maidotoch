@@ -4,8 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "vite --config vite.comensal.config.ts",
+    "dev:backoffice": "vite --config vite.backoffice.config.ts",
+    "build": "tsc --noEmit && npm run build:comensal && npm run build:backoffice",
+    "build:comensal": "vite build --config vite.comensal.config.ts",
+    "build:backoffice": "vite build --config vite.backoffice.config.ts",
     "test": "vitest run"
   },
   "dependencies": {

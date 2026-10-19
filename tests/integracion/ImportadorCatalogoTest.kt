@@ -1,7 +1,7 @@
 package integracion
 
-import aplicacion.SolicitudInvalida
-import datos.consultar
+import comun.SolicitudInvalida
+import comun.datos.consultar
 import soporte.Escenario
 import java.io.File
 import kotlin.test.AfterTest

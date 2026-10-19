@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { ErrorApi, apiBackoffice, login, type Personal } from "../api";
+import { ErrorApi, apiBackoffice, login, type Personal } from "../comun/api";
 import { Comandas, Disponibilidad, Llamados, Metricas, Puestos, Validacion } from "./Paneles";
 import { Cuentas, Piloto } from "./PanelesAdministracion";
 

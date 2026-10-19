@@ -14,8 +14,12 @@ maidotouch.example {
 	}
 
 	# Recursos de la web-app con nombre versionado: se pueden guardar en caché mucho tiempo.
-	@versionados path /assets/* /fotos/*
+	@versionados path /assets/* /admin/assets/* /fotos/*
 	header @versionados Cache-Control "public, max-age=31536000, immutable"
 
-	reverse_proxy 127.0.0.1:8080
+	# API Gateway: único punto de entrada; los demás servicios escuchan solo en 127.0.0.1 con TLS interno.
+	# flush_interval -1: el bus de eventos (Server-Sent Events) llega sin demora a las pantallas.
+	reverse_proxy 127.0.0.1:8080 {
+		flush_interval -1
+	}
 }

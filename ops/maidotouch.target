@@ -1,0 +1,7 @@
+# /etc/systemd/system/maidotouch.target — agrupa los once servicios de MaidoTouch.
+[Unit]
+Description=MaidoTouch (todos los servicios)
+Wants=maidotouch@sesion.service maidotouch@seguridad-alimentaria.service maidotouch@catalogo.service maidotouch@adaptador-ia.service maidotouch@trazabilidad.service maidotouch@recomendacion.service maidotouch@pedido.service maidotouch@atencion.service maidotouch@piloto.service maidotouch@bus.service maidotouch@gateway.service
+
+[Install]
+WantedBy=multi-user.target

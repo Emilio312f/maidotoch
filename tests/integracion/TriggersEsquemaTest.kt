@@ -1,7 +1,7 @@
 package integracion
 
-import datos.BaseDatos
-import datos.consultar
+import comun.datos.BaseDatos
+import comun.datos.consultar
 import soporte.BaseDePrueba
 import java.sql.SQLException
 import kotlin.test.AfterTest

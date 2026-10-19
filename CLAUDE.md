@@ -62,7 +62,11 @@ Estas reglas vienen del Acta, del SRS y del Diseño Arquitectónico. Ninguna tar
 > - Backend: `Kotlin 2.4 (JVM 21) con Gradle; Ktor para la API REST (se agrega con el primer endpoint)`
 > - Frontend: `React + Vite (TypeScript), web-app responsive en el navegador; sin apps nativas`
 > - Pruebas: `kotlin-test sobre JUnit 5 (./gradlew test)`
-> - Acceso a SQLite: `sqlite-jdbc, siempre mediante datos.BaseDatos.conectar()`
+> - Acceso a SQLite: `sqlite-jdbc, siempre mediante comun.datos.BaseDatos.conectar()`
+>
+> **Diseño Arquitectónico v1.1 (19/10/2026, pendiente de aprobación del sponsor):** servicios
+> independientes. Cada servicio es un módulo Gradle con su propio proceso (Ktor sobre Netty, que
+> permite TLS interno) y su propio despliegue. Ver `docs/diseno-arquitectonico-v1.1.md`.
 
 **Instrucción para el agente:** no cambies el stack por tu cuenta. No agregues
 dependencias nuevas sin decir cuál, para qué y por qué.
@@ -71,46 +75,72 @@ Restricciones fijas, sea cual sea el stack:
 
 - Base de datos **SQLite**. Ejecutar `PRAGMA foreign_keys = ON;` en **cada** conexión.
 - Cliente: **web-app responsive** que corre en el navegador del celular, sin instalación.
-- API **REST sobre HTTPS**.
-- Despliegue: **un solo servidor en la nube** (monolito modular). Nada de microservicios
-  ni serverless en esta fase.
+  Dos aplicaciones: comensal (`/`, `/m/<token>`) y back-office (`/admin`).
+- API **REST sobre HTTPS**, con un único punto de entrada: el **API Gateway**.
+- Despliegue: **un solo servidor en la nube** con un proceso por servicio (systemd
+  `maidotouch@<servicio>`). Nada de serverless en esta fase.
 - Interfaz en **español e inglés** (RF04, RNF06).
 
 ---
 
 ## 4. Arquitectura
 
-Cliente-servidor en **cuatro capas**, desplegado como **monolito modular**. Cada capa solo
-conoce a la inmediatamente inferior. La capa de dominio no depende del proveedor de IA ni
-de detalles de infraestructura.
+**Servicios independientes** (Diseño v1.1). El cliente habla solo con el **API Gateway**, que
+enruta cada solicitud al servicio responsable con un **token de servicio**, autentica al personal
+del back-office y limita las solicitudes. Entre servicios: HTTP interno (con TLS en el servidor)
+cuando se necesita respuesta, y **bus de eventos** para comandas y llamados.
 
-| Capa | Componentes |
-|---|---|
-| 1 · Presentación | Activación NFC/QR, catálogo, perfil de preferencias, UI del asistente, carrito/pedido, llamado al mozo, back-office de disponibilidad |
-| 2 · Servicios de aplicación (API) | Sesión, Catálogo, **Orquestador de Recomendación**, Pedido, Atención, Trazabilidad |
-| 3 · Dominio | **Motor de Restricciones Alimentarias**, Filtro de disponibilidad, Motor de Recomendación (estrategia IA o Fallback), Generador de explicaciones |
-| 4 · Datos | Repositorios sobre SQLite |
-| Integración | **Adaptador del proveedor de IA** (única frontera con el servicio externo) |
+| Servicio | Responsabilidad | Escribe en |
+|---|---|---|
+| API Gateway | Entrada única, enrutamiento, autenticación del personal, límite de solicitudes, web-apps | — |
+| Sesión | Sesión por puesto e idioma, perfil, cuentas del personal, puestos NFC/QR | `sesiones`, `sesion_*`, `accesos`, `puntos_servicio`, `personal*` |
+| Catálogo | Carta con disponibilidad (caché), back-office de disponibilidad y validación, fotos | `productos`, `producto_textos`, `categorias`, `preferencias`, `producto_preferencias`, `disponibilidad_historial` |
+| **Seguridad Alimentaria** | **Motor de Restricciones** (Seguro / Inseguro / Sin dato), sin IA | `ingredientes`, `alergenos`, `restricciones`, `producto_ingredientes`, `ingrediente_alergenos`, `producto_alergenos`, `producto_restricciones` |
+| Recomendación | **Orquestador**: disponibilidad → restricciones → ranking → explicación; fallback | `recomendaciones`, `consultas_asistente` |
+| Adaptador de IA | Única frontera con el proveedor: DTO mínimo, timeout 5 s, circuit breaker, validación de ids | — |
+| Pedido | Carrito, confirmación, comandas | `pedidos`, `pedido_items`, `comandas` |
+| Atención | Llamados al mozo y derivaciones | `llamados_mozo` |
+| Trazabilidad | Eventos mostrada / aceptada / modificada / rechazada | `recomendacion_eventos` |
+| Piloto | Encuestas, mediciones, reporte diario, Go/No-Go | `encuestas`, `mediciones_piloto` |
+| Bus de eventos | Publicación-suscripción para cocina, barra y sala | — (sin datos persistentes) |
 
-Patrones a usar: Capas, Facade (el Orquestador), Strategy (IA / Fallback), Adapter
-(proveedor de IA), Specification (reglas de exclusión), Chain of Responsibility (la cadena
-del punto 2.2), Circuit Breaker + Timeout, Repository, Observer (comandas y llamados),
-DTO hacia la IA, caché del catálogo invalidada al cambiar disponibilidad.
+**Datos:** una sola base SQLite con la migración 001 y todos sus triggers. Es la excepción
+documentada al patrón «una base por servicio»: los triggers de seguridad alimentaria cruzan
+catálogo, alérgenos, sesiones, recomendaciones y pedidos, y separarlos violaría la regla 2.7.
+Cada servicio **escribe solo en sus tablas** y pide lo demás por la API del dueño. Excepciones de
+lectura: Seguridad Alimentaria lee en una sola transacción `v_productos_compatibles` y los datos
+que la vista usa (coherencia de revisiones), y Piloto hace reportes de solo lectura.
 
-Estructura sugerida del repositorio:
+Reglas de dependencia:
+
+- Ningún servicio escribe en tablas de otro; los datos ajenos se piden por su API interna (`/interno/...`).
+- El Servicio de Recomendación llama a Seguridad Alimentaria antes que al Adaptador de IA.
+- Solo el Adaptador de IA conoce la clave y la dirección del proveedor (`/etc/maidotouch/adaptador-ia.env`).
+- Las rutas `/interno/...` nunca se exponen en el Gateway. Ningún servicio atiende sin su token.
+- Los contratos entre servicios (DTO, interfaces `Api*` y clientes HTTP) viven en `backend/comun/src/contratos`.
+
+Dentro de cada servicio se mantienen las capas: presentación (rutas), aplicación, dominio
+(sin dependencias externas) y datos. Patrones: API Gateway (Facade), Chain of Responsibility (la
+cadena del punto 2.2, dentro del Orquestador), Strategy (IA / Fallback), Adapter (Adaptador de
+IA), Circuit Breaker + Timeout, Specification (reglas de exclusión), Observer (bus de eventos),
+Repository, DTO hacia la IA, caché del catálogo invalidada al cambiar disponibilidad.
+
+Estructura del repositorio:
 
 ```
 db/migrations/        001_esquema_inicial.sql (no editar), 002_..., 003_...
 backend/
-  presentacion/       controladores HTTP
-  aplicacion/         servicios y orquestador
-  dominio/            motores y reglas (sin dependencias externas)
-  integracion/        adaptador del proveedor de IA
-  datos/              repositorios
-frontend/
+  comun/              infraestructura compartida: SQLite, servidor y cliente internos, contratos
+  gateway/            API Gateway
+  sesion/  catalogo/  seguridad-alimentaria/  recomendacion/  adaptador-ia/
+  pedido/  atencion/  trazabilidad/  piloto/  bus/
+  herramientas/       comandos de operación (migrar, tokens, cuentas, catálogo, verificar, demo)
+frontend/             comensal/ y backoffice/ (dos builds), src/comun compartido
 tests/
   dominio/            pruebas del Motor de Restricciones y del fallback
-  integracion/
+  integracion/        servicios, triggers y API de punta a punta por el Gateway
+  soporte/            base de prueba, Sistema (en proceso) y SistemaHttp (once procesos)
+ops/                  systemd (maidotouch@.service, maidotouch.target), despliegue, reversión, Caddy
 docs/
 ```
 
@@ -178,7 +208,8 @@ duplicarlos ni esquivarlos. Fechas en UTC (ISO 8601) e importes en **céntimos d
 
 ## 6. Flujo de recomendación (implementación esperada)
 
-1. Obtener candidatos desde `v_productos_compatibles` para la sesión.
+1. Obtener candidatos: el Catálogo da los productos activos y disponibles; el Servicio de
+   Seguridad Alimentaria los evalúa y los cruza con `v_productos_compatibles` para la sesión.
 2. Calcular aparte los productos excluidos por falta de evaluación (`desconocido` o sin
    fila en `producto_restricciones`). Si la consulta del comensal depende de ellos, ofrecer
    la derivación al mozo (`restriccion_incierta`).
@@ -211,6 +242,9 @@ configuración.
 | Timeout del proveedor de IA | 5 s → fallback |
 | Ranking de respaldo | ≤ 1 s |
 | Pedido confirmado hasta llegar a cocina/barra | ≤ 2 s |
+
+Con servicios independientes cada salto interno suma tiempo: el presupuesto se mide con los
+saltos reales (`scripts/medir_latencia.py` contra el Gateway), no se supone.
 
 ---
 

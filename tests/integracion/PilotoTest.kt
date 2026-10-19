@@ -1,11 +1,11 @@
 package integracion
 
-import aplicacion.Conflicto
-import aplicacion.NoAutenticado
-import aplicacion.Prohibido
-import aplicacion.ResultadoChequeo
-import aplicacion.SolicitudInvalida
+import comun.Conflicto
+import comun.NoAutenticado
+import comun.Prohibido
+import comun.SolicitudInvalida
 import kotlinx.coroutines.runBlocking
+import piloto.ResultadoChequeo
 import soporte.Escenario
 import java.time.LocalDate
 import java.time.ZoneId

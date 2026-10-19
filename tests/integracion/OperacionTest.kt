@@ -1,12 +1,12 @@
 package integracion
 
-import aplicacion.Conflicto
-import aplicacion.NoAutenticado
-import aplicacion.NoEncontrado
-import aplicacion.Prohibido
-import aplicacion.SesionNoDisponible
-import aplicacion.SolicitudInvalida
-import datos.consultar
+import comun.Conflicto
+import comun.NoAutenticado
+import comun.NoEncontrado
+import comun.Prohibido
+import comun.SesionNoDisponible
+import comun.SolicitudInvalida
+import comun.datos.consultar
 import soporte.Escenario
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -172,19 +172,19 @@ class OperacionTest {
 
     @Test
     fun `un puesto desactivado no abre sesiones y vuelve al pedido tradicional`() {
-        val puesto = e.app.backoffice.crearPuesto(e.admin, "B7", "barra")
+        val puesto = e.app.puestos.crearPuesto(e.admin, "B7", "barra")
         assertEquals(2, puesto.puesto.accesos.size)
         assertTrue(puesto.enlaceNfc!!.startsWith("http://localhost:5173/m/"))
         val token = puesto.puesto.accesos.first { it.canal == "qr" }.token
         e.app.sesiones.iniciar(token, "en")
 
-        e.app.backoffice.cambiarActivoPuesto(e.admin, puesto.puesto.id, false)
+        e.app.puestos.cambiarActivoPuesto(e.admin, puesto.puesto.id, false)
 
         val error = assertFailsWith<Prohibido> { e.app.sesiones.iniciar(token, "es") }
         assertEquals("puesto_inactivo", error.codigo)
         assertFailsWith<NoEncontrado> { e.app.sesiones.iniciar("token-inexistente", "es") }
-        assertFailsWith<Prohibido> { e.app.backoffice.crearPuesto(e.cocina, "B8", "barra") }
-        assertFailsWith<Conflicto> { e.app.backoffice.crearPuesto(e.admin, "B7", "barra") }
+        assertFailsWith<Prohibido> { e.app.puestos.crearPuesto(e.cocina, "B8", "barra") }
+        assertFailsWith<Conflicto> { e.app.puestos.crearPuesto(e.admin, "B7", "barra") }
     }
 
     @Test
@@ -216,14 +216,14 @@ class OperacionTest {
     @Test
     fun `metricas del piloto`() {
         pedidoConfirmado()
-        e.app.sesiones.encuesta(e.sesion(), 5)
+        e.app.piloto.encuesta(e.sesion(), 5)
 
-        val metricas = e.app.backoffice.metricas(e.admin)
+        val metricas = e.app.piloto.metricas(e.admin)
 
         assertEquals(1, metricas.pedidosConfirmados)
         assertEquals(4200L + 1800L, metricas.ticketPromedioCentimos)
         assertEquals(5.0, metricas.satisfaccionPromedio)
-        assertFailsWith<Prohibido> { e.app.backoffice.metricas(e.cocina) }
-        assertFailsWith<SolicitudInvalida> { e.app.sesiones.encuesta(e.sesion(), 6) }
+        assertFailsWith<Prohibido> { e.app.piloto.metricas(e.cocina) }
+        assertFailsWith<SolicitudInvalida> { e.app.piloto.encuesta(e.sesion(), 6) }
     }
 }

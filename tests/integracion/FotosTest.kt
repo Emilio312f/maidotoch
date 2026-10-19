@@ -1,18 +1,9 @@
 package integracion
 
-import aplicacion.Prohibido
-import aplicacion.SolicitudInvalida
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.readRawBytes
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
-import io.ktor.server.testing.testApplication
-import presentacion.moduloMaidoTouch
+import comun.Prohibido
+import comun.SolicitudInvalida
 import soporte.Escenario
+import soporte.SistemaHttp
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
@@ -47,7 +38,7 @@ class FotosTest {
 
         val url = detalle.producto.fotoUrl!!
         assertTrue(url.startsWith("/fotos/ficticio-p01-") && url.endsWith(".jpg"), url)
-        val archivo = File(e.app.configuracion.directorioFotos, url.removePrefix("/fotos/"))
+        val archivo = File(e.app.directorioFotos, url.removePrefix("/fotos/"))
         val guardada = ImageIO.read(archivo)
         assertEquals(800 to 400, guardada.width to guardada.height)
         assertFalse(detalle.producto.validado, "Cambiar la foto anula la validación")
@@ -62,7 +53,7 @@ class FotosTest {
     fun `una foto pequena no se agranda`() {
         val detalle = e.app.fotos.subir(e.cocina, e.producto("FICTICIO-B01"), png(300, 200))
 
-        val guardada = ImageIO.read(File(e.app.configuracion.directorioFotos, detalle.producto.fotoUrl!!.removePrefix("/fotos/")))
+        val guardada = ImageIO.read(File(e.app.directorioFotos, detalle.producto.fotoUrl!!.removePrefix("/fotos/")))
         assertEquals(300 to 200, guardada.width to guardada.height)
     }
 
@@ -77,21 +68,22 @@ class FotosTest {
     }
 
     @Test
-    fun `la API recibe la foto y la sirve en fotos`() = testApplication {
-        application { moduloMaidoTouch(e.app, programarTareas = false) }
-        val token = e.app.personal.iniciarSesion("cocina-prueba", Escenario.CLAVE).token
+    fun `la API recibe la foto por el gateway y la sirve en fotos`() {
+        SistemaHttp(e.db, mapOf("MAIDOTOUCH_FOTOS_DIR" to e.app.directorioFotos.absolutePath)).use { sistema ->
+            val token = e.app.personal.iniciarSesion("cocina-prueba", Escenario.CLAVE).token
+            val producto = e.producto("FICTICIO-P04")
 
-        val respuesta = client.post("/api/backoffice/productos/${e.producto("FICTICIO-P04")}/foto") {
-            header("Authorization", "Bearer $token")
-            contentType(ContentType.Image.PNG)
-            setBody(png(1200, 900))
+            val respuesta = sistema.pedirBytes(
+                "POST", "/api/backoffice/productos/$producto/foto", png(1200, 900),
+                mapOf("Authorization" to "Bearer $token", "Content-Type" to "image/png"),
+            )
+            assertEquals(200, respuesta.statusCode(), String(respuesta.body()))
+
+            val url = e.app.backoffice.detalle(e.cocina, producto).producto.fotoUrl!!
+            val foto = sistema.pedirBytes("GET", url)
+            assertEquals(200, foto.statusCode())
+            assertEquals("image/jpeg", foto.headers().firstValue("Content-Type").get().substringBefore(';'))
+            assertEquals(800, ImageIO.read(ByteArrayInputStream(foto.body())).width)
         }
-        assertEquals(HttpStatusCode.OK, respuesta.status)
-
-        val url = e.app.backoffice.detalle(e.cocina, e.producto("FICTICIO-P04")).producto.fotoUrl!!
-        val foto = client.get(url)
-        assertEquals(HttpStatusCode.OK, foto.status)
-        assertEquals(ContentType.Image.JPEG, foto.headers["Content-Type"]?.let(ContentType::parse)?.withoutParameters())
-        assertEquals(800, ImageIO.read(ByteArrayInputStream(foto.readRawBytes())).width)
     }
 }

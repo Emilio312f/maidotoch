@@ -1,18 +1,24 @@
 package dominio.recomendacion
 
-import aplicacion.OrquestadorRecomendacion
-import configuracion.Configuracion
-import datos.consultar
+import comun.Entorno
+import comun.contratos.ApiIA
+import comun.contratos.CandidatoParaIA
+import comun.contratos.EstadoIA
+import comun.contratos.SolicitudOrdenamiento
+import comun.datos.consultar
+import comun.http.ClienteInterno
 import dominio.restricciones.ResultadoEvaluacion.DESCONOCIDO
-import integracion.OrdenadorProtegido
-import integracion.PayloadIA
+import ia.OrdenadorExterno
+import ia.PayloadIA
+import ia.ServicioAdaptadorIA
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import presentacion.Aplicacion
 import soporte.BaseDePrueba
+import soporte.Sistema
+import java.lang.reflect.Modifier
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,14 +26,19 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-/** Proveedor de IA falso: registra lo que recibe y responde lo que la prueba indique. */
-class IaFalsa(var responder: suspend (SolicitudOrdenamiento) -> List<Long> = { s -> s.candidatos.map { it.id } }) : OrdenadorExterno {
+/**
+ * Proveedor de IA falso: registra lo que recibe y responde lo que la prueba indique. Sirve como
+ * Servicio Adaptador de IA (ApiIA) o como proveedor detrás del adaptador real (OrdenadorExterno).
+ */
+class IaFalsa(var responder: suspend (SolicitudOrdenamiento) -> List<Long> = { s -> s.candidatos.map { it.id } }) : ApiIA, OrdenadorExterno {
     val solicitudes = mutableListOf<SolicitudOrdenamiento>()
 
     override suspend fun ordenar(solicitud: SolicitudOrdenamiento): List<Long> {
         solicitudes += solicitud
         return responder(solicitud)
     }
+
+    override fun estado() = EstadoIA(configurada = true, modelo = "FICTICIO", timeoutMs = 5_000, circuitoAbierto = false)
 }
 
 /**
@@ -52,7 +63,9 @@ class OrquestadorRecomendacionTest {
     @AfterTest
     fun cerrar() = db.close()
 
-    private fun orquestador(ia: OrdenadorExterno?, limite: Int = 10) = OrquestadorRecomendacion(db.fuente, ia, 3, limite)
+    /** Cadena completa en proceso: Sesión, Catálogo, Seguridad Alimentaria, Recomendación y Trazabilidad. */
+    private fun orquestador(ia: ApiIA?, limite: Int = 10, timeoutMs: Long = 5_000) =
+        Sistema(db.fuente, ia, limiteConsultasIa = limite, timeoutIaMs = timeoutMs).orquestador
 
     private fun filasRecomendaciones() = db.conn.consultar(
         "SELECT producto_id, motor, revision_producto, revision_perfil, version_reglas FROM recomendaciones ORDER BY posicion",
@@ -92,12 +105,41 @@ class OrquestadorRecomendacionTest {
         val lenta = IaFalsa { delay(10_000); listOf(seguro) }
         val inicio = System.currentTimeMillis()
 
-        val respuesta = orquestador(OrdenadorProtegido(lenta, timeoutMs = 200)).recomendar(sesion, "algo picante")
+        val respuesta = orquestador(lenta, timeoutMs = 200).recomendar(sesion, "algo picante")
 
         assertTrue(System.currentTimeMillis() - inicio < 3_000, "No debe esperar a la IA más allá del timeout")
         assertEquals("fallback", respuesta.motor)
         assertTrue(respuesta.recomendaciones.isNotEmpty())
         assertEquals("fallback", filasRecomendaciones().first()[1])
+    }
+
+    @Test
+    fun `el Servicio Adaptador de IA corta al proveedor lento y el orquestador usa el fallback`() = runBlocking<Unit> {
+        val lenta = IaFalsa { delay(10_000); listOf(seguro) }
+        val adaptador = ServicioAdaptadorIA(lenta, timeoutMs = 200, modelo = "FICTICIO")
+        val inicio = System.currentTimeMillis()
+
+        val respuesta = orquestador(adaptador).recomendar(sesion, "algo picante")
+
+        assertTrue(System.currentTimeMillis() - inicio < 3_000, "El adaptador no debe esperar al proveedor más allá del timeout")
+        assertEquals("fallback", respuesta.motor)
+        assertTrue(respuesta.recomendaciones.isNotEmpty())
+    }
+
+    @Test
+    fun `el Servicio Adaptador de IA descarta ids que no estaban en la lista enviada`() = runBlocking<Unit> {
+        val adaptador = ServicioAdaptadorIA(IaFalsa { listOf(inseguro, 999_999, seguro) }, timeoutMs = 5_000, modelo = "FICTICIO")
+        val solicitud = SolicitudOrdenamiento("algo", 3, listOf(CandidatoParaIA(seguro, "x", "y", emptyList())))
+
+        assertEquals(listOf(seguro), adaptador.ordenar(solicitud))
+    }
+
+    @Test
+    fun `sin clave del proveedor el adaptador responde no disponible y el orquestador usa el fallback`() = runBlocking<Unit> {
+        val respuesta = orquestador(ServicioAdaptadorIA(null, 5_000, null)).recomendar(sesion, "algo picante")
+
+        assertEquals("fallback", respuesta.motor)
+        assertEquals(seguro, respuesta.recomendaciones.first().productoId)
     }
 
     @Test
@@ -110,9 +152,9 @@ class OrquestadorRecomendacionTest {
 
     @Test
     fun `el timeout por defecto del proveedor es de 5 segundos`() {
-        assertEquals(5_000, Configuracion().iaTimeoutMs)
-        val app = Aplicacion(Configuracion(directorioFrontend = null), db.fuente, IaFalsa())
-        assertEquals(5_000, app.ordenador!!.timeoutMs)
+        assertEquals(5_000, Entorno.timeoutIaMs(emptyMap()))
+        assertEquals(5_000, ServicioAdaptadorIA(IaFalsa(), Entorno.timeoutIaMs(emptyMap()), "FICTICIO").protegido!!.timeoutMs)
+        assertEquals(5_000, Sistema(db.fuente, IaFalsa()).orquestador.timeoutIaMs)
     }
 
     @Test
@@ -145,9 +187,16 @@ class OrquestadorRecomendacionTest {
         listOf(sesion, "FICTICIO-ALG-mani", "FICTICIO-RES-alergia-mani", "FICTICIO-ING-salsa-mani", "alergia", "alerg").forEach {
             assertFalse(it in payload, "El DTO no debe contener «$it»")
         }
-        val camposSolicitud = SolicitudOrdenamiento::class.java.declaredFields.map { it.name }.toSet()
-        assertEquals(setOf("consulta", "maximo", "candidatos"), camposSolicitud)
-        assertEquals(setOf("id", "nombre", "descripcion", "etiquetas"), CandidatoParaIA::class.java.declaredFields.map { it.name }.toSet())
+        fun campos(clase: Class<*>) = clase.declaredFields.filterNot { Modifier.isStatic(it.modifiers) }.map { it.name }.toSet()
+        assertEquals(setOf("consulta", "maximo", "candidatos"), campos(SolicitudOrdenamiento::class.java))
+        assertEquals(setOf("id", "nombre", "descripcion", "etiquetas"), campos(CandidatoParaIA::class.java))
+
+        // Lo que viaja del Servicio de Recomendación al Servicio Adaptador de IA tampoco lleva datos sensibles.
+        val interno = ClienteInterno.JSON.encodeToString(SolicitudOrdenamiento.serializer(), ia.solicitudes.single())
+        assertEquals(setOf("consulta", "maximo", "candidatos"), Json.parseToJsonElement(interno).jsonObject.keys)
+        listOf(sesion, "FICTICIO-ALG-mani", "FICTICIO-RES-alergia-mani", "FICTICIO-ING-salsa-mani", "alergia", "alerg").forEach {
+            assertFalse(it in interno, "La solicitud interna no debe contener «$it»")
+        }
     }
 
     @Test

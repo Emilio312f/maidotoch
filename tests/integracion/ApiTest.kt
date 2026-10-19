@@ -1,142 +1,137 @@
 package integracion
 
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.patch
-import io.ktor.client.request.post
-import io.ktor.client.request.put
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
-import io.ktor.server.testing.ApplicationTestBuilder
-import io.ktor.server.testing.testApplication
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
-import presentacion.moduloMaidoTouch
 import soporte.Escenario
+import soporte.SistemaHttp
+import java.net.http.HttpResponse
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/** La API REST de punta a punta: comensal y back-office. Datos FICTICIOS. */
+/**
+ * La API REST de punta a punta, como la usa la web-app: entra por el API Gateway y recorre los
+ * servicios por HTTP, cada uno en su propio puerto y con su token. Datos FICTICIOS.
+ */
 class ApiTest {
     private val e = Escenario()
+    private val sistema = SistemaHttp(e.db)
 
     @AfterTest
-    fun cerrar() = e.close()
-
-    private fun prueba(bloque: suspend ApplicationTestBuilder.() -> Unit) = testApplication {
-        application { moduloMaidoTouch(e.app, programarTareas = false) }
-        bloque()
+    fun cerrar() {
+        sistema.close()
+        e.close()
     }
 
-    private suspend fun HttpResponse.json(): JsonElement = Json.parseToJsonElement(bodyAsText())
+    private fun HttpResponse<String>.json(): JsonElement = Json.parseToJsonElement(body())
 
     private val JsonElement.o get() = jsonObject
 
-    @Test
-    fun `flujo completo del comensal hasta la comanda en cocina`() = prueba {
-        val sesion = client.post("/api/sesiones") {
-            contentType(ContentType.Application.Json)
-            setBody("""{"token":"${e.tokenMesa}","idioma":"es"}""")
-        }.also { assertEquals(HttpStatusCode.Created, it.status) }.json().o["sesionId"]!!.jsonPrimitive.content
+    private fun conSesion(sesion: String) = mapOf("X-Sesion" to sesion)
 
-        val opciones = client.get("/api/opciones-perfil?idioma=en").json().o
+    @Test
+    fun `flujo completo del comensal hasta la comanda en cocina`() {
+        val creada = sistema.pedir("POST", "/api/sesiones", """{"token":"${e.tokenMesa}","idioma":"es"}""")
+        assertEquals(201, creada.statusCode(), creada.body())
+        val sesion = creada.json().o["sesionId"]!!.jsonPrimitive.content
+
+        val opciones = sistema.pedir("GET", "/api/opciones-perfil?idioma=en").json().o
         val mani = opciones["restricciones"]!!.jsonArray.first { it.o["codigo"]!!.jsonPrimitive.content == "FICTICIO-alergia-mani" }.o["id"]!!.jsonPrimitive.long
         assertEquals("Peanut allergy", opciones["restricciones"]!!.jsonArray.first { it.o["id"]!!.jsonPrimitive.long == mani }.o["nombre"]!!.jsonPrimitive.content)
 
-        val sinPerfil = client.post("/api/sesion/asistente") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("""{"consulta":"algo ligero"}""")
-        }
-        assertEquals(HttpStatusCode.Conflict, sinPerfil.status)
+        val sinPerfil = sistema.pedir("POST", "/api/sesion/asistente", """{"consulta":"algo ligero"}""", conSesion(sesion))
+        assertEquals(409, sinPerfil.statusCode())
         assertEquals("perfil_incompleto", sinPerfil.json().o["error"]!!.jsonPrimitive.content)
 
-        client.put("/api/sesion/perfil") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("""{"restricciones":[$mani],"preferencias":[]}""")
-        }.also { assertEquals(HttpStatusCode.OK, it.status) }
+        assertEquals(200, sistema.pedir("PUT", "/api/sesion/perfil", """{"restricciones":[$mani],"preferencias":[]}""", conSesion(sesion)).statusCode())
 
-        val carta = client.get("/api/sesion/carta") { header("X-Sesion", sesion) }.json().o
+        val carta = sistema.pedir("GET", "/api/sesion/carta", cabeceras = conSesion(sesion)).json().o
         assertEquals(8, carta["productos"]!!.jsonArray.size)
 
-        val asistente = client.post("/api/sesion/asistente") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("""{"consulta":"algo ligero"}""")
-        }.json().o
-        assertEquals("fallback", asistente["motor"]!!.jsonPrimitive.content)
-        val primera = asistente["recomendaciones"]!!.jsonArray.first().o
+        val asistente = sistema.pedir("POST", "/api/sesion/asistente", """{"consulta":"algo ligero"}""", conSesion(sesion))
+        assertEquals(200, asistente.statusCode(), asistente.body())
+        // Sin ANTHROPIC_API_KEY el Servicio Adaptador de IA no está configurado: responde el ranking por reglas.
+        assertEquals("fallback", asistente.json().o["motor"]!!.jsonPrimitive.content)
+        val primera = asistente.json().o["recomendaciones"]!!.jsonArray.first().o
         val productoId = primera["productoId"]!!.jsonPrimitive.long
         val recomendacionId = primera["recomendacionId"]!!.jsonPrimitive.long
         assertTrue(primera["explicacion"]!!.jsonPrimitive.content.isNotBlank())
 
-        val carrito = client.post("/api/sesion/pedido/items") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json)
-            setBody("""{"productoId":$productoId,"cantidad":1,"recomendacionId":$recomendacionId}""")
-        }.json().o
+        val carrito = sistema.pedir(
+            "POST", "/api/sesion/pedido/items",
+            """{"productoId":$productoId,"cantidad":1,"recomendacionId":$recomendacionId}""", conSesion(sesion),
+        ).json().o
         val item = carrito["borrador"]!!.o["items"]!!.jsonArray.single().o["id"]!!.jsonPrimitive.long
-        client.patch("/api/sesion/pedido/items/$item") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("""{"cantidad":2}""")
-        }.also { assertEquals(HttpStatusCode.OK, it.status) }
+        assertEquals(200, sistema.pedir("PATCH", "/api/sesion/pedido/items/$item", """{"cantidad":2}""", conSesion(sesion)).statusCode())
 
-        val sinConfirmar = client.post("/api/sesion/pedido/confirmar") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("{}")
-        }
-        assertEquals(HttpStatusCode.BadRequest, sinConfirmar.status)
+        assertEquals(400, sistema.pedir("POST", "/api/sesion/pedido/confirmar", "{}", conSesion(sesion)).statusCode())
 
-        val pedido = client.post("/api/sesion/pedido/confirmar") {
-            header("X-Sesion", sesion); contentType(ContentType.Application.Json); setBody("""{"confirmo":true}""")
-        }.json().o
+        val pedido = sistema.pedir("POST", "/api/sesion/pedido/confirmar", """{"confirmo":true}""", conSesion(sesion)).json().o
         assertEquals("confirmado", pedido["estado"]!!.jsonPrimitive.content)
 
-        val token = client.post("/api/backoffice/login") {
-            contentType(ContentType.Application.Json); setBody("""{"identificador":"cocina-prueba","clave":"${Escenario.CLAVE}"}""")
-        }.json().o["token"]!!.jsonPrimitive.content
+        // Trazabilidad entre servicios: mostrada (Recomendación), aceptada y modificada (Pedido).
+        val eventos = e.db.conn.prepareStatement("SELECT accion FROM recomendacion_eventos WHERE recomendacion_id = ? ORDER BY id").use { st ->
+            st.setLong(1, recomendacionId)
+            st.executeQuery().use { rs -> buildList { while (rs.next()) add(rs.getString(1)) } }
+        }
+        assertEquals(listOf("mostrada", "aceptada", "modificada"), eventos)
+
         val destino = pedido["comandas"]!!.jsonArray.single().o["destino"]!!.jsonPrimitive.content
-        val comandas = client.get("/api/backoffice/comandas?destino=$destino") {
-            header("Authorization", "Bearer ${e.app.personal.iniciarSesion(if (destino == "barra") "barra-prueba" else "cocina-prueba", Escenario.CLAVE).token}")
-        }.json().jsonArray
+        val tokenDestino = login(if (destino == "barra") "barra-prueba" else "cocina-prueba")
+        val comandas = sistema.pedir("GET", "/api/backoffice/comandas?destino=$destino", cabeceras = bearer(tokenDestino)).json().jsonArray
         assertEquals(1, comandas.size)
         assertEquals("T1", comandas.single().o["puesto"]!!.jsonPrimitive.content)
 
-        val sinPermiso = client.get("/api/backoffice/metricas") { header("Authorization", "Bearer $token") }
-        assertEquals(HttpStatusCode.Forbidden, sinPermiso.status)
+        val sinPermiso = sistema.pedir("GET", "/api/backoffice/metricas", cabeceras = bearer(login("cocina-prueba")))
+        assertEquals(403, sinPermiso.statusCode())
     }
 
+    private fun login(identificador: String): String =
+        sistema.pedir("POST", "/api/backoffice/login", """{"identificador":"$identificador","clave":"${Escenario.CLAVE}"}""")
+            .json().o["token"]!!.jsonPrimitive.content
+
+    private fun bearer(token: String) = mapOf("Authorization" to "Bearer $token")
+
     @Test
-    fun `errores de acceso`() = prueba {
-        val sinSesion = client.get("/api/sesion/carta")
-        assertEquals(HttpStatusCode.Unauthorized, sinSesion.status)
+    fun `errores de acceso`() {
+        val sinSesion = sistema.pedir("GET", "/api/sesion/carta")
+        assertEquals(401, sinSesion.statusCode())
         assertEquals("sesion_no_valida", sinSesion.json().o["error"]!!.jsonPrimitive.content)
 
-        assertEquals(HttpStatusCode.Unauthorized, client.get("/api/backoffice/productos").status)
+        assertEquals(401, sistema.pedir("GET", "/api/backoffice/productos").statusCode())
         assertEquals(
-            HttpStatusCode.Unauthorized,
-            client.post("/api/backoffice/login") {
-                contentType(ContentType.Application.Json); setBody("""{"identificador":"cocina-prueba","clave":"equivocada-123"}""")
-            }.status,
+            401,
+            sistema.pedir("POST", "/api/backoffice/login", """{"identificador":"cocina-prueba","clave":"equivocada-123"}""").statusCode(),
         )
 
-        e.app.backoffice.cambiarActivoPuesto(e.admin, e.mesa.puesto.id, false)
-        val inactivo = client.post("/api/sesiones") {
-            contentType(ContentType.Application.Json); setBody("""{"token":"${e.tokenMesa}"}""")
-        }
-        assertEquals(HttpStatusCode.Forbidden, inactivo.status)
+        e.app.puestos.cambiarActivoPuesto(e.admin, e.mesa.puesto.id, false)
+        val inactivo = sistema.pedir("POST", "/api/sesiones", """{"token":"${e.tokenMesa}"}""")
+        assertEquals(403, inactivo.statusCode())
         assertEquals("puesto_inactivo", inactivo.json().o["error"]!!.jsonPrimitive.content)
 
-        val malformado = client.post("/api/sesiones") { contentType(ContentType.Application.Json); setBody("{") }
-        assertEquals(HttpStatusCode.BadRequest, malformado.status)
+        assertEquals(400, sistema.pedir("POST", "/api/sesiones", "{").statusCode())
     }
 
     @Test
-    fun `salud indica si hay proveedor de IA`() = prueba {
-        val salud = client.get("/api/salud").json().o
+    fun `salud informa cada servicio y si hay proveedor de IA`() {
+        val respuesta = sistema.pedir("GET", "/api/salud")
+        assertEquals(200, respuesta.statusCode(), respuesta.body())
+        val salud = respuesta.json().o
         assertEquals("ok", salud["estado"]!!.jsonPrimitive.content)
         assertEquals("false", salud["ia"]!!.jsonPrimitive.content)
+        assertEquals(10, salud["servicios"]!!.jsonObject.size)
+    }
+
+    @Test
+    fun `cerrar sesion por el gateway descarta el perfil`() {
+        val sesion = e.sesion(restricciones = listOf("FICTICIO-alergia-mani"))
+
+        assertEquals(200, sistema.pedir("POST", "/api/sesion/cerrar", cabeceras = conSesion(sesion)).statusCode())
+        assertEquals(401, sistema.pedir("GET", "/api/sesion/carta", cabeceras = conSesion(sesion)).statusCode())
     }
 }

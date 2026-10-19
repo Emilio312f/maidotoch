@@ -1,0 +1,35 @@
+# /etc/systemd/system/maidotouch@.service — un proceso por servicio (Diseño v1.1).
+#   systemctl restart maidotouch@pedido      # reinicia solo el Servicio de Pedido
+#   systemctl restart maidotouch.target      # todos
+[Unit]
+Description=MaidoTouch · servicio %i
+After=network-online.target
+Wants=network-online.target
+PartOf=maidotouch.target
+
+[Service]
+User=maidotouch
+Group=maidotouch
+# Cada servicio corre desde su propia versión instalada (enlace servicios/%i).
+WorkingDirectory=/opt/maidotouch/servicios/%i
+# Valores comunes: URL y token de cada servicio, base y TLS interno (solo root y maidotouch los leen).
+EnvironmentFile=/etc/maidotouch/comun.env
+# Valores propios del servicio; la clave del proveedor de IA solo está en adaptador-ia.env.
+EnvironmentFile=-/etc/maidotouch/%i.env
+Environment=MAIDOTOUCH_DB_PATH=/opt/maidotouch/datos/maidotouch.db
+Environment=MAIDOTOUCH_FOTOS_DIR=/opt/maidotouch/datos/fotos
+Environment=MAIDOTOUCH_WEB_COMENSAL_DIR=/opt/maidotouch/web/comensal
+Environment=MAIDOTOUCH_WEB_BACKOFFICE_DIR=/opt/maidotouch/web/backoffice
+ExecStart=/opt/maidotouch/servicios/%i/bin/maidotouch-%i
+# Disponibilidad durante el servicio (RNF05): si un proceso cae, systemd lo levanta.
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/maidotouch/datos
+
+[Install]
+WantedBy=maidotouch.target
