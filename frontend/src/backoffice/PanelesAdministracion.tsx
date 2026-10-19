@@ -9,7 +9,7 @@ import {
   type ReporteDiario,
   type ResumenFase,
   type Verificacion,
-} from "../api";
+} from "../comun/api";
 
 interface PropsPanel {
   api: ReturnType<typeof apiBackoffice>;

@@ -110,7 +110,8 @@ validación automáticamente** y el plato deja de recomendarse hasta revalidarlo
 | Un puesto da problemas | Administración lo **desactiva** en *Puestos NFC/QR*: ese puesto vuelve al pedido tradicional sin afectar a los demás. |
 | El asistente de IA no responde | No hay que hacer nada: la app sugiere platos con reglas propias en menos de un segundo. |
 | La app o el servidor no funcionan | Pedido tradicional con el mozo en todas las mesas. Avisar al Programador-Tester. |
-| No llegan comandas a cocina o barra | Revisar la conexión de la pantalla; sala lleva los pedidos pendientes a mano. |
+| Falla una parte de la app (por ejemplo, el asistente o la carta) | El resto sigue funcionando: cada parte es un servicio aparte. Tomar el pedido a mano en las mesas afectadas y avisar al Programador-Tester. |
+| No llegan comandas a cocina o barra | Revisar la conexión de la pantalla; sala lleva los pedidos pendientes a mano. La pantalla sigue consultando aunque se corte el aviso inmediato. |
 | Dato de alérgeno incorrecto | Sección 6, regla especial. |
 
 ---
@@ -145,15 +146,27 @@ cierran sus sesiones de inmediato. **Cambiar clave** también cierra las sesione
 
 ## 9. Operación técnica (Programador-Tester)
 
-Los comandos se ejecutan en el servidor como el usuario `maidotouch`, con las variables de
-`/etc/maidotouch/maidotouch.env`.
+MaidoTouch corre como **once procesos** (Diseño v1.1), uno por servicio, en el mismo servidor:
+`maidotouch@gateway`, `maidotouch@sesion`, `maidotouch@catalogo`, `maidotouch@seguridad-alimentaria`,
+`maidotouch@recomendacion`, `maidotouch@adaptador-ia`, `maidotouch@pedido`, `maidotouch@atencion`,
+`maidotouch@trazabilidad`, `maidotouch@piloto` y `maidotouch@bus`, agrupados en `maidotouch.target`.
+
+Los comandos se ejecutan como el usuario `maidotouch`, con las variables de `/etc/maidotouch/comun.env`:
+
+```bash
+H=/opt/maidotouch/herramientas/bin/maidotouch-herramientas
+sudo -u maidotouch env $(grep -v '^#' /etc/maidotouch/comun.env | xargs) $H <comando>
+```
 
 ### 9.1 Preparar un servidor (una vez)
 
 ```bash
-sudo ops/preparar-servidor.sh maidotouch.example   # Java, SQLite, Caddy (HTTPS), systemd y respaldos
-sudo nano /etc/maidotouch/maidotouch.env           # completar ANTHROPIC_API_KEY y demás valores
+sudo ops/preparar-servidor.sh maidotouch.example   # Java, SQLite, Caddy (HTTPS), tokens, TLS interno, systemd y respaldos
+sudo nano /etc/maidotouch/adaptador-ia.env         # ANTHROPIC_API_KEY: solo el Adaptador de IA la lee
 ```
+
+`comun.env` tiene la dirección y el **token de servicio** de cada proceso y el certificado del TLS
+interno. No se copia a otros equipos ni se sube al repositorio.
 
 ### 9.2 Desplegar
 
@@ -163,19 +176,25 @@ El pipeline despliega solo: **staging** al integrar en `develop`; **producción*
 ```bash
 scripts/empaquetar.sh                                   # en una máquina de desarrollo
 scp build/paquete/maidotouch-<versión>.tar.gz servidor:/tmp/
-sudo /opt/maidotouch/ops/desplegar.sh /tmp/maidotouch-<versión>.tar.gz
+sudo /opt/maidotouch/ops/desplegar.sh /tmp/maidotouch-<versión>.tar.gz                  # todos
+sudo /opt/maidotouch/ops/desplegar.sh /tmp/maidotouch-<versión>.tar.gz pedido gateway   # solo esos
 ```
 
-`desplegar.sh` **no se ejecuta en horario de servicio** (12:00–16:30 y 19:00–23:30); respalda la
-base, instala la versión junto a la anterior y comprueba que la versión nueva responda. Si no
-responde, **vuelve sola a la anterior**. Solo en una emergencia autorizada por el Director:
+`desplegar.sh` **no se ejecuta en horario de servicio** (12:00–16:30 y 19:00–23:30). Respalda la
+base, aplica las migraciones y cambia los servicios uno por uno. Después de cada cambio comprueba en
+`/api/salud` que el servicio responda con la versión nueva. Si uno no responde, **los servicios ya
+cambiados vuelven solos a su versión anterior**. Solo en una emergencia autorizada por el Director:
 `FORZAR=1`.
+
+Al desplegar un solo servicio, la migración nueva debe ser compatible con la versión que siguen
+usando los demás.
 
 ### 9.3 Revertir (objetivo: menos de 30 minutos)
 
 ```bash
-sudo /opt/maidotouch/ops/revertir.sh                    # código anterior, conserva los datos
-sudo /opt/maidotouch/ops/revertir.sh --restaurar-base   # además restaura el último respaldo
+sudo /opt/maidotouch/ops/revertir.sh                    # todos los servicios a su versión anterior
+sudo /opt/maidotouch/ops/revertir.sh recomendacion      # solo un servicio
+sudo /opt/maidotouch/ops/revertir.sh --restaurar-base   # además restaura el último respaldo (detiene todos)
 ```
 
 Restaurar la base descarta lo registrado después del respaldo: solo si la versión nueva dañó los
@@ -183,19 +202,23 @@ datos y con autorización del Director.
 
 ### 9.4 Catálogo, cuentas, verificación y reportes
 
+Con los servicios en marcha:
+
 ```bash
-maidotouch importar-catalogo catalogo.json cocina-01   # el JSON lo prepara el Responsable de Datos
-maidotouch crear-personal admin-01 administrador       # primera cuenta de administración
-maidotouch verificar                                    # Go/No-Go; código de salida 1 si hay FALLA
-maidotouch reporte-diario 2026-11-12                    # resumen del día
+$H importar-catalogo catalogo.json cocina-01   # el JSON lo prepara el Responsable de Datos
+$H crear-personal admin-01 administrador       # primera cuenta de administración
+$H verificar                                    # Go/No-Go; código de salida 1 si hay FALLA
+$H reporte-diario 2026-11-12                    # resumen del día
 ```
 
 ### 9.5 Respaldos y registros
 
 - Respaldo automático diario a las 05:00 (timer `maidotouch-respaldo`), y antes de cada despliegue y
   migración. Se conservan 30 días en `/opt/maidotouch/respaldos`.
-- Registros del servicio: `journalctl -u maidotouch --since today`.
-- Estado: `curl https://<dominio>/api/salud` (indica versión y si la IA está disponible).
+- Registros: `journalctl -u 'maidotouch@*' --since today`, o uno solo: `journalctl -u maidotouch@pedido`.
+- Reiniciar un servicio: `sudo systemctl restart maidotouch@catalogo`; todos: `sudo systemctl restart maidotouch.target`.
+- Estado: `curl https://<dominio>/api/salud` muestra la versión de cada servicio, si la IA está
+  disponible y el estado del circuito. Responde 503 («degradado») si algún servicio no contesta.
 
 ### 9.6 Medir la latencia (QA)
 
@@ -206,4 +229,5 @@ MAIDOTOUCH_CLAVE=... python3 scripts/medir_latencia.py https://staging.example <
     --repeticiones 30 --cocina cocina-01 --barra barra-01
 ```
 
-Compara el P95 de activación, carta, asistente y llegada de la comanda con el presupuesto del diseño.
+Compara el P95 de activación, carta, asistente y llegada de la comanda con el presupuesto del
+diseño. Con servicios independientes cada salto interno suma tiempo: esta medición es la que vale.

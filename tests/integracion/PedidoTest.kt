@@ -1,10 +1,10 @@
 package integracion
 
-import aplicacion.Conflicto
-import aplicacion.NoEncontrado
-import aplicacion.SesionNoDisponible
-import aplicacion.SolicitudInvalida
-import datos.consultar
+import comun.Conflicto
+import comun.NoEncontrado
+import comun.SesionNoDisponible
+import comun.SolicitudInvalida
+import comun.datos.consultar
 import kotlinx.coroutines.runBlocking
 import soporte.Escenario
 import kotlin.test.AfterTest
@@ -144,7 +144,7 @@ class PedidoTest {
         e.app.trazabilidad.registrar(sesion, recomendado.recomendacionId, "rechazada")
         e.app.trazabilidad.registrar(sesion, recomendado.recomendacionId, "rechazada")
 
-        val metricas = e.app.backoffice.metricas(e.admin)
+        val metricas = e.app.piloto.metricas(e.admin)
         assertEquals(1, metricas.rechazadas)
         assertFailsWith<NoEncontrado> { e.app.trazabilidad.registrar(e.sesion(), recomendado.recomendacionId, "aceptada") }
     }

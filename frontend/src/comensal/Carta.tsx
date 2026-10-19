@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { soles, type Aptitud, type CartaSesion, type ProductoCarta } from "../api";
+import { soles, type Aptitud, type CartaSesion, type ProductoCarta } from "../comun/api";
 import { useComensal } from "./contexto";
 
 /** Carta digital (RF02 · RF12): disponibilidad actual y aptitud para el perfil, calculada en el servidor. */

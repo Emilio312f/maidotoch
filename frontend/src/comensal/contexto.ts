@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import type { Carrito, EstadoSesion, Idioma, Llamado, MotivoLlamado, apiComensal } from "../api";
-import type { Clave } from "../i18n";
+import type { Carrito, EstadoSesion, Idioma, Llamado, MotivoLlamado, apiComensal } from "../comun/api";
+import type { Clave } from "../comun/i18n";
 
 export interface ContextoComensal {
   api: ReturnType<typeof apiComensal>;

@@ -4,6 +4,6 @@ Description=Respaldo diario de la base de MaidoTouch
 
 [Service]
 Type=oneshot
-EnvironmentFile=/etc/maidotouch/maidotouch.env
+EnvironmentFile=/etc/maidotouch/comun.env
 Environment=MAIDOTOUCH_DB_PATH=/opt/maidotouch/datos/maidotouch.db
 ExecStart=/opt/maidotouch/ops/respaldar.sh

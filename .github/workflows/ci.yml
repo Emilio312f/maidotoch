@@ -24,14 +24,14 @@ jobs:
           distribution: temurin
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v4
-      - name: Pruebas (casos críticos de alergias, asistente, pedido, API)
+      - name: Pruebas (casos críticos de alergias, asistente, pedido, servicios y API Gateway)
         run: ./gradlew test --no-daemon
       - name: Ninguna prueba omitida
         run: |
           python3 - <<'EOF'
           import glob, sys, xml.etree.ElementTree as ET
           total = omitidas = 0
-          for p in glob.glob("build/test-results/test/*.xml"):
+          for p in glob.glob("build/pruebas/test-results/test/*.xml"):
               r = ET.parse(p).getroot()
               total += int(r.get("tests")); omitidas += int(r.get("skipped"))
           print(f"{total} pruebas, {omitidas} omitidas")
@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reporte-pruebas-backend
-          path: build/reports/tests/test
+          path: build/pruebas/reports/tests/test
 
   frontend:
     name: Frontend (web-app)
@@ -60,7 +60,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Textos es/en
         run: npm test
-      - name: Tipos y compilación
+      - name: Tipos y compilación (web-app del comensal y back-office)
         run: npm run build
 
   paquete:

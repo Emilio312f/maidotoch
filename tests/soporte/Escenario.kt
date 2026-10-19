@@ -1,26 +1,18 @@
 package soporte
 
-import configuracion.Configuracion
-import datos.PersonalAutenticado
-import datos.RepositorioCatalogo
-import datos.consultar
-import dominio.recomendacion.OrdenadorExterno
-import presentacion.Aplicacion
+import catalogo.datos.RepositorioCatalogo
+import comun.PersonalAutenticado
+import comun.contratos.ApiIA
+import comun.datos.consultar
 import java.io.File
 
 /**
  * Escenario completo con el catálogo FICTICIO de db/catalogo/ficticio.json cargado por el importador,
- * validado por cocina y disponible; cuentas del back-office y un puesto de mesa y uno de barra.
+ * validado por cocina y disponible; cuentas del back-office y un puesto de mesa.
  */
-class Escenario(
-    proveedorIa: OrdenadorExterno? = null,
-    configuracion: Configuracion = Configuracion(
-        directorioFrontend = null,
-        directorioFotos = java.nio.file.Files.createTempDirectory("maidotouch-fotos").toString(),
-    ),
-) : AutoCloseable {
+class Escenario(ia: ApiIA? = null, urlPublica: String = "http://localhost:5173") : AutoCloseable {
     val db = BaseDePrueba()
-    val app = Aplicacion(configuracion, db.fuente, proveedorIa)
+    val app = Sistema(db.fuente, ia, urlPublica = urlPublica)
 
     val admin: PersonalAutenticado = cuenta("admin-prueba", "administrador")
     val cocina: PersonalAutenticado = cuenta("cocina-prueba", "cocina")
@@ -37,9 +29,10 @@ class Escenario(
                 if (!it.disponible) repo.cambiarDisponibilidad(it.id, true, cocina.id, "FICTICIO: prueba")
             }
         }
+        app.catalogo.invalidar()
     }
 
-    val mesa = app.backoffice.crearPuesto(admin, "T1", "mesa")
+    val mesa = app.puestos.crearPuesto(admin, "T1", "mesa")
     val tokenMesa: String = mesa.puesto.accesos.first { it.canal == "nfc" }.token
 
     fun cuenta(identificador: String, rol: String): PersonalAutenticado {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ErrorApi, iniciarSesion } from "../api";
-import { textoError, traducir } from "../i18n";
+import { ErrorApi, iniciarSesion } from "../comun/api";
+import { textoError, traducir } from "../comun/i18n";
 import { guardarSesion, idiomaDelNavegador } from "./contexto";
 
 /** Entrada desde el tag NFC o el QR del puesto (RF01 · RNF08): ambos abren /m/<token>. */

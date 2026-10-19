@@ -5,6 +5,15 @@ tag NFC de la mesa (o lee el QR de respaldo), declara gustos y restricciones, re
 explicadas y envía su pedido a cocina y barra. El sistema complementa al mozo; no lo reemplaza.
 
 Las reglas del proyecto están en [CLAUDE.md](CLAUDE.md) y los documentos fuente en [docs/](docs/).
+La arquitectura es de servicios independientes según el
+[Diseño Arquitectónico v1.1](docs/diseno-arquitectonico-v1.1.md) (pendiente de aprobación del sponsor).
+
+## Arquitectura en una línea
+
+Web-app → **API Gateway** (:8080) → Sesión, Catálogo, **Seguridad Alimentaria**, Recomendación,
+Adaptador de IA, Pedido, Atención, Trazabilidad, Piloto y Bus de eventos (:8101–8110), cada uno en
+su proceso, con su token de servicio, sobre una base SQLite compartida que conserva todos los
+triggers de seguridad alimentaria.
 
 ## Requisitos
 
@@ -14,21 +23,24 @@ Las reglas del proyecto están en [CLAUDE.md](CLAUDE.md) y los documentos fuente
 ## Puesta en marcha local
 
 ```bash
-# 1. Datos FICTICIOS de desarrollo: cuentas demo, catálogo de prueba validado y tres puestos.
-MAIDOTOUCH_DB_PATH=dev.db ./gradlew run --args=demo
-#    Imprime la clave de las cuentas admin-demo, cocina-demo, barra-demo y sala-demo,
-#    y los enlaces /m/<token> de cada puesto.
+# 1. Web-apps compiladas (el gateway las entrega en / y /admin).
+cd frontend && npm install && npm run build && cd ..
 
-# 2. Backend (API en :8080).
-MAIDOTOUCH_DB_PATH=dev.db ./gradlew run
+# 2. Los once procesos con datos FICTICIOS: genera los tokens en .env.servicios, migra la base,
+#    levanta los servicios y carga cuentas demo, catálogo de prueba validado y tres puestos.
+scripts/desarrollo.sh demo
+#    Imprime la clave de admin-demo, cocina-demo, barra-demo y sala-demo y los enlaces /m/<token>.
+#    Registros de cada servicio en build/desarrollo/<servicio>.log. Ctrl+C detiene todo.
 
-# 3. Frontend con recarga en caliente (:5173, redirige /api al backend).
-cd frontend && npm install && npm run dev
+# 3. (Opcional) Frontend con recarga en caliente; /api va al gateway.
+cd frontend && npm run dev               # comensal en :5173
+cd frontend && npm run dev:backoffice    # back-office en :5174/admin/
 ```
 
-- Comensal: abre uno de los enlaces `http://localhost:5173/m/<token>` impresos por `demo`.
-- Back-office: `http://localhost:5173/admin`.
-- Sin `ANTHROPIC_API_KEY` el asistente funciona con el ranking por reglas (fallback).
+- Comensal: `http://localhost:8080/m/<token>` (o `:5173/m/<token>` en modo desarrollo).
+- Back-office: `http://localhost:8080/admin/`.
+- Sin `ANTHROPIC_API_KEY` el Adaptador de IA responde «no configurado» y el asistente usa el
+  ranking por reglas (fallback). Si la clave está en `.env`, el script se la entrega solo al Adaptador.
 
 Para probar desde un celular en la misma red, usa la IP de la computadora en lugar de `localhost`
 y define `MAIDOTOUCH_URL_PUBLICA` con esa dirección antes de crear los puestos.
@@ -36,26 +48,32 @@ y define `MAIDOTOUCH_URL_PUBLICA` con esa dirección antes de crear los puestos.
 ## Pruebas
 
 ```bash
-./gradlew test             # backend: motor de restricciones, asistente, pedido, API
+./gradlew test             # todos los servicios: motor de restricciones, asistente, pedido, gateway, TLS interno
 cd frontend && npm test    # textos del comensal en español e inglés
 cd frontend && npm run build
 ```
 
 Los casos críticos de alergias están en `tests/dominio/` y deben pasar al 100 %. Ninguna prueba de
-seguridad alimentaria se omite ni se debilita.
+seguridad alimentaria se omite ni se debilita. `tests/soporte/Sistema.kt` conecta los servicios en
+un mismo proceso por sus interfaces; `SistemaHttp.kt` levanta los once procesos de verdad y las
+pruebas entran por el API Gateway.
 
 ## Comandos de operación
 
 ```bash
-./gradlew installDist                      # genera build/install/maidotouch/bin/maidotouch
-maidotouch servir                          # aplica migraciones pendientes y levanta API + web-app
-maidotouch migrar                          # respalda el archivo SQLite y aplica migraciones
-maidotouch crear-personal cocina-01 cocina # roles: administrador, cocina, barra, sala
-maidotouch cambiar-clave cocina-01
-maidotouch importar-catalogo catalogo.json cocina-01
-maidotouch verificar                       # criterios de Go/No-Go; sale con código 1 si hay FALLA
-maidotouch reporte-diario [AAAA-MM-DD]     # monitoreo diario del piloto
+./gradlew installDist     # build/<servicio>/install/maidotouch-<servicio>/bin/maidotouch-<servicio>
+H=build/herramientas/install/maidotouch-herramientas/bin/maidotouch-herramientas
+$H migrar                                 # respalda el archivo SQLite y aplica migraciones (antes de levantar)
+$H tokens                                 # tokens de servicio nuevos (MAIDOTOUCH_TOKEN_*)
+$H crear-personal cocina-01 cocina        # roles: administrador, cocina, barra, sala
+$H cambiar-clave cocina-01
+$H importar-catalogo catalogo.json cocina-01
+$H verificar                              # criterios de Go/No-Go; sale con código 1 si hay FALLA
+$H reporte-diario [AAAA-MM-DD]            # monitoreo diario del piloto
 ```
+
+Salvo `migrar` y `tokens`, los comandos hablan con los servicios en ejecución usando
+`MAIDOTOUCH_URL_*` y `MAIDOTOUCH_TOKEN_*`.
 
 El uso diario del sistema por sala, cocina, barra y administración está en
 [docs/manual-operacion.md](docs/manual-operacion.md), y la verificación de cada requisito en
@@ -87,15 +105,15 @@ Después, cocina revisa y valida cada producto en *Back-office → Validación d
 - Ramas `main` y `develop` protegidas en GitHub (Settings → Branches): pull request obligatorio,
   CI en verde y una revisión.
 
-Un solo servidor (monolito modular) con [ops/](ops/):
+Un solo servidor con un proceso por servicio, con [ops/](ops/):
 
 | Archivo | Uso |
 |---|---|
-| `preparar-servidor.sh` | Instalación única: Java, SQLite, Caddy con HTTPS automático, systemd y respaldo diario |
-| `desplegar.sh` | Rechaza el horario de servicio, respalda la base, instala, verifica la versión y revierte solo si falla |
-| `revertir.sh` | Vuelve a la versión anterior; `--restaurar-base` restaura además el último respaldo |
+| `preparar-servidor.sh` | Instalación única: Java, SQLite, Caddy con HTTPS, tokens de servicio, certificado del TLS interno, systemd y respaldo diario |
+| `desplegar.sh` | Todos los servicios o solo los indicados: rechaza el horario de servicio, respalda, migra, cambia servicio por servicio, verifica la versión en `/api/salud` y revierte solo si falla |
+| `revertir.sh` | Vuelve a la versión anterior de todos o de un servicio; `--restaurar-base` restaura además el último respaldo |
 | `respaldar.sh` | Respaldo consistente de SQLite en caliente (30 días) |
-| `maidotouch.service`, `Caddyfile` | Servicio con reinicio automático y proxy HTTPS |
+| `maidotouch@.service`, `maidotouch.target`, `Caddyfile` | Un proceso por servicio con reinicio automático, y proxy HTTPS al gateway |
 
 `scripts/empaquetar.sh` arma el paquete y `scripts/medir_latencia.py` mide el P95 contra el
 presupuesto del diseño.
@@ -104,12 +122,16 @@ presupuesto del diseño.
 
 ```
 backend/
-  presentacion/   API REST (Ktor) y composición de servicios
-  aplicacion/     sesión, catálogo, orquestador de recomendación, pedido, atención, back-office
-  dominio/        motor de restricciones, filtro de disponibilidad, ranking por reglas, explicaciones
-  integracion/    adaptador del proveedor de IA (timeout + circuit breaker)
-  datos/          repositorios sobre SQLite
-db/migrations/    001 (no editar), 002, ...
-frontend/         web-app del comensal (/m/<token>) y back-office (/admin)
-tests/            dominio/ (casos críticos) e integracion/
+  comun/                  SQLite, servidor y cliente HTTP internos (token y TLS), contratos entre servicios
+  gateway/                API Gateway: enrutamiento, autenticación del personal, límite de solicitudes, web-apps
+  sesion/                 sesión por puesto, perfil, cuentas del personal, puestos NFC/QR
+  catalogo/               carta, disponibilidad, validación, fotos, importador (parte de catálogo)
+  seguridad-alimentaria/  Motor de Restricciones, filtro de disponibilidad, alérgenos (sin IA)
+  recomendacion/          orquestador, ranking por reglas, explicaciones
+  adaptador-ia/           única frontera con el proveedor (timeout + circuit breaker)
+  pedido/  atencion/  trazabilidad/  piloto/  bus/
+  herramientas/           comandos de operación
+db/migrations/            001 (no editar), 002, ...
+frontend/                 comensal/ (/, /m/<token>) y backoffice/ (/admin), código común en src/comun
+tests/                    dominio/ (casos críticos), integracion/ y soporte/
 ```

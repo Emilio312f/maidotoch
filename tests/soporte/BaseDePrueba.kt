@@ -1,30 +1,40 @@
 package soporte
 
-import datos.BaseDatos
-import datos.ConexionUnica
-import datos.Migraciones
-import datos.consultar
+import comun.datos.ArchivoSqlite
+import comun.datos.BaseDatos
+import comun.datos.Migraciones
+import comun.datos.consultar
 import dominio.restricciones.ResultadoEvaluacion
+import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 import java.sql.Connection
 import java.util.UUID
 
 /**
- * Base SQLite en memoria creada desde las migraciones reales del repositorio.
+ * Base SQLite en un archivo temporal creada desde las migraciones reales del repositorio. Es un
+ * archivo, no una base en memoria, porque cada servicio abre sus propias conexiones, como en el servidor.
  *
  * Todos los datos que crea son FICTICIOS y existen solo para las pruebas: no representan platos,
  * ingredientes ni alérgenos reales de Maido. El catálogo real lo carga y valida el Responsable de
  * Datos con cocina.
  */
 class BaseDePrueba : AutoCloseable {
-    val conn: Connection = BaseDatos.conectar("jdbc:sqlite::memory:")
+    private val directorio: File = Files.createTempDirectory("maidotouch-prueba").toFile()
+    val ruta: String = File(directorio, "maidotouch.db").absolutePath
+
+    /** Conexión de la prueba para preparar datos; los servicios usan [fuente], con sus propias conexiones. */
+    val conn: Connection = BaseDatos.conectar("jdbc:sqlite:$ruta")
 
     init {
         Migraciones.aplicar(conn, Path.of(System.getProperty("maidotouch.migraciones") ?: "db/migrations"))
+        conn.createStatement().use {
+            it.execute("PRAGMA journal_mode = WAL")
+            it.execute("PRAGMA busy_timeout = 5000")
+        }
     }
 
-    /** Todas las operaciones de los servicios comparten esta única conexión en memoria. */
-    val fuente = ConexionUnica(conn)
+    val fuente = ArchivoSqlite(ruta)
 
     val cocina: Long = insertar("INSERT INTO personal(identificador, rol) VALUES ('FICTICIO-cocina', 'cocina')")
     private val punto = insertar("INSERT INTO puntos_servicio(codigo, tipo) VALUES ('FICTICIO-mesa-1', 'mesa')")
@@ -183,5 +193,8 @@ class BaseDePrueba : AutoCloseable {
             it.getString(1)
         }.single()
 
-    override fun close() = conn.close()
+    override fun close() {
+        conn.close()
+        directorio.deleteRecursively()
+    }
 }

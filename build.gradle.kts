@@ -1,66 +1,54 @@
-plugins {
-    kotlin("jvm") version "2.4.20"
-    kotlin("plugin.serialization") version "2.4.20"
-    application
-}
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
-repositories {
-    mavenCentral()
+plugins {
+    kotlin("jvm") version "2.4.20" apply false
+    kotlin("plugin.serialization") version "2.4.20" apply false
 }
 
 val ktor = "3.5.0"
+extra["ktor"] = ktor
 
-dependencies {
-    // Acceso a SQLite por JDBC.
-    implementation("org.xerial:sqlite-jdbc:3.50.3.0")
+// Convenciones comunes: Kotlin 2.4 sobre JVM 21, código en src/ de cada módulo y salida en build/<módulo>.
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
-    // API REST.
-    implementation("io.ktor:ktor-server-core:$ktor")
-    implementation("io.ktor:ktor-server-cio:$ktor")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktor")
-    implementation("io.ktor:ktor-server-status-pages:$ktor")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    repositories {
+        mavenCentral()
+    }
 
-    // Adaptador del proveedor de IA (SDK oficial de Anthropic para la JVM).
-    implementation("com.anthropic:anthropic-java:2.34.0")
+    layout.buildDirectory.set(rootProject.layout.buildDirectory.dir(name))
 
-    // Logs del servidor.
-    runtimeOnly("org.slf4j:slf4j-simple:2.0.17")
+    extensions.configure<KotlinJvmProjectExtension> {
+        jvmToolchain(21)
+        if (project.name != "pruebas") {
+            sourceSets.named("main") { kotlin.srcDir("src") }
+        }
+    }
 
-    testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-server-test-host:$ktor")
+    // Logs de cada proceso.
+    dependencies {
+        "runtimeOnly"("org.slf4j:slf4j-simple:2.0.17")
+    }
 }
 
-kotlin {
-    jvmToolchain(21)
-}
+/** Cada servicio es una aplicación propia: `installDist` deja build/<servicio>/install/maidotouch-<servicio>. */
+val servicios = listOf(
+    "gateway", "sesion", "catalogo", "seguridad-alimentaria", "recomendacion", "adaptador-ia",
+    "pedido", "atencion", "trazabilidad", "piloto", "bus",
+)
 
-// Estructura del repositorio definida en CLAUDE.md: código en backend/, pruebas en tests/.
-sourceSets {
-    main { kotlin.srcDir("backend") }
-    test { kotlin.srcDir("tests") }
-}
-
-application {
-    mainClass.set("PrincipalKt")
-    applicationName = "maidotouch"
-    // Procesamiento de fotos sin pantalla (servidor y CI).
-    applicationDefaultJvmArgs = listOf("-Djava.awt.headless=true")
-}
-
-tasks.named<JavaExec>("run") {
-    workingDir = rootDir
-}
-
-tasks.test {
-    useJUnitPlatform()
-    systemProperty("java.awt.headless", "true")
-    // Las pruebas crean una base nueva desde las migraciones reales del repositorio.
-    systemProperty("maidotouch.migraciones", layout.projectDirectory.dir("db/migrations").asFile.absolutePath)
-    systemProperty("maidotouch.catalogoFicticio", layout.projectDirectory.file("db/catalogo/ficticio.json").asFile.absolutePath)
-    testLogging {
-        events("passed", "failed", "skipped")
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+configure(servicios.map { project(":$it") } + project(":herramientas")) {
+    apply(plugin = "application")
+    dependencies {
+        "implementation"(project(":comun"))
+    }
+    extensions.configure<JavaApplication> {
+        applicationName = "maidotouch-${project.name}"
+        // Procesamiento de fotos sin pantalla (servidor y CI).
+        applicationDefaultJvmArgs = listOf("-Djava.awt.headless=true")
+    }
+    tasks.named<JavaExec>("run") {
+        workingDir = rootDir
     }
 }

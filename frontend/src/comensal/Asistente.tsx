@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { soles, type Recomendado, type RespuestaAsistente } from "../api";
+import { soles, type Recomendado, type RespuestaAsistente } from "../comun/api";
 import { useComensal } from "./contexto";
 
 /**

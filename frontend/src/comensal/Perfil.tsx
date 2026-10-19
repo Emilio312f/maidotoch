@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { opcionesPerfil, type OpcionPerfil } from "../api";
+import { opcionesPerfil, type OpcionPerfil } from "../comun/api";
 import { useComensal } from "./contexto";
 
 /** Perfil breve al inicio (RF07): se completa con toques, en menos de 30 segundos y sin datos personales. */

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
-import { ErrorApi, apiComensal, type Carrito, type EstadoSesion, type Idioma, type Llamado, type MotivoLlamado } from "../api";
-import { textoError, traducir, type Clave } from "../i18n";
+import { ErrorApi, apiComensal, type Carrito, type EstadoSesion, type Idioma, type Llamado, type MotivoLlamado } from "../comun/api";
+import { textoError, traducir, type Clave } from "../comun/i18n";
 import { Asistente } from "./Asistente";
 import { Carta } from "./Carta";
 import { Contexto, guardarSesion, idiomaDelNavegador, leerSesion, useComensal, type ContextoComensal } from "./contexto";

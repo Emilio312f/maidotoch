@@ -1,14 +1,14 @@
 package dominio.restricciones
 
-import aplicacion.CandidatosSeguros
-import aplicacion.ServicioCandidatosSeguros
-import aplicacion.SesionNoDisponible
-import datos.RepositorioSeguridadAlimentaria
+import comun.SesionNoDisponible
 import dominio.restricciones.EstadoSeguridad.INSEGURO
 import dominio.restricciones.EstadoSeguridad.SEGURO
 import dominio.restricciones.EstadoSeguridad.SIN_DATO
 import dominio.restricciones.ResultadoEvaluacion.DESCONOCIDO
 import dominio.restricciones.ResultadoEvaluacion.INCOMPATIBLE
+import seguridad.aplicacion.CandidatosSeguros
+import seguridad.aplicacion.ServicioCandidatosSeguros
+import seguridad.datos.RepositorioSeguridadAlimentaria
 import soporte.BaseDePrueba
 import kotlin.test.AfterTest
 import kotlin.test.Test

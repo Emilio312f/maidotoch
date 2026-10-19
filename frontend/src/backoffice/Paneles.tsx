@@ -11,7 +11,7 @@ import {
   type Personal,
   type ProductoBackoffice,
   type PuestoConEnlaces,
-} from "../api";
+} from "../comun/api";
 
 interface PropsPanel {
   api: ReturnType<typeof apiBackoffice>;
@@ -40,6 +40,19 @@ function useSondeo<T>(cargar: () => Promise<T>, cadaMs: number, manejarError: (e
   return { datos, error, refrescar };
 }
 
+/**
+ * Aviso inmediato por el bus de eventos (Observer). Mientras el bus está conectado la consulta
+ * periódica se espacia; si se cae, la pantalla vuelve a consultar seguido (respaldo, RNF03).
+ */
+function useEventos(
+  api: PropsPanel["api"],
+  canal: "cocina" | "barra" | "sala",
+  alRecibir: () => void,
+  alCambiarConexion: (conectado: boolean) => void,
+) {
+  useEffect(() => api.eventos(canal, alRecibir, alCambiarConexion), [api, canal, alRecibir, alCambiarConexion]);
+}
+
 const hora = (iso?: string) => (iso ? new Date(iso).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" }) : "");
 
 const minutosDesde = (iso: string) => Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
@@ -55,7 +68,10 @@ const SIGUIENTE: Record<Comanda["estado"], { estado: string; texto: string }> = 
 
 export function Comandas({ api, manejarError, destino }: PropsPanel & { destino: "cocina" | "barra" }) {
   const cargar = useCallback(() => api.comandas(destino), [api, destino]);
-  const { datos, error, refrescar } = useSondeo(cargar, 1500, manejarError);
+  const [conectado, setConectado] = useState(false);
+  // Presupuesto: comanda en pantalla ≤ 2 s. Sin bus, se consulta cada 1.5 s como antes.
+  const { datos, error, refrescar } = useSondeo(cargar, conectado ? 10000 : 1500, manejarError);
+  useEventos(api, destino, refrescar, setConectado);
   const [errorAccion, setErrorAccion] = useState<string | null>(null);
 
   const avanzar = async (comanda: Comanda) => {
@@ -109,7 +125,9 @@ const MOTIVOS: Record<Llamado["motivo"], string> = {
 
 export function Llamados({ api, manejarError }: PropsPanel) {
   const cargar = useCallback(() => api.llamados(), [api]);
-  const { datos, error, refrescar } = useSondeo(cargar, 3000, manejarError);
+  const [conectado, setConectado] = useState(false);
+  const { datos, error, refrescar } = useSondeo(cargar, conectado ? 15000 : 3000, manejarError);
+  useEventos(api, "sala", refrescar, setConectado);
   const cargarAtrasadas = useCallback(() => api.comandasAtrasadas(), [api]);
   const { datos: atrasadas } = useSondeo(cargarAtrasadas, 10000, manejarError);
 

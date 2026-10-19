@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { ErrorApi, soles, type ItemPedido, type Pedido as TipoPedido } from "../api";
-import type { Clave } from "../i18n";
+import { ErrorApi, soles, type ItemPedido, type Pedido as TipoPedido } from "../comun/api";
+import type { Clave } from "../comun/i18n";
 import { useComensal } from "./contexto";
 
 /** Carrito y confirmación (RF05 · RF10 · RF11): nada sale a cocina sin la confirmación explícita. */
