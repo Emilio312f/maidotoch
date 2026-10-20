@@ -5,6 +5,7 @@ import comun.Tls
 import comun.http.ClienteInterno
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.netty.NettyApplicationEngine
+import java.net.BindException
 import java.net.ServerSocket
 import java.net.URI
 import java.net.http.HttpClient
@@ -19,13 +20,23 @@ import java.util.Base64
  * Los once procesos del Diseño v1.1 levantados de verdad (cada uno en su puerto, con su token y
  * hablando por HTTP), sobre la base de [db]. Las pruebas entran por el API Gateway, como la web-app.
  */
-class SistemaHttp(db: BaseDePrueba, extra: Map<String, String> = emptyMap(), private val tls: Tls? = null) : AutoCloseable {
-    private val puertos = Servicio.entries.associateWith { libre() }
+class SistemaHttp(
+    private val db: BaseDePrueba,
+    private val extra: Map<String, String> = emptyMap(),
+    private val tls: Tls? = null,
+) : AutoCloseable {
+    private var puertos: Map<Servicio, Int> = emptyMap()
     val tokens: Map<Servicio, String> = Servicio.entries.associateWith { aleatorio() }
+    private val fotos = Files.createTempDirectory("maidotouch-fotos").toString()
 
-    val entorno: Map<String, String> = buildMap {
+    var entorno: Map<String, String> = emptyMap()
+        private set
+
+    private val servidores: List<EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>> = arrancar()
+
+    private fun construirEntorno(): Map<String, String> = buildMap {
         put("MAIDOTOUCH_DB_PATH", db.ruta)
-        put("MAIDOTOUCH_FOTOS_DIR", Files.createTempDirectory("maidotouch-fotos").toString())
+        put("MAIDOTOUCH_FOTOS_DIR", fotos)
         put("MAIDOTOUCH_URL_PUBLICA", "http://localhost:5173")
         Servicio.entries.forEach {
             put("MAIDOTOUCH_URL_${it.sufijo}", url(it))
@@ -38,19 +49,26 @@ class SistemaHttp(db: BaseDePrueba, extra: Map<String, String> = emptyMap(), pri
         putAll(extra)
     }
 
-    private val servidores: List<EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>> = listOf(
-        sesion.servidor(entorno),
-        catalogo.servidor(entorno),
-        seguridad.servidor(entorno),
-        recomendacion.servidor(entorno),
-        ia.servidor(entorno),
-        pedido.servidor(entorno),
-        atencion.servidor(entorno),
-        trazabilidad.servidor(entorno),
-        piloto.servidor(entorno),
-        bus.servidor(entorno),
-        gateway.servidor(entorno),
-    ).onEach { it.start(wait = false) }
+    /**
+     * Los puertos se eligen antes de levantar los servidores (cada servicio necesita la dirección de
+     * los demás), así que otro proceso puede ocupar uno en el intervalo. En ese caso se detiene lo
+     * levantado y se vuelve a intentar con puertos nuevos.
+     */
+    private fun arrancar(): List<EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>> {
+        for (intento in 1..INTENTOS) {
+            puertos = reservarPuertos()
+            entorno = construirEntorno()
+            val iniciados = mutableListOf<EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>>()
+            try {
+                fabricas.forEach { fabrica -> iniciados += fabrica(entorno).also { it.start(wait = false) } }
+                return iniciados
+            } catch (e: Exception) {
+                iniciados.forEach { it.stop(0, 200) }
+                if (!puertoOcupado(e) || intento == INTENTOS) throw e
+            }
+        }
+        error("inalcanzable")
+    }
 
     val http: HttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(2)).build()
 
@@ -89,7 +107,23 @@ class SistemaHttp(db: BaseDePrueba, extra: Map<String, String> = emptyMap(), pri
     }
 
     private companion object {
-        fun libre(): Int = ServerSocket(0).use { it.localPort }
+        const val INTENTOS = 5
+
+        val fabricas: List<(Map<String, String>) -> EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>> = listOf(
+            { e -> sesion.servidor(e) }, { e -> catalogo.servidor(e) }, { e -> seguridad.servidor(e) },
+            { e -> recomendacion.servidor(e) }, { e -> ia.servidor(e) }, { e -> pedido.servidor(e) },
+            { e -> atencion.servidor(e) }, { e -> trazabilidad.servidor(e) }, { e -> piloto.servidor(e) },
+            { e -> bus.servidor(e) }, { e -> gateway.servidor(e) },
+        )
+
+        /** Once puertos distintos: se abren todos a la vez y se liberan juntos justo antes de arrancar. */
+        fun reservarPuertos(): Map<Servicio, Int> {
+            val sockets = Servicio.entries.associateWith { ServerSocket(0) }
+            return sockets.mapValues { it.value.localPort }.also { sockets.values.forEach(ServerSocket::close) }
+        }
+
+        fun puertoOcupado(e: Throwable): Boolean =
+            generateSequence(e) { it.cause }.any { it is BindException || "Address already in use" in (it.message ?: "") }
 
         fun aleatorio(): String = ByteArray(32).also(SecureRandom()::nextBytes).let { Base64.getUrlEncoder().withoutPadding().encodeToString(it) }
     }
