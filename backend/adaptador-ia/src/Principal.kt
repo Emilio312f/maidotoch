@@ -33,12 +33,27 @@ fun Application.moduloIa(ia: ApiIA, token: String, version: String) =
 
 fun servidor(entorno: Map<String, String> = System.getenv()): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     val topologia = Topologia.desdeEntorno(entorno)
-    // La clave del proveedor solo está en el entorno de este servicio (/etc/maidotouch/adaptador-ia.env).
-    val clave = Entorno.texto("ANTHROPIC_API_KEY", entorno)
-    val modelo = Entorno.texto("MAIDOTOUCH_IA_MODELO", entorno) ?: "claude-opus-5-5"
+    // Las claves de los proveedores solo están en el entorno de este servicio (/etc/maidotouch/adaptador-ia.env).
     val timeoutMs = Entorno.timeoutIaMs(entorno)
-    val ia = ServicioAdaptadorIA(clave?.let { AdaptadorClaude(it, modelo, timeoutMs) }, timeoutMs, modelo)
-    if (clave == null) println("ANTHROPIC_API_KEY no definida: el asistente usará solo el ranking por reglas.")
+    val proveedor = Entorno.texto("MAIDOTOUCH_IA_PROVEEDOR", entorno) ?: "claude"
+    val (ordenador, modelo) = when (proveedor) {
+        "claude" -> {
+            val clave = Entorno.texto("ANTHROPIC_API_KEY", entorno)
+            val modelo = Entorno.texto("MAIDOTOUCH_IA_MODELO", entorno) ?: "claude-opus-5-5"
+            if (clave == null) println("ANTHROPIC_API_KEY no definida: el asistente usará solo el ranking por reglas.")
+            clave?.let { AdaptadorClaude(it, modelo, timeoutMs) } to modelo
+        }
+        "servidor-casa" -> {
+            val url = Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_URL", entorno)
+            val modelo = Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_MODELO", entorno) ?: "qwen3-4b"
+            if (url == null) println("MAIDOTOUCH_IA_SERVIDOR_URL no definida: el asistente usará solo el ranking por reglas.")
+            url?.let {
+                AdaptadorServidorCasa(it, Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_CLAVE", entorno), modelo, timeoutMs)
+            } to modelo
+        }
+        else -> error("MAIDOTOUCH_IA_PROVEEDOR desconocido: '$proveedor' (use 'claude' o 'servidor-casa')")
+    }
+    val ia = ServicioAdaptadorIA(ordenador, timeoutMs, modelo)
     val version = Entorno.version()
     return arrancar(Servicio.ADAPTADOR_IA, topologia) { moduloIa(ia, topologia.token(Servicio.ADAPTADOR_IA), version) }
 }

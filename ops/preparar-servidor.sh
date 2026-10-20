@@ -50,7 +50,7 @@ if [ ! -f "$etc/comun.env" ]; then
   echo "Creado $etc/comun.env con tokens de servicio nuevos."
 fi
 if [ ! -f "$etc/adaptador-ia.env" ]; then
-  printf '# Solo el Servicio Adaptador de IA conoce la clave del proveedor.\nANTHROPIC_API_KEY=\nMAIDOTOUCH_IA_MODELO=claude-opus-5-5\n' > "$etc/adaptador-ia.env"
+  printf '# Solo el Servicio Adaptador de IA conoce la clave del proveedor.\nMAIDOTOUCH_IA_PROVEEDOR=claude\nANTHROPIC_API_KEY=\nMAIDOTOUCH_IA_MODELO=claude-opus-5-5\nMAIDOTOUCH_IA_SERVIDOR_URL=\nMAIDOTOUCH_IA_SERVIDOR_CLAVE=\nMAIDOTOUCH_IA_SERVIDOR_MODELO=qwen3-4b\n' > "$etc/adaptador-ia.env"
   echo "Completa ANTHROPIC_API_KEY en $etc/adaptador-ia.env."
 fi
 chown root:maidotouch "$etc"/*.env "$etc/tls-interno.p12"

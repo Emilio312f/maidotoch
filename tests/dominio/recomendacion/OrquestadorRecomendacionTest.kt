@@ -174,6 +174,29 @@ class OrquestadorRecomendacionTest {
     }
 
     @Test
+    fun `si la IA responde que ningun plato encaja no se recomienda nada y se dice`() = runBlocking<Unit> {
+        val ia = IaFalsa { emptyList() }
+
+        val respuesta = orquestador(ia).recomendar(sesion, "algo caliente")
+
+        assertEquals(1, ia.solicitudes.size)
+        assertTrue(respuesta.sinCoincidencia)
+        assertTrue(respuesta.recomendaciones.isEmpty())
+        assertEquals("ia", respuesta.motor)
+        assertTrue(filasRecomendaciones().isEmpty())
+    }
+
+    @Test
+    fun `sin coincidencia con la consulta el respaldo no recomienda al azar y lo dice`() = runBlocking<Unit> {
+        val respuesta = orquestador(null).recomendar(sesion, "algo que no existe en la carta")
+
+        assertTrue(respuesta.sinCoincidencia)
+        assertFalse(respuesta.sinCandidatos)
+        assertTrue(respuesta.recomendaciones.isEmpty())
+        assertTrue(filasRecomendaciones().isEmpty())
+    }
+
+    @Test
     fun `el DTO enviado a la IA no contiene alergenos, ingredientes, restricciones ni id de sesion`() = runBlocking<Unit> {
         val ia = IaFalsa()
         orquestador(ia).recomendar(sesion, "algo picante")
