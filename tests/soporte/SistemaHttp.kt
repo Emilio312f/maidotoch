@@ -20,7 +20,7 @@ import java.util.Base64
  * hablando por HTTP), sobre la base de [db]. Las pruebas entran por el API Gateway, como la web-app.
  */
 class SistemaHttp(db: BaseDePrueba, extra: Map<String, String> = emptyMap(), private val tls: Tls? = null) : AutoCloseable {
-    private val puertos = Servicio.entries.associateWith { libre() }
+    private val puertos = puertosUnicos(Servicio.entries)
     val tokens: Map<Servicio, String> = Servicio.entries.associateWith { aleatorio() }
 
     val entorno: Map<String, String> = buildMap {
@@ -88,9 +88,18 @@ class SistemaHttp(db: BaseDePrueba, extra: Map<String, String> = emptyMap(), pri
         servidores.forEach { it.stop(50, 500) }
     }
 
-    private companion object {
-        fun libre(): Int = ServerSocket(0).use { it.localPort }
+    companion object {
+        internal fun puertosUnicos(servicios: List<Servicio>, libre: () -> Int = ::libre): Map<Servicio, Int> {
+            val usados = mutableSetOf<Int>()
+            return servicios.associateWith {
+                var puerto = libre()
+                while (!usados.add(puerto)) puerto = libre()
+                puerto
+            }
+        }
 
-        fun aleatorio(): String = ByteArray(32).also(SecureRandom()::nextBytes).let { Base64.getUrlEncoder().withoutPadding().encodeToString(it) }
+        private fun libre(): Int = ServerSocket(0).use { it.localPort }
+
+        private fun aleatorio(): String = ByteArray(32).also(SecureRandom()::nextBytes).let { Base64.getUrlEncoder().withoutPadding().encodeToString(it) }
     }
 }
