@@ -34,7 +34,7 @@ body {
 }
 
 h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0 0 0.4em; }
-h1 { font-size: 1.6rem; }
+h1 { font-size: clamp(1.35rem, 5vw, 1.6rem); }
 h2 { font-size: 1.3rem; }
 h3 { font-size: 1.08rem; }
 p { margin: 0 0 0.75em; }
@@ -51,17 +51,19 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 
 .cabecera {
   position: sticky; top: 0; z-index: 10;
-  display: flex; align-items: center; gap: 8px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 8px;
   padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
   background: var(--tinta); color: #fff;
 }
-.cabecera .marca { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; flex: 1; }
+.cabecera .marca { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; flex: 1 1 160px; min-width: 0; display: flex; align-items: center; gap: 10px; }
 .cabecera .puesto { font-size: 0.8rem; opacity: 0.75; display: block; font-family: var(--sans); font-weight: 400; }
+.logo { width: 38px; height: 38px; flex: none; object-fit: contain; border-radius: 50%; background: #fff; }
+.logo-letra { display: grid; place-items: center; background: var(--acento); color: #fff; font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
 
 .contenido { flex: 1; padding: 16px 16px 96px; }
 
 .navegacion {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  position: fixed; left: 50%; transform: translateX(-50%); width: min(100%, 720px); bottom: 0; z-index: 10;
   display: flex; justify-content: center;
   background: var(--superficie); border-top: 1px solid var(--borde);
   padding-bottom: env(safe-area-inset-bottom);
@@ -211,3 +213,55 @@ button:disabled { cursor: not-allowed; opacity: 0.55; }
 }
 
 code { font-size: 0.82rem; word-break: break-all; background: #efe9e2; padding: 2px 6px; border-radius: 6px; }
+
+/* ---------- Responsivo ---------- */
+
+/* Teléfonos chicos (≤ 380 px): márgenes, tarjetas y barra de navegación más compactos. */
+@media (max-width: 380px) {
+  .contenido { padding: 12px 12px 96px; }
+  .cabecera { padding-left: 12px; padding-right: 12px; }
+  .pestanas { margin: 0 -12px 12px; padding-left: 12px; padding-right: 12px; }
+  .cabecera .boton.claro, .cabecera .boton.peque { padding: 6px 10px; font-size: 0.82rem; }
+  .cabecera .marca { font-size: 1.02rem; }
+  .logo { width: 32px; height: 32px; }
+  .producto { grid-template-columns: 72px 1fr; gap: 10px; }
+  .producto .foto { width: 72px; height: 72px; font-size: 1.3rem; }
+  .tarjeta { padding: 12px; }
+  .navegacion a { font-size: 0.82rem; padding: 10px 2px 12px; }
+}
+
+/* Escritorio (≥ 900 px): diseño propio a ancho completo, con el contenido centrado en 1200 px. */
+@media (min-width: 900px) {
+  .app { max-width: none; }
+
+  .cabecera {
+    order: 0; padding-top: 14px; padding-bottom: 14px;
+    padding-left: max(32px, calc((100% - 1200px) / 2));
+    padding-right: max(32px, calc((100% - 1200px) / 2));
+  }
+  .cabecera .marca { flex: 0 1 auto; font-size: 1.3rem; }
+  .cabecera .marca .logo { width: 44px; height: 44px; }
+
+  /* La navegación pasa a una barra bajo la cabecera, en lugar de quedar fija abajo. */
+  .navegacion { order: 1; position: static; transform: none; width: 100%; background: var(--superficie); border-top: none; border-bottom: 1px solid var(--borde); }
+  .navegacion nav {
+    max-width: none; justify-content: flex-start;
+    padding-left: max(32px, calc((100% - 1200px) / 2)); padding-right: max(32px, calc((100% - 1200px) / 2));
+  }
+  .navegacion a { flex: 0 0 auto; padding: 16px 22px; text-align: left; font-size: 1rem; }
+  .navegacion a.active::before { left: 12px; right: 12px; }
+
+  .contenido { order: 2; width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 32px 56px; }
+  .contenido h1 { font-size: 2rem; }
+  .pestanas { margin: 0 0 20px; padding: 0; }
+
+  /* Carta: cuadrícula de tarjetas con la foto arriba. */
+  .lista:has(> .producto) { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
+  .producto { grid-template-columns: 1fr; gap: 12px; height: 100%; }
+  .producto .foto { width: 100%; height: auto; aspect-ratio: 4 / 3; font-size: 3rem; border-radius: 12px; }
+  .producto .acciones { margin-top: auto; }
+
+  /* Asistente: formulario angosto y recomendaciones en dos columnas. */
+  .consulta { max-width: 720px; }
+  .lista:has(> .recomendacion) { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+}

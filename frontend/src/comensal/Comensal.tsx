@@ -132,8 +132,11 @@ function Cabecera() {
   return (
     <header className="cabecera">
       <div className="marca">
-        {t("app.nombre")}
-        <span className="puesto">{estado.puestoCodigo}</span>
+        <Logo />
+        <div>
+          {t("app.nombre")}
+          <span className="puesto">{estado.puestoCodigo.replace(/^FICTICIO-/i, "")}</span>
+        </div>
       </div>
       <button className="boton claro" onClick={cambiarIdioma} lang={idioma === "es" ? "en" : "es"}>
         {t("idioma.cambiar")}
@@ -144,6 +147,16 @@ function Cabecera() {
       </button>
     </header>
   );
+}
+
+/**
+ * Logo de Maido: se toma de /logo-maido.svg (carpeta comensal/public). Mientras ese archivo no
+ * exista se muestra una letra M en el color de la marca.
+ */
+function Logo() {
+  const [sinArchivo, setSinArchivo] = useState(false);
+  if (sinArchivo) return <span className="logo logo-letra" aria-hidden="true">M</span>;
+  return <img className="logo" src="/logo-maido.svg" alt="Maido" onError={() => setSinArchivo(true)} />;
 }
 
 function AvisoLlamado({ llamado }: { llamado: Llamado }) {

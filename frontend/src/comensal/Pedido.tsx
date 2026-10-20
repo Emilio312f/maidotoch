@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ErrorApi, soles, type ItemPedido, type Pedido as TipoPedido } from "../comun/api";
 import type { Clave } from "../comun/i18n";
+import { textoVisible } from "../comun/textos";
 import { useComensal } from "./contexto";
 
 /** Carrito y confirmación (RF05 · RF10 · RF11): nada sale a cocina sin la confirmación explícita. */
@@ -100,7 +101,7 @@ export function Pedido() {
             <ul>
               {borrador.items.map((i) => (
                 <li key={i.id}>
-                  {i.cantidad} × {i.nombre}
+                  {i.cantidad} × {textoVisible(i.nombre)}
                 </li>
               ))}
             </ul>
@@ -128,12 +129,12 @@ function LineaPedido({ item, invalido, cambiar }: { item: ItemPedido; invalido: 
   return (
     <div className={`item-pedido ${invalido ? "invalido" : ""}`}>
       <div>
-        <strong>{item.nombre}</strong>
+        <strong>{textoVisible(item.nombre)}</strong>
         <div className="suave">{soles(item.precioUnitarioCentimos)}</div>
         {invalido && <div className="suave">{t("pedido.revisar")}</div>}
       </div>
       <span className="precio">{soles(item.precioUnitarioCentimos * item.cantidad)}</span>
-      <div className="cantidad" aria-label={item.nombre}>
+      <div className="cantidad" aria-label={textoVisible(item.nombre)}>
         <button onClick={() => cambiar(item.cantidad - 1)} aria-label="−">−</button>
         <span>{item.cantidad}</span>
         <button onClick={() => cambiar(item.cantidad + 1)} aria-label="+" disabled={item.cantidad >= 20}>+</button>
@@ -154,7 +155,7 @@ function PedidoEnviado({ pedido }: { pedido: TipoPedido }) {
       <ul className="suave" style={{ paddingLeft: 18, margin: "8px 0" }}>
         {pedido.items.map((i) => (
           <li key={i.id}>
-            {i.cantidad} × {i.nombre}
+            {i.cantidad} × {textoVisible(i.nombre)}
           </li>
         ))}
       </ul>

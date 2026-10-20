@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { soles, type Aptitud, type CartaSesion, type ProductoCarta } from "../comun/api";
+import { fotoDemo } from "../comun/fotosDemo";
+import { textoVisible } from "../comun/textos";
 import { useComensal } from "./contexto";
 
 /** Carta digital (RF02 · RF12): disponibilidad actual y aptitud para el perfil, calculada en el servidor. */
@@ -25,7 +27,7 @@ export function Carta() {
         </button>
         {carta.categorias.map((c) => (
           <button key={c.id} className="chip" aria-pressed={categoria === c.id} onClick={() => setCategoria(c.id)}>
-            {c.nombre}
+            {textoVisible(c.nombre)}
           </button>
         ))}
       </div>
@@ -59,20 +61,21 @@ function TarjetaProducto({ producto, aptitud }: { producto: ProductoCarta; aptit
   };
 
   const pedible = producto.disponible && aptitud === "apto";
+  const foto = producto.fotoUrl ?? fotoDemo(producto.nombre);
 
   return (
     <article className={`tarjeta producto ${producto.disponible ? "" : "agotado"}`}>
-      {producto.fotoUrl ? (
-        <img className="foto" src={producto.fotoUrl} alt="" loading="lazy" width={88} height={88} />
+      {foto ? (
+        <img className="foto" src={foto} alt="" loading="lazy" width={88} height={88} />
       ) : (
-        <div className="foto" aria-hidden="true">{producto.nombre.charAt(0)}</div>
+        <div className="foto" aria-hidden="true">{textoVisible(producto.nombre).charAt(0)}</div>
       )}
       <div>
         <div className="fila entre">
-          <h3>{producto.nombre}</h3>
+          <h3>{textoVisible(producto.nombre)}</h3>
           <span className="precio">{soles(producto.precioCentimos)}</span>
         </div>
-        <p className="descripcion">{producto.descripcion}</p>
+        <p className="descripcion">{textoVisible(producto.descripcion)}</p>
         <div className="acciones">
           <div className="fila" style={{ flexWrap: "wrap", gap: 6 }}>
             {!producto.disponible && <span className="etiqueta neutra">{t("carta.agotado")}</span>}
