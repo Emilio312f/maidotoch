@@ -25,8 +25,9 @@ object GeneradorExplicaciones {
             }
             if (preferencias.isEmpty() && palabras.isEmpty()) {
                 add(
-                    if (en) "It does not match a specific preference; it is one of the $totalCandidatos dishes available today that fit your profile."
-                    else "No coincide con una preferencia específica; es uno de los $totalCandidatos platos disponibles hoy que se ajustan a tu perfil.",
+                    // Solo se afirma lo que el sistema verificó: no encaja con la consulta ni con las preferencias.
+                    if (en) "It does not match your request or your preferences; it is one of the $totalCandidatos dishes available today."
+                    else "No coincide con lo que pediste ni con tus preferencias; es uno de los $totalCandidatos platos disponibles hoy.",
                 )
             }
             if (perfil.restricciones.isNotEmpty()) {

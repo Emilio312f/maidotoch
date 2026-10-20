@@ -76,7 +76,7 @@ class RankingPorReglasTest {
         val texto = GeneradorExplicaciones.explicar(candidato(1), ContextoPerfil("en", emptyMap(), emptyList()), "", 5)
 
         assertEquals(
-            "It does not match a specific preference; it is one of the 5 dishes available today that fit your profile. Available on today's menu.",
+            "It does not match your request or your preferences; it is one of the 5 dishes available today. Available on today's menu.",
             texto,
         )
     }

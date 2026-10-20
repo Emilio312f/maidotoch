@@ -99,6 +99,7 @@ export interface RespuestaAsistente {
   sinCandidatos: boolean;
   derivacion?: { motivo: MotivoLlamado; productos: string[] };
   platosSinConfirmar: number;
+  sinCoincidencia?: boolean;
 }
 
 export interface ItemPedido {

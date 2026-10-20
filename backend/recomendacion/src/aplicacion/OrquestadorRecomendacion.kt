@@ -52,6 +52,8 @@ data class RespuestaAsistente(
     val derivacion: Derivacion? = null,
     /** Platos disponibles que no se pudieron confirmar para el perfil (sin dato). */
     val platosSinConfirmar: Int,
+    /** El respaldo por reglas no encontró ningún plato que coincida con la consulta ni con el perfil. */
+    val sinCoincidencia: Boolean = false,
 )
 
 /**
@@ -108,6 +110,16 @@ class OrquestadorRecomendacion(
             }
 
             val (ordenados, motor) = rankear(preparacion, texto)
+            // Se dice la verdad en vez de sugerir platos al azar: la IA respondió que ninguno encaja, o el
+            // respaldo por reglas no encontró ninguna coincidencia con la consulta ni con el perfil.
+            val sinCoincidencia = ordenados.isEmpty() ||
+                (motor == Motor.FALLBACK && texto.isNotBlank() && !RankingPorReglas.hayCoincidencia(preparacion.candidatos, preparacion.contexto, texto))
+            if (sinCoincidencia) {
+                withContext(Dispatchers.IO) {
+                    fuente.usar { RepositorioRecomendacion(it).registrarConsulta(sesionId, motor.valor, milis(inicio), 0) }
+                }
+                return RespuestaAsistente(emptyList(), motor.valor, false, derivacion, preparacion.sinDato.size, sinCoincidencia = true)
+            }
             val elegidos = ordenados.take(maximoRecomendaciones)
             val nuevas = elegidos.mapIndexed { i, candidato ->
                 NuevaRecomendacion(
@@ -186,7 +198,10 @@ class OrquestadorRecomendacion(
             )
             try {
                 val porId = preparacion.candidatos.associateBy { it.productoId }
-                val ids = ValidadorRespuestaIA.filtrar(withTimeout(timeoutIaMs) { proveedor.ordenar(solicitud) }, porId.keys)
+                val respuestaIa = withTimeout(timeoutIaMs) { proveedor.ordenar(solicitud) }
+                // Lista vacía: la IA decidió que ningún plato encaja con la consulta.
+                if (respuestaIa.isEmpty()) return emptyList<CandidatoRecomendable>() to Motor.IA
+                val ids = ValidadorRespuestaIA.filtrar(respuestaIa, porId.keys)
                 if (ids.isNotEmpty()) return ids.map(porId::getValue) to Motor.IA
                 log.warn("El proveedor de IA no devolvió ids válidos; se usa el ranking por reglas")
             } catch (e: TimeoutCancellationException) {

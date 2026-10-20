@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { soles, type Recomendado, type RespuestaAsistente } from "../comun/api";
+import { textoVisible } from "../comun/textos";
 import { useComensal } from "./contexto";
 
 /**
@@ -8,6 +10,7 @@ import { useComensal } from "./contexto";
  */
 export function Asistente() {
   const { api, t, manejarError, llamarMozo } = useComensal();
+  const navegar = useNavigate();
   const [consulta, setConsulta] = useState("");
   const [respuesta, setRespuesta] = useState<RespuestaAsistente | null>(null);
   const [cargando, setCargando] = useState(false);
@@ -56,6 +59,15 @@ export function Asistente() {
             </div>
           )}
 
+          {respuesta.sinCoincidencia && (
+            <div className="aviso info">
+              <p>{t("asistente.sinCoincidencia")}</p>
+              <button className="boton secundario peque" onClick={() => navegar("/carta")}>
+                {t("asistente.verCarta")}
+              </button>
+            </div>
+          )}
+
           {respuesta.sinCandidatos ? (
             <div className="aviso alerta">
               <p>{t("asistente.sinCandidatos")}</p>
@@ -67,7 +79,7 @@ export function Asistente() {
             respuesta.recomendaciones.map((r) => <TarjetaRecomendacion key={r.recomendacionId} recomendacion={r} />)
           )}
 
-          {respuesta.motor === "fallback" && <p className="suave">{t("asistente.motorReglas")}</p>}
+          {respuesta.motor === "fallback" && !respuesta.sinCoincidencia && <p className="suave">{t("asistente.motorReglas")}</p>}
           {!respuesta.sinCandidatos && respuesta.platosSinConfirmar > 0 && (
             <p className="suave">{t("asistente.sinConfirmar", { n: respuesta.platosSinConfirmar })}</p>
           )}
@@ -103,11 +115,11 @@ function TarjetaRecomendacion({ recomendacion }: { recomendacion: Recomendado })
       <div className="fila entre">
         <div className="fila">
           <span className="posicion">{recomendacion.posicion}</span>
-          <h3 style={{ margin: 0 }}>{recomendacion.nombre}</h3>
+          <h3 style={{ margin: 0 }}>{textoVisible(recomendacion.nombre)}</h3>
         </div>
         <span className="precio">{soles(recomendacion.precioCentimos)}</span>
       </div>
-      <p className="suave" style={{ marginTop: 6 }}>{recomendacion.descripcion}</p>
+      <p className="suave" style={{ marginTop: 6 }}>{textoVisible(recomendacion.descripcion)}</p>
       <div className="porque">
         <strong>{t("asistente.porque")}</strong>
         {recomendacion.explicacion}
