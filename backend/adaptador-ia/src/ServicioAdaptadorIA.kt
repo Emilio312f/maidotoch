@@ -31,7 +31,7 @@ class ServicioAdaptadorIA(
     val protegido: OrdenadorProtegido? = proveedor?.let { OrdenadorProtegido(it, timeoutMs) }
 
     override suspend fun ordenar(solicitud: SolicitudOrdenamiento): List<Long> {
-        val ordenador = protegido ?: throw IaNoDisponible("ia_no_configurada", "Sin ANTHROPIC_API_KEY")
+        val ordenador = protegido ?: throw IaNoDisponible("ia_no_configurada", "Sin proveedor de IA configurado")
         val enviados = solicitud.candidatos.map { it.id }.toSet()
         val ids = try {
             ordenador.ordenar(solicitud)
