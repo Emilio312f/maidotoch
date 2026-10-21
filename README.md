@@ -137,7 +137,7 @@ dominio los pone el proxy de Coolify.
 | `MAIDOTOUCH_IA_PROVEEDOR` | `servidor-casa` para el servidor de IA del equipo o Gemini, o `claude` (por defecto) |
 | `MAIDOTOUCH_IA_SERVIDOR_URL` | Con `servidor-casa`: URL HTTPS del servidor, terminada en `/v1`; para Gemini, `https://generativelanguage.googleapis.com/v1beta/openai` |
 | `MAIDOTOUCH_IA_SERVIDOR_CLAVE` | Con `servidor-casa`: clave del servidor o de Gemini (marcarla como secreta en Coolify) |
-| `MAIDOTOUCH_IA_SERVIDOR_MODELO` | Con `servidor-casa`: modelo, por ejemplo `qwen3-4b` o `gemini-2.5-flash-lite` |
+| `MAIDOTOUCH_IA_SERVIDOR_MODELO` | Con `servidor-casa`: modelo, por ejemplo `qwen3-4b` o `gemini-3.5-flash-lite` |
 | `ANTHROPIC_API_KEY` | Con `claude`; sin ella el asistente usa el ranking por reglas |
 
 Las variables del proveedor de IA (dirección y claves) solo las recibe el proceso del Adaptador de IA.
