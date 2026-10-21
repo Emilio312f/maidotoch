@@ -298,8 +298,8 @@ export const apiComensal = (sesion: string) => {
   };
 };
 
-export const iniciarSesion = (token: string, idioma: Idioma) =>
-  pedir<{ sesionId: string; estado: EstadoSesion }>("POST", "/sesiones", { token, idioma });
+export const iniciarSesion = (token: string, idioma: Idioma, sesionPrevia: string | null) =>
+  pedir<{ sesionId: string; estado: EstadoSesion }>("POST", "/sesiones", { token, idioma, sesionPrevia });
 
 export const opcionesPerfil = (idioma: Idioma) =>
   pedir<{ restricciones: OpcionPerfil[]; preferencias: OpcionPerfil[] }>("GET", `/opciones-perfil?idioma=${idioma}`);

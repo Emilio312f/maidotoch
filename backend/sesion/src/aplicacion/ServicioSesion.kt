@@ -21,12 +21,20 @@ data class SesionIniciada(val sesionId: String, val estado: EstadoSesion)
 /** Sesión del comensal: solo puesto (token NFC/QR) e idioma, sin datos personales (RNF02). */
 class ServicioSesion(private val fuente: FuenteConexiones) {
 
-    fun iniciar(token: String, idioma: String): SesionIniciada {
+    /**
+     * Abre la sesión del puesto. Si el celular trae una [sesionPrevia] abierta del mismo puesto (por NFC
+     * o QR), la retoma con su perfil y su carrito; cualquier otro caso abre una sesión nueva.
+     */
+    fun iniciar(token: String, idioma: String, sesionPrevia: String? = null): SesionIniciada {
         validarIdioma(idioma)
         return fuente.usar { conn ->
             val repo = RepositorioSesiones(conn)
             val acceso = repo.buscarAcceso(token) ?: throw NoEncontrado("acceso_no_encontrado", "Token de puesto desconocido")
             if (!acceso.habilitado) throw Prohibido("puesto_inactivo", "Puesto ${acceso.puestoCodigo} deshabilitado")
+            val previa = sesionPrevia?.let { repo.estado(it) }
+            if (previa != null && previa.abierta && previa.puestoCodigo == acceso.puestoCodigo) {
+                return@usar SesionIniciada(sesionPrevia, previa)
+            }
             val id = repo.crear(acceso.accesoId, idioma)
             SesionIniciada(id, repo.estado(id)!!)
         }

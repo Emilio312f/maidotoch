@@ -24,12 +24,13 @@ export function useComensal(): ContextoComensal {
   return ctx;
 }
 
-// La sesión vive solo en esta pestaña (sessionStorage): sin cuentas ni datos personales.
+// El celular guarda solo el id de su sesión (localStorage), sin cuentas ni datos personales: así
+// sobrevive al cierre de la pestaña y, al volver a escanear el mismo puesto, el servidor la retoma.
 const CLAVE_SESION = "maidotouch.sesion";
 
 export function leerSesion(): string | null {
   try {
-    return sessionStorage.getItem(CLAVE_SESION);
+    return localStorage.getItem(CLAVE_SESION);
   } catch {
     return null;
   }
@@ -37,8 +38,8 @@ export function leerSesion(): string | null {
 
 export function guardarSesion(id: string | null) {
   try {
-    if (id) sessionStorage.setItem(CLAVE_SESION, id);
-    else sessionStorage.removeItem(CLAVE_SESION);
+    if (id) localStorage.setItem(CLAVE_SESION, id);
+    else localStorage.removeItem(CLAVE_SESION);
   } catch {
     /* sin almacenamiento disponible: la sesión dura lo que la página */
   }

@@ -65,7 +65,7 @@ fun Route.rutasSesion(app: AppSesion) {
     route("/api") {
         post("/sesiones") {
             val p = call.receive<IniciarSesion>()
-            call.respond(HttpStatusCode.Created, io { app.sesiones.iniciar(p.token, p.idioma) })
+            call.respond(HttpStatusCode.Created, io { app.sesiones.iniciar(p.token, p.idioma, p.sesionPrevia) })
         }
         route("/sesion") {
             get { call.respond(io { app.sesiones.estado(call.sesion()) }) }

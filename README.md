@@ -134,7 +134,13 @@ dominio los pone el proxy de Coolify.
 | `MAIDOTOUCH_URL_PUBLICA` | `https://<dominio-de-staging>` (enlaces de los tags NFC y QR) |
 | `MAIDOTOUCH_DEMO` | `piloto` para cargar el catálogo piloto, cuentas demo y los puestos M1, M2 y B1 |
 | `MAIDOTOUCH_CLAVE` | Clave de las cuentas demo (mínimo 10 caracteres) |
-| `ANTHROPIC_API_KEY` | Opcional; sin ella el asistente usa el ranking por reglas. Solo la recibe el Adaptador de IA |
+| `MAIDOTOUCH_IA_PROVEEDOR` | `servidor-casa` para el servidor de IA del equipo, o `claude` (por defecto) |
+| `MAIDOTOUCH_IA_SERVIDOR_URL` | Con `servidor-casa`: URL HTTPS del servidor, terminada en `/v1` |
+| `MAIDOTOUCH_IA_SERVIDOR_CLAVE` | Con `servidor-casa`: clave del servidor (marcarla como secreta en Coolify) |
+| `MAIDOTOUCH_IA_SERVIDOR_MODELO` | Con `servidor-casa`: modelo, por ejemplo `qwen3-4b` |
+| `ANTHROPIC_API_KEY` | Con `claude`; sin ella el asistente usa el ranking por reglas |
+
+Las variables del proveedor de IA (dirección y claves) solo las recibe el proceso del Adaptador de IA.
 
 Los tokens de servicio se generan solos en el primer arranque (`/datos/tokens.env`). El contenedor
 tiene healthcheck sobre `/api/salud` y se detiene si cualquier servicio cae, para que Coolify lo

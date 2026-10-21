@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 // Cuerpos de las peticiones de la API pública (web-app del comensal y back-office).
 
 @Serializable
-data class IniciarSesion(val token: String, val idioma: String = "es")
+data class IniciarSesion(val token: String, val idioma: String = "es", val sesionPrevia: String? = null)
 
 @Serializable
 data class PerfilPeticion(val restricciones: List<Long> = emptyList(), val preferencias: List<Long> = emptyList())

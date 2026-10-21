@@ -35,7 +35,7 @@ for s in "${servicios[@]}"; do
     # Solo el Servicio Adaptador de IA recibe las claves del proveedor.
     env -u MAIDOTOUCH_CLAVE "/app/servicios/$s/bin/maidotouch-$s" > >(sed -u "s/^/[$s] /") 2>&1 &
   else
-    env -u ANTHROPIC_API_KEY -u MAIDOTOUCH_IA_SERVIDOR_CLAVE -u MAIDOTOUCH_CLAVE \
+    env -u ANTHROPIC_API_KEY -u MAIDOTOUCH_IA_SERVIDOR_CLAVE -u MAIDOTOUCH_IA_SERVIDOR_URL -u MAIDOTOUCH_CLAVE \
       "/app/servicios/$s/bin/maidotouch-$s" > >(sed -u "s/^/[$s] /") 2>&1 &
   fi
   pids+=($!)

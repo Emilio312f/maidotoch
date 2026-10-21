@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ErrorApi, iniciarSesion } from "../comun/api";
 import { textoError, traducir } from "../comun/i18n";
-import { guardarSesion, idiomaDelNavegador } from "./contexto";
+import { guardarSesion, idiomaDelNavegador, leerSesion } from "./contexto";
 
 /** Entrada desde el tag NFC o el QR del puesto (RF01 · RNF08): ambos abren /m/<token>. */
 export function Activacion() {
@@ -13,7 +13,8 @@ export function Activacion() {
 
   useEffect(() => {
     let vigente = true;
-    iniciarSesion(token, idioma)
+    // Si este celular ya tiene una sesión abierta en el mismo puesto, el servidor la retoma.
+    iniciarSesion(token, idioma, leerSesion())
       .then(({ sesionId }) => {
         if (!vigente) return;
         guardarSesion(sesionId);

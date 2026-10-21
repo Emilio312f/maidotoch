@@ -128,6 +128,33 @@ class ApiTest {
     }
 
     @Test
+    fun `volver a escanear el mismo puesto retoma la sesion del celular`() {
+        val sesion = e.sesion(restricciones = listOf("FICTICIO-alergia-mani"))
+        val iniciar = { token: String, previa: String? ->
+            val cuerpo = if (previa == null) """{"token":"$token"}""" else """{"token":"$token","sesionPrevia":"$previa"}"""
+            sistema.pedir("POST", "/api/sesiones", cuerpo).json().o
+        }
+
+        // El mismo celular escanea el QR del mismo puesto: misma sesión, con sus restricciones.
+        val tokenQr = e.mesa.puesto.accesos.first { it.canal == "qr" }.token
+        val retomada = iniciar(tokenQr, sesion)
+        assertEquals(sesion, retomada["sesionId"]!!.jsonPrimitive.content)
+        assertEquals(1, retomada["estado"]!!.o["restricciones"]!!.jsonArray.size)
+
+        // Otro celular en el mismo puesto: sesión propia y sin perfil.
+        val otra = iniciar(e.tokenMesa, null)
+        assertTrue(otra["sesionId"]!!.jsonPrimitive.content != sesion)
+        assertEquals(0, otra["estado"]!!.o["restricciones"]!!.jsonArray.size)
+
+        // Otro puesto, o una sesión ya cerrada: sesión nueva.
+        val tokenOtroPuesto = e.app.puestos.crearPuesto(e.admin, "T2", "mesa").puesto.accesos.first { it.canal == "nfc" }.token
+        assertTrue(iniciar(tokenOtroPuesto, sesion)["sesionId"]!!.jsonPrimitive.content != sesion)
+        sistema.pedir("POST", "/api/sesion/cerrar", cabeceras = conSesion(sesion))
+        assertTrue(iniciar(e.tokenMesa, sesion)["sesionId"]!!.jsonPrimitive.content != sesion)
+        assertTrue(iniciar(e.tokenMesa, "no-existe")["sesionId"]!!.jsonPrimitive.content != "no-existe")
+    }
+
+    @Test
     fun `cerrar sesion por el gateway descarta el perfil`() {
         val sesion = e.sesion(restricciones = listOf("FICTICIO-alergia-mani"))
 
