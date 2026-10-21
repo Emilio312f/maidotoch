@@ -657,6 +657,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 6800,
+      "foto_url": "/demo/ceviche.jpg",
       "textos": {
         "es": {
           "nombre": "Ceviche nikkei",
@@ -763,6 +764,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 6200,
+      "foto_url": "/demo/tiradito.jpg",
       "textos": {
         "es": {
           "nombre": "Tiradito al ají amarillo",
@@ -855,6 +857,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 6600,
+      "foto_url": "/demo/tiradito-pulpo.jpg",
       "textos": {
         "es": {
           "nombre": "Tiradito de pulpo al olivo",
@@ -946,6 +949,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5400,
+      "foto_url": "/demo/causa-cangrejo.jpg",
       "textos": {
         "es": {
           "nombre": "Causa de cangrejo",
@@ -1041,6 +1045,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 4200,
+      "foto_url": "/demo/causa-vegetal.jpg",
       "textos": {
         "es": {
           "nombre": "Causa vegetal",
@@ -1128,6 +1133,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 7400,
+      "foto_url": "/demo/tartar-atun.jpg",
       "textos": {
         "es": {
           "nombre": "Tartar de atún",
@@ -1232,6 +1238,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 4600,
+      "foto_url": "/demo/choritos.jpg",
       "textos": {
         "es": {
           "nombre": "Choritos a la chalaca",
@@ -1325,6 +1332,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 2400,
+      "foto_url": "/demo/edamame.jpg",
       "textos": {
         "es": {
           "nombre": "Edamames con sal de Maras",
@@ -1413,6 +1421,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 3600,
+      "foto_url": "/demo/gyozas.jpg",
       "textos": {
         "es": {
           "nombre": "Gyozas de cerdo",
@@ -1508,6 +1517,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 3800,
+      "foto_url": "/demo/ensalada-quinua.jpg",
       "textos": {
         "es": {
           "nombre": "Ensalada de quinua y palta",
@@ -1595,6 +1605,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 4800,
+      "foto_url": "/demo/nigiris.jpg",
       "textos": {
         "es": {
           "nombre": "Nigiris de pesca del día",
@@ -1693,6 +1704,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5600,
+      "foto_url": "/demo/maki-acevichado.jpg",
       "textos": {
         "es": {
           "nombre": "Maki acevichado",
@@ -1800,6 +1812,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 3800,
+      "foto_url": "/demo/maki-palta.jpg",
       "textos": {
         "es": {
           "nombre": "Maki de palta y pepino",
@@ -1891,6 +1904,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5400,
+      "foto_url": "/demo/maki-furai.jpg",
       "textos": {
         "es": {
           "nombre": "Maki furai de langostino",
@@ -1996,6 +2010,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 9800,
+      "foto_url": "/demo/pescado-nikkei.jpg",
       "textos": {
         "es": {
           "nombre": "Pesca del día en salsa nikkei",
@@ -2095,6 +2110,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 8900,
+      "foto_url": "/demo/lomo-saltado.jpg",
       "textos": {
         "es": {
           "nombre": "Lomo saltado nikkei",
@@ -2192,6 +2208,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 7800,
+      "foto_url": "/demo/arroz-langostinos.jpg",
       "textos": {
         "es": {
           "nombre": "Arroz chaufa de mariscos",
@@ -2303,6 +2320,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5600,
+      "foto_url": "/demo/chaufa-vegetal.jpg",
       "textos": {
         "es": {
           "nombre": "Arroz chaufa vegetal",
@@ -2404,6 +2422,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 8400,
+      "foto_url": "/demo/panceta-miso.jpg",
       "textos": {
         "es": {
           "nombre": "Panceta glaseada con miso",
@@ -2494,6 +2513,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 6400,
+      "foto_url": "/demo/ramen.jpg",
       "textos": {
         "es": {
           "nombre": "Ramen de pollo",
@@ -2594,6 +2614,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5800,
+      "foto_url": "/demo/udon.jpg",
       "textos": {
         "es": {
           "nombre": "Udon de verduras",
@@ -2689,6 +2710,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 5200,
+      "foto_url": "/demo/anticuchos.jpg",
       "textos": {
         "es": {
           "nombre": "Anticuchos de corazón",
@@ -2785,6 +2807,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 6600,
+      "foto_url": "/demo/tempura-langostinos.jpg",
       "textos": {
         "es": {
           "nombre": "Tempura de langostinos",
@@ -2887,6 +2910,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 4800,
+      "foto_url": "/demo/tempura-verduras.jpg",
       "textos": {
         "es": {
           "nombre": "Tempura de verduras",
@@ -2989,6 +3013,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 2800,
+      "foto_url": "/demo/suspiro.jpg",
       "textos": {
         "es": {
           "nombre": "Suspiro a la limeña",
@@ -3083,6 +3108,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 2600,
+      "foto_url": "/demo/mochi.jpg",
       "textos": {
         "es": {
           "nombre": "Mochi de lúcuma",
@@ -3167,6 +3193,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 2400,
+      "foto_url": "/demo/helado-matcha.jpg",
       "textos": {
         "es": {
           "nombre": "Helado de matcha",
@@ -3256,6 +3283,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 2800,
+      "foto_url": "/demo/tres-leches.jpg",
       "textos": {
         "es": {
           "nombre": "Tres leches de lúcuma",
@@ -3355,6 +3383,7 @@
       "tipo": "plato",
       "destino": "cocina",
       "precio_centimos": 3000,
+      "foto_url": "/demo/volcan-chocolate.jpg",
       "textos": {
         "es": {
           "nombre": "Volcán de chocolate",
@@ -3457,6 +3486,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 1400,
+      "foto_url": "/demo/chicha-morada.jpg",
       "textos": {
         "es": {
           "nombre": "Chicha morada",
@@ -3544,6 +3574,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 1400,
+      "foto_url": "/demo/limonada.jpg",
       "textos": {
         "es": {
           "nombre": "Limonada de hierbabuena",
@@ -3628,6 +3659,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 1500,
+      "foto_url": "/demo/refresco-maracuya.jpg",
       "textos": {
         "es": {
           "nombre": "Refresco de maracuyá",
@@ -3711,6 +3743,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 1200,
+      "foto_url": "/demo/te-verde.jpg",
       "textos": {
         "es": {
           "nombre": "Té verde",
@@ -3793,6 +3826,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 3200,
+      "foto_url": "/demo/pisco-sour.jpg",
       "textos": {
         "es": {
           "nombre": "Pisco sour",
@@ -3882,6 +3916,7 @@
       "tipo": "bebida",
       "destino": "barra",
       "precio_centimos": 3000,
+      "foto_url": "/demo/chilcano.jpg",
       "textos": {
         "es": {
           "nombre": "Chilcano de maracuyá",
