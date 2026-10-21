@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { entradasDesdeSrc } from "./vite.entradas";
 
 // Web-app del back-office, publicada en /admin por el API Gateway (dist/backoffice).
 export default defineConfig({
   root: "backoffice",
   base: "/admin/",
-  plugins: [react()],
+  plugins: [entradasDesdeSrc(), react()],
   build: { outDir: "../dist/backoffice", emptyOutDir: true },
   server: {
     port: 5174,
