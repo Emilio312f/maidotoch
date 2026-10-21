@@ -3,6 +3,7 @@
 #
 #   scripts/desarrollo.sh          # compila, migra la base y levanta los servicios (Ctrl+C los detiene)
 #   scripts/desarrollo.sh demo     # además carga los datos FICTICIOS de desarrollo
+#   scripts/desarrollo.sh demo db/catalogo/piloto.json   # con el catálogo piloto (usar una base nueva)
 #
 # Los tokens de servicio se generan una vez en .env.servicios (no se sube al repositorio). La clave
 # del proveedor de IA, si está en .env, solo se entrega al Servicio Adaptador de IA.
@@ -63,7 +64,7 @@ curl -fsS "$puerto/api/salud" || { echo "Los servicios no respondieron; revisa $
 echo
 
 if [ "${1:-}" = "demo" ]; then
-  build/herramientas/install/maidotouch-herramientas/bin/maidotouch-herramientas demo
+  build/herramientas/install/maidotouch-herramientas/bin/maidotouch-herramientas demo ${2:-}
 fi
 
 echo "MaidoTouch en $puerto · registros en $registros · Ctrl+C para detener"

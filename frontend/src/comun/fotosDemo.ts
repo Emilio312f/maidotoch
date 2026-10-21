@@ -14,8 +14,18 @@ const fotosDemo: Record<string, string> = {
   "Postre de chocolate": "/demo/postre-chocolate.jpg",
   "Refresco de maracuyá": "/demo/refresco-maracuya.jpg",
   "Té verde": "/demo/te-verde.jpg",
+  "Arroz chaufa": "/demo/arroz-langostinos.jpg",
+  "Gyozas": "/demo/empanadas.jpg",
+  "Volcán de chocolate": "/demo/postre-chocolate.jpg",
+  "Chilcano de maracuyá": "/demo/refresco-maracuya.jpg",
 };
 
+/** Las claves más largas primero: «Arroz chaufa de mariscos» usa «Arroz chaufa», no otra más corta. */
+const claves = Object.keys(fotosDemo).sort((a, b) => b.length - a.length);
+
+/** Foto por nombre exacto o por el comienzo del nombre («Tiradito de pulpo» → «Tiradito»). */
 export function fotoDemo(nombre: string): string | undefined {
-  return fotosDemo[textoVisible(nombre)];
+  const visible = textoVisible(nombre);
+  const clave = claves.find((c) => visible === c || visible.startsWith(`${c} `));
+  return clave ? fotosDemo[clave] : undefined;
 }

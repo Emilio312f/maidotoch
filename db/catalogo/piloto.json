@@ -1,0 +1,3964 @@
+{
+  "aviso": "Catálogo piloto de MaidoTouch preparado por el Responsable de Datos e IA. Antes de atender comensales reales, cocina confirma ingredientes y alérgenos de cada plato y lo valida en el back-office.",
+  "categorias": [
+    {
+      "codigo": "entradas",
+      "nombre_es": "Entradas",
+      "nombre_en": "Starters",
+      "orden": 1
+    },
+    {
+      "codigo": "nigiris-makis",
+      "nombre_es": "Nigiris y makis",
+      "nombre_en": "Nigiri and maki",
+      "orden": 2
+    },
+    {
+      "codigo": "fondos",
+      "nombre_es": "Fondos",
+      "nombre_en": "Mains",
+      "orden": 3
+    },
+    {
+      "codigo": "postres",
+      "nombre_es": "Postres",
+      "nombre_en": "Desserts",
+      "orden": 4
+    },
+    {
+      "codigo": "bebidas",
+      "nombre_es": "Bebidas",
+      "nombre_en": "Drinks",
+      "orden": 5
+    },
+    {
+      "codigo": "cocteles",
+      "nombre_es": "Cócteles",
+      "nombre_en": "Cocktails",
+      "orden": 6
+    }
+  ],
+  "alergenos": [
+    {
+      "codigo": "mani",
+      "nombre_es": "Maní",
+      "nombre_en": "Peanut"
+    },
+    {
+      "codigo": "frutos-secos",
+      "nombre_es": "Frutos secos",
+      "nombre_en": "Tree nuts"
+    },
+    {
+      "codigo": "pescado",
+      "nombre_es": "Pescado",
+      "nombre_en": "Fish"
+    },
+    {
+      "codigo": "mariscos",
+      "nombre_es": "Mariscos",
+      "nombre_en": "Shellfish"
+    },
+    {
+      "codigo": "gluten",
+      "nombre_es": "Gluten",
+      "nombre_en": "Gluten"
+    },
+    {
+      "codigo": "lacteos",
+      "nombre_es": "Lácteos",
+      "nombre_en": "Dairy"
+    },
+    {
+      "codigo": "huevo",
+      "nombre_es": "Huevo",
+      "nombre_en": "Egg"
+    },
+    {
+      "codigo": "soya",
+      "nombre_es": "Soya",
+      "nombre_en": "Soy"
+    },
+    {
+      "codigo": "sesamo",
+      "nombre_es": "Sésamo",
+      "nombre_en": "Sesame"
+    }
+  ],
+  "ingredientes": [
+    {
+      "codigo": "pescado-blanco",
+      "nombre_es": "Pescado blanco",
+      "nombre_en": "White fish",
+      "alergenos": [
+        "pescado"
+      ]
+    },
+    {
+      "codigo": "atun",
+      "nombre_es": "Atún",
+      "nombre_en": "Tuna",
+      "alergenos": [
+        "pescado"
+      ]
+    },
+    {
+      "codigo": "pulpo",
+      "nombre_es": "Pulpo",
+      "nombre_en": "Octopus",
+      "alergenos": [
+        "mariscos"
+      ]
+    },
+    {
+      "codigo": "langostino",
+      "nombre_es": "Langostino",
+      "nombre_en": "Prawn",
+      "alergenos": [
+        "mariscos"
+      ]
+    },
+    {
+      "codigo": "cangrejo",
+      "nombre_es": "Cangrejo",
+      "nombre_en": "Crab",
+      "alergenos": [
+        "mariscos"
+      ]
+    },
+    {
+      "codigo": "conchas",
+      "nombre_es": "Conchas de abanico",
+      "nombre_en": "Scallops",
+      "alergenos": [
+        "mariscos"
+      ]
+    },
+    {
+      "codigo": "choros",
+      "nombre_es": "Choros",
+      "nombre_en": "Mussels",
+      "alergenos": [
+        "mariscos"
+      ]
+    },
+    {
+      "codigo": "pollo",
+      "nombre_es": "Pollo",
+      "nombre_en": "Chicken",
+      "alergenos": []
+    },
+    {
+      "codigo": "cerdo",
+      "nombre_es": "Panceta de cerdo",
+      "nombre_en": "Pork belly",
+      "alergenos": []
+    },
+    {
+      "codigo": "res",
+      "nombre_es": "Lomo de res",
+      "nombre_en": "Beef tenderloin",
+      "alergenos": []
+    },
+    {
+      "codigo": "corazon-res",
+      "nombre_es": "Corazón de res",
+      "nombre_en": "Beef heart",
+      "alergenos": []
+    },
+    {
+      "codigo": "caldo-pollo",
+      "nombre_es": "Caldo de pollo",
+      "nombre_en": "Chicken broth",
+      "alergenos": []
+    },
+    {
+      "codigo": "huevo",
+      "nombre_es": "Huevo",
+      "nombre_en": "Egg",
+      "alergenos": [
+        "huevo"
+      ]
+    },
+    {
+      "codigo": "mayonesa",
+      "nombre_es": "Mayonesa",
+      "nombre_en": "Mayonnaise",
+      "alergenos": [
+        "huevo"
+      ]
+    },
+    {
+      "codigo": "leche",
+      "nombre_es": "Leche",
+      "nombre_en": "Milk",
+      "alergenos": [
+        "lacteos"
+      ]
+    },
+    {
+      "codigo": "crema",
+      "nombre_es": "Crema de leche",
+      "nombre_en": "Cream",
+      "alergenos": [
+        "lacteos"
+      ]
+    },
+    {
+      "codigo": "mantequilla",
+      "nombre_es": "Mantequilla",
+      "nombre_en": "Butter",
+      "alergenos": [
+        "lacteos"
+      ]
+    },
+    {
+      "codigo": "miel",
+      "nombre_es": "Miel de abeja",
+      "nombre_en": "Honey",
+      "alergenos": []
+    },
+    {
+      "codigo": "salsa-soya",
+      "nombre_es": "Salsa de soya",
+      "nombre_en": "Soy sauce",
+      "alergenos": [
+        "soya",
+        "gluten"
+      ]
+    },
+    {
+      "codigo": "miso",
+      "nombre_es": "Pasta de miso",
+      "nombre_en": "Miso paste",
+      "alergenos": [
+        "soya"
+      ]
+    },
+    {
+      "codigo": "tofu",
+      "nombre_es": "Tofu",
+      "nombre_en": "Tofu",
+      "alergenos": [
+        "soya"
+      ]
+    },
+    {
+      "codigo": "edamame",
+      "nombre_es": "Edamame",
+      "nombre_en": "Edamame",
+      "alergenos": [
+        "soya"
+      ]
+    },
+    {
+      "codigo": "aceite-sesamo",
+      "nombre_es": "Aceite de sésamo",
+      "nombre_en": "Sesame oil",
+      "alergenos": [
+        "sesamo"
+      ]
+    },
+    {
+      "codigo": "semillas-sesamo",
+      "nombre_es": "Semillas de sésamo",
+      "nombre_en": "Sesame seeds",
+      "alergenos": [
+        "sesamo"
+      ]
+    },
+    {
+      "codigo": "harina-trigo",
+      "nombre_es": "Harina de trigo",
+      "nombre_en": "Wheat flour",
+      "alergenos": [
+        "gluten"
+      ]
+    },
+    {
+      "codigo": "panko",
+      "nombre_es": "Panko",
+      "nombre_en": "Panko breadcrumbs",
+      "alergenos": [
+        "gluten"
+      ]
+    },
+    {
+      "codigo": "masa-gyoza",
+      "nombre_es": "Masa de gyoza",
+      "nombre_en": "Gyoza wrapper",
+      "alergenos": [
+        "gluten"
+      ]
+    },
+    {
+      "codigo": "fideos-ramen",
+      "nombre_es": "Fideos ramen",
+      "nombre_en": "Ramen noodles",
+      "alergenos": [
+        "gluten",
+        "huevo"
+      ]
+    },
+    {
+      "codigo": "fideos-udon",
+      "nombre_es": "Fideos udon",
+      "nombre_en": "Udon noodles",
+      "alergenos": [
+        "gluten"
+      ]
+    },
+    {
+      "codigo": "limon",
+      "nombre_es": "Limón",
+      "nombre_en": "Lime",
+      "alergenos": []
+    },
+    {
+      "codigo": "aji-amarillo",
+      "nombre_es": "Ají amarillo",
+      "nombre_en": "Yellow chili",
+      "alergenos": []
+    },
+    {
+      "codigo": "aji-limo",
+      "nombre_es": "Ají limo",
+      "nombre_en": "Limo chili",
+      "alergenos": []
+    },
+    {
+      "codigo": "aji-panca",
+      "nombre_es": "Ají panca",
+      "nombre_en": "Panca chili",
+      "alergenos": []
+    },
+    {
+      "codigo": "rocoto",
+      "nombre_es": "Rocoto",
+      "nombre_en": "Rocoto pepper",
+      "alergenos": []
+    },
+    {
+      "codigo": "cebolla-roja",
+      "nombre_es": "Cebolla roja",
+      "nombre_en": "Red onion",
+      "alergenos": []
+    },
+    {
+      "codigo": "ajo",
+      "nombre_es": "Ajo",
+      "nombre_en": "Garlic",
+      "alergenos": []
+    },
+    {
+      "codigo": "jengibre",
+      "nombre_es": "Kion",
+      "nombre_en": "Ginger",
+      "alergenos": []
+    },
+    {
+      "codigo": "culantro",
+      "nombre_es": "Culantro",
+      "nombre_en": "Cilantro",
+      "alergenos": []
+    },
+    {
+      "codigo": "cebollin",
+      "nombre_es": "Cebolla china",
+      "nombre_en": "Spring onion",
+      "alergenos": []
+    },
+    {
+      "codigo": "nori",
+      "nombre_es": "Alga nori",
+      "nombre_en": "Nori seaweed",
+      "alergenos": []
+    },
+    {
+      "codigo": "caldo-kombu",
+      "nombre_es": "Caldo de kombu",
+      "nombre_en": "Kombu broth",
+      "alergenos": []
+    },
+    {
+      "codigo": "arroz",
+      "nombre_es": "Arroz",
+      "nombre_en": "Rice",
+      "alergenos": []
+    },
+    {
+      "codigo": "arroz-sushi",
+      "nombre_es": "Arroz de sushi",
+      "nombre_en": "Sushi rice",
+      "alergenos": []
+    },
+    {
+      "codigo": "quinua",
+      "nombre_es": "Quinua",
+      "nombre_en": "Quinoa",
+      "alergenos": []
+    },
+    {
+      "codigo": "palta",
+      "nombre_es": "Palta",
+      "nombre_en": "Avocado",
+      "alergenos": []
+    },
+    {
+      "codigo": "pepino",
+      "nombre_es": "Pepino",
+      "nombre_en": "Cucumber",
+      "alergenos": []
+    },
+    {
+      "codigo": "papa-amarilla",
+      "nombre_es": "Papa amarilla",
+      "nombre_en": "Yellow potato",
+      "alergenos": []
+    },
+    {
+      "codigo": "camote",
+      "nombre_es": "Camote",
+      "nombre_en": "Sweet potato",
+      "alergenos": []
+    },
+    {
+      "codigo": "choclo",
+      "nombre_es": "Choclo",
+      "nombre_en": "Andean corn",
+      "alergenos": []
+    },
+    {
+      "codigo": "aceituna",
+      "nombre_es": "Aceituna botija",
+      "nombre_en": "Botija olive",
+      "alergenos": []
+    },
+    {
+      "codigo": "aceite-oliva",
+      "nombre_es": "Aceite de oliva",
+      "nombre_en": "Olive oil",
+      "alergenos": []
+    },
+    {
+      "codigo": "sal-maras",
+      "nombre_es": "Sal de Maras",
+      "nombre_en": "Maras salt",
+      "alergenos": []
+    },
+    {
+      "codigo": "arroz-glutinoso",
+      "nombre_es": "Harina de arroz glutinoso",
+      "nombre_en": "Glutinous rice flour",
+      "alergenos": []
+    },
+    {
+      "codigo": "lucuma",
+      "nombre_es": "Lúcuma",
+      "nombre_en": "Lucuma",
+      "alergenos": []
+    },
+    {
+      "codigo": "maracuya",
+      "nombre_es": "Maracuyá",
+      "nombre_en": "Passion fruit",
+      "alergenos": []
+    },
+    {
+      "codigo": "chocolate",
+      "nombre_es": "Chocolate amargo",
+      "nombre_en": "Dark chocolate",
+      "alergenos": []
+    },
+    {
+      "codigo": "matcha",
+      "nombre_es": "Té matcha",
+      "nombre_en": "Matcha tea",
+      "alergenos": []
+    },
+    {
+      "codigo": "te-verde",
+      "nombre_es": "Té verde",
+      "nombre_en": "Green tea",
+      "alergenos": []
+    },
+    {
+      "codigo": "azucar",
+      "nombre_es": "Azúcar",
+      "nombre_en": "Sugar",
+      "alergenos": []
+    },
+    {
+      "codigo": "canela",
+      "nombre_es": "Canela",
+      "nombre_en": "Cinnamon",
+      "alergenos": []
+    },
+    {
+      "codigo": "clavo",
+      "nombre_es": "Clavo de olor",
+      "nombre_en": "Clove",
+      "alergenos": []
+    },
+    {
+      "codigo": "maiz-morado",
+      "nombre_es": "Maíz morado",
+      "nombre_en": "Purple corn",
+      "alergenos": []
+    },
+    {
+      "codigo": "pina",
+      "nombre_es": "Piña",
+      "nombre_en": "Pineapple",
+      "alergenos": []
+    },
+    {
+      "codigo": "hierbabuena",
+      "nombre_es": "Hierbabuena",
+      "nombre_en": "Mint",
+      "alergenos": []
+    },
+    {
+      "codigo": "pisco",
+      "nombre_es": "Pisco",
+      "nombre_en": "Pisco",
+      "alergenos": []
+    },
+    {
+      "codigo": "ginger-ale",
+      "nombre_es": "Ginger ale",
+      "nombre_en": "Ginger ale",
+      "alergenos": []
+    }
+  ],
+  "restricciones": [
+    {
+      "codigo": "alergia-mani",
+      "tipo": "alergia",
+      "nombre_es": "Alergia al maní",
+      "nombre_en": "Peanut allergy",
+      "alergeno": "mani"
+    },
+    {
+      "codigo": "alergia-frutos-secos",
+      "tipo": "alergia",
+      "nombre_es": "Alergia a frutos secos",
+      "nombre_en": "Tree nut allergy",
+      "alergeno": "frutos-secos"
+    },
+    {
+      "codigo": "alergia-pescado",
+      "tipo": "alergia",
+      "nombre_es": "Alergia al pescado",
+      "nombre_en": "Fish allergy",
+      "alergeno": "pescado"
+    },
+    {
+      "codigo": "alergia-mariscos",
+      "tipo": "alergia",
+      "nombre_es": "Alergia a mariscos",
+      "nombre_en": "Shellfish allergy",
+      "alergeno": "mariscos"
+    },
+    {
+      "codigo": "alergia-gluten",
+      "tipo": "alergia",
+      "nombre_es": "Alergia al gluten o celiaquía",
+      "nombre_en": "Gluten allergy or coeliac disease",
+      "alergeno": "gluten"
+    },
+    {
+      "codigo": "alergia-lacteos",
+      "tipo": "alergia",
+      "nombre_es": "Alergia a lácteos",
+      "nombre_en": "Dairy allergy",
+      "alergeno": "lacteos"
+    },
+    {
+      "codigo": "alergia-huevo",
+      "tipo": "alergia",
+      "nombre_es": "Alergia al huevo",
+      "nombre_en": "Egg allergy",
+      "alergeno": "huevo"
+    },
+    {
+      "codigo": "alergia-soya",
+      "tipo": "alergia",
+      "nombre_es": "Alergia a la soya",
+      "nombre_en": "Soy allergy",
+      "alergeno": "soya"
+    },
+    {
+      "codigo": "alergia-sesamo",
+      "tipo": "alergia",
+      "nombre_es": "Alergia al sésamo",
+      "nombre_en": "Sesame allergy",
+      "alergeno": "sesamo"
+    },
+    {
+      "codigo": "vegetariana",
+      "tipo": "dieta",
+      "nombre_es": "Vegetariana",
+      "nombre_en": "Vegetarian"
+    },
+    {
+      "codigo": "vegana",
+      "tipo": "dieta",
+      "nombre_es": "Vegana",
+      "nombre_en": "Vegan"
+    }
+  ],
+  "preferencias": [
+    {
+      "codigo": "picante",
+      "nombre_es": "Picante",
+      "nombre_en": "Spicy"
+    },
+    {
+      "codigo": "pescados-mariscos",
+      "nombre_es": "Pescados y mariscos",
+      "nombre_en": "Fish and seafood"
+    },
+    {
+      "codigo": "ligero",
+      "nombre_es": "Ligero",
+      "nombre_en": "Light"
+    },
+    {
+      "codigo": "contundente",
+      "nombre_es": "Contundente",
+      "nombre_en": "Hearty"
+    },
+    {
+      "codigo": "vegetal",
+      "nombre_es": "Opción vegetal",
+      "nombre_en": "Plant-based"
+    },
+    {
+      "codigo": "dulce",
+      "nombre_es": "Dulce",
+      "nombre_en": "Sweet"
+    },
+    {
+      "codigo": "sin-alcohol",
+      "nombre_es": "Sin alcohol",
+      "nombre_en": "Alcohol-free"
+    },
+    {
+      "codigo": "coctel",
+      "nombre_es": "Cóctel",
+      "nombre_en": "Cocktail"
+    }
+  ],
+  "productos": [
+    {
+      "codigo": "PIL-E01",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 6800,
+      "textos": {
+        "es": {
+          "nombre": "Ceviche nikkei",
+          "descripcion": "Pescado blanco del día marinado en leche de tigre con salsa de soya, aceite de sésamo y kion."
+        },
+        "en": {
+          "nombre": "Nikkei ceviche",
+          "descripcion": "Catch of the day cured in tiger's milk with soy sauce, sesame oil and ginger."
+        }
+      },
+      "ingredientes": [
+        "pescado-blanco",
+        "limon",
+        "aji-limo",
+        "cebolla-roja",
+        "salsa-soya",
+        "aceite-sesamo",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "sesamo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "picante",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (pescado blanco)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene sésamo (aceite de sésamo)."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E02",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 6200,
+      "textos": {
+        "es": {
+          "nombre": "Tiradito al ají amarillo",
+          "descripcion": "Láminas de pescado blanco en crema de ají amarillo y limón, con choclo y culantro."
+        },
+        "en": {
+          "nombre": "Yellow chili tiradito",
+          "descripcion": "Thin slices of white fish in yellow chili and lime cream, with Andean corn and cilantro."
+        }
+      },
+      "ingredientes": [
+        "pescado-blanco",
+        "limon",
+        "aji-amarillo",
+        "choclo",
+        "culantro"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "picante",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (pescado blanco)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E03",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 6600,
+      "textos": {
+        "es": {
+          "nombre": "Tiradito de pulpo al olivo",
+          "descripcion": "Pulpo en láminas con crema de aceituna botija, aceite de oliva y limón."
+        },
+        "en": {
+          "nombre": "Octopus tiradito with olive",
+          "descripcion": "Sliced octopus with botija olive cream, olive oil and lime."
+        }
+      },
+      "ingredientes": [
+        "pulpo",
+        "aceituna",
+        "aceite-oliva",
+        "limon",
+        "culantro"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (pulpo)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pulpo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pulpo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E04",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5400,
+      "textos": {
+        "es": {
+          "nombre": "Causa de cangrejo",
+          "descripcion": "Papa amarilla prensada con ají amarillo y limón, rellena de cangrejo, mayonesa y palta."
+        },
+        "en": {
+          "nombre": "Crab causa",
+          "descripcion": "Pressed yellow potato with yellow chili and lime, filled with crab, mayonnaise and avocado."
+        }
+      },
+      "ingredientes": [
+        "papa-amarilla",
+        "aji-amarillo",
+        "limon",
+        "cangrejo",
+        "mayonesa",
+        "palta"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (cangrejo)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (mayonesa)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: cangrejo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: cangrejo, mayonesa."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E05",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 4200,
+      "textos": {
+        "es": {
+          "nombre": "Causa vegetal",
+          "descripcion": "Papa amarilla con ají amarillo y limón, rellena de palta y choclo, con aceite de oliva."
+        },
+        "en": {
+          "nombre": "Vegetable causa",
+          "descripcion": "Yellow potato with yellow chili and lime, filled with avocado and Andean corn, with olive oil."
+        }
+      },
+      "ingredientes": [
+        "papa-amarilla",
+        "aji-amarillo",
+        "limon",
+        "palta",
+        "choclo",
+        "aceite-oliva"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "vegetal",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E06",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 7400,
+      "textos": {
+        "es": {
+          "nombre": "Tartar de atún",
+          "descripcion": "Atún picado a cuchillo con palta, salsa de soya, aceite de sésamo y cebolla china."
+        },
+        "en": {
+          "nombre": "Tuna tartare",
+          "descripcion": "Hand-cut tuna with avocado, soy sauce, sesame oil and spring onion."
+        }
+      },
+      "ingredientes": [
+        "atun",
+        "palta",
+        "salsa-soya",
+        "aceite-sesamo",
+        "cebollin",
+        "semillas-sesamo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "sesamo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (atún)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene sésamo (aceite de sésamo, semillas de sésamo)."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: atún."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: atún."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E07",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 4600,
+      "textos": {
+        "es": {
+          "nombre": "Choritos a la chalaca",
+          "descripcion": "Choros al vapor con cebolla roja, choclo, rocoto y limón."
+        },
+        "en": {
+          "nombre": "Mussels a la chalaca",
+          "descripcion": "Steamed mussels with red onion, Andean corn, rocoto pepper and lime."
+        }
+      },
+      "ingredientes": [
+        "choros",
+        "cebolla-roja",
+        "choclo",
+        "rocoto",
+        "limon",
+        "culantro"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "picante",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (choros)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: choros."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: choros."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E08",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 2400,
+      "textos": {
+        "es": {
+          "nombre": "Edamames con sal de Maras",
+          "descripcion": "Vainas de soya al vapor con sal de Maras."
+        },
+        "en": {
+          "nombre": "Edamame with Maras salt",
+          "descripcion": "Steamed soybean pods with Maras salt."
+        }
+      },
+      "ingredientes": [
+        "edamame",
+        "sal-maras"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "vegetal",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (edamame)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E09",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 3600,
+      "textos": {
+        "es": {
+          "nombre": "Gyozas de cerdo",
+          "descripcion": "Empanaditas japonesas a la plancha rellenas de cerdo, kion y cebolla china, con salsa de soya."
+        },
+        "en": {
+          "nombre": "Pork gyoza",
+          "descripcion": "Pan-fried Japanese dumplings filled with pork, ginger and spring onion, with soy sauce."
+        }
+      },
+      "ingredientes": [
+        "masa-gyoza",
+        "cerdo",
+        "cebollin",
+        "jengibre",
+        "salsa-soya",
+        "ajo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (masa de gyoza, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: panceta de cerdo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: panceta de cerdo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-E10",
+      "categoria": "entradas",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 3800,
+      "textos": {
+        "es": {
+          "nombre": "Ensalada de quinua y palta",
+          "descripcion": "Quinua, palta, choclo y culantro con vinagreta de limón y aceite de oliva."
+        },
+        "en": {
+          "nombre": "Quinoa and avocado salad",
+          "descripcion": "Quinoa, avocado, Andean corn and cilantro with lime and olive oil dressing."
+        }
+      },
+      "ingredientes": [
+        "quinua",
+        "palta",
+        "choclo",
+        "limon",
+        "aceite-oliva",
+        "culantro"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "vegetal",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-N01",
+      "categoria": "nigiris-makis",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 4800,
+      "textos": {
+        "es": {
+          "nombre": "Nigiris de pesca del día",
+          "descripcion": "Cuatro piezas de arroz de sushi con pescado blanco del día, kion y salsa de soya."
+        },
+        "en": {
+          "nombre": "Catch of the day nigiri",
+          "descripcion": "Four pieces of sushi rice with white fish of the day, ginger and soy sauce."
+        }
+      },
+      "ingredientes": [
+        "arroz-sushi",
+        "pescado-blanco",
+        "salsa-soya",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (pescado blanco)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-N02",
+      "categoria": "nigiris-makis",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5600,
+      "textos": {
+        "es": {
+          "nombre": "Maki acevichado",
+          "descripcion": "Maki de langostino empanizado y palta, cubierto con pescado y salsa acevichada."
+        },
+        "en": {
+          "nombre": "Acevichado maki",
+          "descripcion": "Breaded prawn and avocado maki topped with fish and ceviche-style sauce."
+        }
+      },
+      "ingredientes": [
+        "arroz-sushi",
+        "nori",
+        "langostino",
+        "panko",
+        "palta",
+        "mayonesa",
+        "pescado-blanco",
+        "limon",
+        "aji-amarillo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "picante"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (pescado blanco)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (langostino)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (panko)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (mayonesa)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, pescado blanco."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, mayonesa, pescado blanco."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-N03",
+      "categoria": "nigiris-makis",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 3800,
+      "textos": {
+        "es": {
+          "nombre": "Maki de palta y pepino",
+          "descripcion": "Maki de palta y pepino con semillas de sésamo."
+        },
+        "en": {
+          "nombre": "Avocado and cucumber maki",
+          "descripcion": "Avocado and cucumber maki with sesame seeds."
+        }
+      },
+      "ingredientes": [
+        "arroz-sushi",
+        "nori",
+        "palta",
+        "pepino",
+        "semillas-sesamo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "sesamo",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "vegetal",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene sésamo (semillas de sésamo)."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-N04",
+      "categoria": "nigiris-makis",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5400,
+      "textos": {
+        "es": {
+          "nombre": "Maki furai de langostino",
+          "descripcion": "Maki frito relleno de langostino en tempura, con salsa de soya."
+        },
+        "en": {
+          "nombre": "Prawn furai maki",
+          "descripcion": "Fried maki filled with prawn tempura, with soy sauce."
+        }
+      },
+      "ingredientes": [
+        "arroz-sushi",
+        "nori",
+        "langostino",
+        "panko",
+        "harina-trigo",
+        "huevo",
+        "salsa-soya"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (langostino)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (panko, harina de trigo, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F01",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 9800,
+      "textos": {
+        "es": {
+          "nombre": "Pesca del día en salsa nikkei",
+          "descripcion": "Pescado del día a la plancha con salsa de miso y mantequilla, kion y arroz blanco."
+        },
+        "en": {
+          "nombre": "Catch of the day in nikkei sauce",
+          "descripcion": "Grilled catch of the day with miso butter sauce, ginger and white rice."
+        }
+      },
+      "ingredientes": [
+        "pescado-blanco",
+        "miso",
+        "mantequilla",
+        "jengibre",
+        "cebollin",
+        "arroz"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "lacteos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "pescado",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "incompatible",
+          "evidencia": "Contiene pescado (pescado blanco)."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene lácteos (mantequilla)."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (pasta de miso)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: pescado blanco, mantequilla."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F02",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 8900,
+      "textos": {
+        "es": {
+          "nombre": "Lomo saltado nikkei",
+          "descripcion": "Lomo de res salteado al wok con cebolla roja, ají amarillo y salsa de soya, con papas y arroz."
+        },
+        "en": {
+          "nombre": "Nikkei lomo saltado",
+          "descripcion": "Wok-tossed beef tenderloin with red onion, yellow chili and soy sauce, with potatoes and rice."
+        }
+      },
+      "ingredientes": [
+        "res",
+        "cebolla-roja",
+        "ajo",
+        "salsa-soya",
+        "aji-amarillo",
+        "papa-amarilla",
+        "arroz"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "contundente",
+        "picante"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: lomo de res."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: lomo de res."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F03",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 7800,
+      "textos": {
+        "es": {
+          "nombre": "Arroz chaufa de mariscos",
+          "descripcion": "Arroz salteado al wok con langostinos, conchas, pulpo, huevo, salsa de soya y aceite de sésamo."
+        },
+        "en": {
+          "nombre": "Seafood chaufa rice",
+          "descripcion": "Wok-fried rice with prawns, scallops, octopus, egg, soy sauce and sesame oil."
+        }
+      },
+      "ingredientes": [
+        "arroz",
+        "langostino",
+        "conchas",
+        "pulpo",
+        "huevo",
+        "salsa-soya",
+        "cebollin",
+        "aceite-sesamo",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "sesamo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos",
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (langostino, conchas de abanico, pulpo)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene sésamo (aceite de sésamo)."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, conchas de abanico, pulpo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, conchas de abanico, pulpo, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F04",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5600,
+      "textos": {
+        "es": {
+          "nombre": "Arroz chaufa vegetal",
+          "descripcion": "Arroz salteado al wok con tofu, choclo, cebolla china, salsa de soya y aceite de sésamo."
+        },
+        "en": {
+          "nombre": "Vegetable chaufa rice",
+          "descripcion": "Wok-fried rice with tofu, Andean corn, spring onion, soy sauce and sesame oil."
+        }
+      },
+      "ingredientes": [
+        "arroz",
+        "tofu",
+        "choclo",
+        "cebollin",
+        "salsa-soya",
+        "aceite-sesamo",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "sesamo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "vegetal",
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (tofu, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene sésamo (aceite de sésamo)."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F05",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 8400,
+      "textos": {
+        "es": {
+          "nombre": "Panceta glaseada con miso",
+          "descripcion": "Panceta de cerdo cocida a baja temperatura, glaseada con miso y miel, con puré de camote."
+        },
+        "en": {
+          "nombre": "Miso-glazed pork belly",
+          "descripcion": "Slow-cooked pork belly glazed with miso and honey, with sweet potato purée."
+        }
+      },
+      "ingredientes": [
+        "cerdo",
+        "miso",
+        "miel",
+        "jengibre",
+        "camote"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (pasta de miso)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: panceta de cerdo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: panceta de cerdo, miel de abeja."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F06",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 6400,
+      "textos": {
+        "es": {
+          "nombre": "Ramen de pollo",
+          "descripcion": "Caldo de pollo con fideos ramen, pollo, huevo marinado, cebolla china y nori."
+        },
+        "en": {
+          "nombre": "Chicken ramen",
+          "descripcion": "Chicken broth with ramen noodles, chicken, marinated egg, spring onion and nori."
+        }
+      },
+      "ingredientes": [
+        "fideos-ramen",
+        "caldo-pollo",
+        "pollo",
+        "huevo",
+        "cebollin",
+        "salsa-soya",
+        "nori"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "contundente"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (fideos ramen, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (fideos ramen, huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: caldo de pollo, pollo."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: fideos ramen, caldo de pollo, pollo, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F07",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5800,
+      "textos": {
+        "es": {
+          "nombre": "Udon de verduras",
+          "descripcion": "Fideos udon en caldo de kombu con tofu, cebolla china y kion."
+        },
+        "en": {
+          "nombre": "Vegetable udon",
+          "descripcion": "Udon noodles in kombu broth with tofu, spring onion and ginger."
+        }
+      },
+      "ingredientes": [
+        "fideos-udon",
+        "caldo-kombu",
+        "tofu",
+        "cebollin",
+        "salsa-soya",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "vegetal"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (fideos udon, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (tofu, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F08",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 5200,
+      "textos": {
+        "es": {
+          "nombre": "Anticuchos de corazón",
+          "descripcion": "Corazón de res marinado en ají panca y salsa de soya, a la parrilla, con papa y choclo."
+        },
+        "en": {
+          "nombre": "Beef heart anticuchos",
+          "descripcion": "Beef heart marinated in panca chili and soy sauce, grilled, with potato and Andean corn."
+        }
+      },
+      "ingredientes": [
+        "corazon-res",
+        "aji-panca",
+        "ajo",
+        "salsa-soya",
+        "papa-amarilla",
+        "choclo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "contundente",
+        "picante"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: corazón de res."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: corazón de res."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F09",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 6600,
+      "textos": {
+        "es": {
+          "nombre": "Tempura de langostinos",
+          "descripcion": "Langostinos en tempura ligera con salsa de soya y kion."
+        },
+        "en": {
+          "nombre": "Prawn tempura",
+          "descripcion": "Prawns in light tempura batter with soy sauce and ginger."
+        }
+      },
+      "ingredientes": [
+        "langostino",
+        "harina-trigo",
+        "huevo",
+        "salsa-soya",
+        "jengibre"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "pescados-mariscos"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene mariscos (langostino)."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (harina de trigo, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: langostino, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-F10",
+      "categoria": "fondos",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 4800,
+      "textos": {
+        "es": {
+          "nombre": "Tempura de verduras",
+          "descripcion": "Camote y verduras de estación en tempura, con salsa de soya."
+        },
+        "en": {
+          "nombre": "Vegetable tempura",
+          "descripcion": "Sweet potato and seasonal vegetables in tempura, with soy sauce."
+        }
+      },
+      "ingredientes": [
+        "camote",
+        "cebollin",
+        "harina-trigo",
+        "huevo",
+        "salsa-soya"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "soya",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "mariscos",
+          "origen": "trazas"
+        }
+      ],
+      "preferencias": [
+        "vegetal"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "incompatible",
+          "evidencia": "Puede contener trazas de mariscos: se fríe en el mismo aceite que los langostinos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (harina de trigo, salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "incompatible",
+          "evidencia": "Contiene soya (salsa de soya)."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-P01",
+      "categoria": "postres",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 2800,
+      "textos": {
+        "es": {
+          "nombre": "Suspiro a la limeña",
+          "descripcion": "Manjar blanco de leche con merengue al pisco y canela."
+        },
+        "en": {
+          "nombre": "Suspiro limeño",
+          "descripcion": "Milk caramel cream with pisco meringue and cinnamon."
+        }
+      },
+      "ingredientes": [
+        "leche",
+        "huevo",
+        "azucar",
+        "canela",
+        "pisco"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "lacteos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene lácteos (leche)."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: leche, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-P02",
+      "categoria": "postres",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 2600,
+      "textos": {
+        "es": {
+          "nombre": "Mochi de lúcuma",
+          "descripcion": "Pastelitos de arroz glutinoso rellenos de crema de lúcuma."
+        },
+        "en": {
+          "nombre": "Lucuma mochi",
+          "descripcion": "Glutinous rice cakes filled with lucuma cream."
+        }
+      },
+      "ingredientes": [
+        "arroz-glutinoso",
+        "lucuma",
+        "azucar"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "dulce",
+        "vegetal"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-P03",
+      "categoria": "postres",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 2400,
+      "textos": {
+        "es": {
+          "nombre": "Helado de matcha",
+          "descripcion": "Helado artesanal de té matcha."
+        },
+        "en": {
+          "nombre": "Matcha ice cream",
+          "descripcion": "House-made matcha tea ice cream."
+        }
+      },
+      "ingredientes": [
+        "leche",
+        "crema",
+        "matcha",
+        "azucar"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "lacteos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene lácteos (leche, crema de leche)."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: leche, crema de leche."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-P04",
+      "categoria": "postres",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 2800,
+      "textos": {
+        "es": {
+          "nombre": "Tres leches de lúcuma",
+          "descripcion": "Bizcocho bañado en tres leches con crema de lúcuma."
+        },
+        "en": {
+          "nombre": "Lucuma tres leches",
+          "descripcion": "Sponge cake soaked in three milks with lucuma cream."
+        }
+      },
+      "ingredientes": [
+        "harina-trigo",
+        "huevo",
+        "leche",
+        "crema",
+        "lucuma",
+        "azucar"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "lacteos",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (harina de trigo)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene lácteos (leche, crema de leche)."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: huevo, leche, crema de leche."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-P05",
+      "categoria": "postres",
+      "tipo": "plato",
+      "destino": "cocina",
+      "precio_centimos": 3000,
+      "textos": {
+        "es": {
+          "nombre": "Volcán de chocolate",
+          "descripcion": "Bizcocho tibio de chocolate amargo con centro fundido."
+        },
+        "en": {
+          "nombre": "Chocolate lava cake",
+          "descripcion": "Warm dark chocolate cake with a molten center."
+        }
+      },
+      "ingredientes": [
+        "chocolate",
+        "mantequilla",
+        "huevo",
+        "harina-trigo",
+        "azucar"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "gluten",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "lacteos",
+          "origen": "contiene"
+        },
+        {
+          "alergeno": "frutos-secos",
+          "origen": "trazas"
+        }
+      ],
+      "preferencias": [
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "incompatible",
+          "evidencia": "Puede contener trazas de frutos secos: se prepara en la misma estación que los postres con pecanas."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "incompatible",
+          "evidencia": "Contiene gluten (harina de trigo)."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "incompatible",
+          "evidencia": "Contiene lácteos (mantequilla)."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: mantequilla, huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-B01",
+      "categoria": "bebidas",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 1400,
+      "textos": {
+        "es": {
+          "nombre": "Chicha morada",
+          "descripcion": "Bebida de maíz morado con piña, canela, clavo y limón."
+        },
+        "en": {
+          "nombre": "Chicha morada",
+          "descripcion": "Purple corn drink with pineapple, cinnamon, clove and lime."
+        }
+      },
+      "ingredientes": [
+        "maiz-morado",
+        "pina",
+        "canela",
+        "clavo",
+        "limon",
+        "azucar"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "sin-alcohol",
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-B02",
+      "categoria": "bebidas",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 1400,
+      "textos": {
+        "es": {
+          "nombre": "Limonada de hierbabuena",
+          "descripcion": "Limonada fresca con hierbabuena."
+        },
+        "en": {
+          "nombre": "Mint lemonade",
+          "descripcion": "Fresh lime lemonade with mint."
+        }
+      },
+      "ingredientes": [
+        "limon",
+        "hierbabuena",
+        "azucar"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "sin-alcohol",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-B03",
+      "categoria": "bebidas",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 1500,
+      "textos": {
+        "es": {
+          "nombre": "Refresco de maracuyá",
+          "descripcion": "Jugo natural de maracuyá."
+        },
+        "en": {
+          "nombre": "Passion fruit juice",
+          "descripcion": "Fresh passion fruit juice."
+        }
+      },
+      "ingredientes": [
+        "maracuya",
+        "azucar"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "sin-alcohol",
+        "dulce"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-B04",
+      "categoria": "bebidas",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 1200,
+      "textos": {
+        "es": {
+          "nombre": "Té verde",
+          "descripcion": "Té verde japonés caliente."
+        },
+        "en": {
+          "nombre": "Green tea",
+          "descripcion": "Hot Japanese green tea."
+        }
+      },
+      "ingredientes": [
+        "te-verde"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "sin-alcohol",
+        "ligero"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-C01",
+      "categoria": "cocteles",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 3200,
+      "textos": {
+        "es": {
+          "nombre": "Pisco sour",
+          "descripcion": "Pisco, limón, jarabe de azúcar y clara de huevo."
+        },
+        "en": {
+          "nombre": "Pisco sour",
+          "descripcion": "Pisco, lime, sugar syrup and egg white."
+        }
+      },
+      "ingredientes": [
+        "pisco",
+        "limon",
+        "azucar",
+        "huevo"
+      ],
+      "alergenos": [
+        {
+          "alergeno": "huevo",
+          "origen": "contiene"
+        }
+      ],
+      "preferencias": [
+        "coctel"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "incompatible",
+          "evidencia": "Contiene huevo (huevo)."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "incompatible",
+          "evidencia": "Contiene ingredientes de origen animal no aptos: huevo."
+        }
+      ]
+    },
+    {
+      "codigo": "PIL-C02",
+      "categoria": "cocteles",
+      "tipo": "bebida",
+      "destino": "barra",
+      "precio_centimos": 3000,
+      "textos": {
+        "es": {
+          "nombre": "Chilcano de maracuyá",
+          "descripcion": "Pisco con maracuyá, limón y ginger ale."
+        },
+        "en": {
+          "nombre": "Passion fruit chilcano",
+          "descripcion": "Pisco with passion fruit, lime and ginger ale."
+        }
+      },
+      "ingredientes": [
+        "pisco",
+        "maracuya",
+        "limon",
+        "ginger-ale"
+      ],
+      "alergenos": [],
+      "preferencias": [
+        "coctel"
+      ],
+      "evaluaciones": [
+        {
+          "restriccion": "alergia-mani",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene maní."
+        },
+        {
+          "restriccion": "alergia-frutos-secos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene frutos secos."
+        },
+        {
+          "restriccion": "alergia-pescado",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene pescado."
+        },
+        {
+          "restriccion": "alergia-mariscos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene mariscos."
+        },
+        {
+          "restriccion": "alergia-gluten",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene gluten."
+        },
+        {
+          "restriccion": "alergia-lacteos",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene lácteos."
+        },
+        {
+          "restriccion": "alergia-huevo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene huevo."
+        },
+        {
+          "restriccion": "alergia-soya",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene soya."
+        },
+        {
+          "restriccion": "alergia-sesamo",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: ningún ingrediente ni preparación contiene sésamo."
+        },
+        {
+          "restriccion": "vegetariana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        },
+        {
+          "restriccion": "vegana",
+          "resultado": "compatible",
+          "evidencia": "Ficha técnica revisada: todos los ingredientes son aptos para esta dieta."
+        }
+      ]
+    }
+  ]
+}

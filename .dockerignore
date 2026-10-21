@@ -1,0 +1,14 @@
+.git
+.gradle
+.kotlin
+.idea
+build
+**/build
+frontend/node_modules
+frontend/dist
+*.db
+*.db-*
+.env
+.env.*
+fotos
+docs

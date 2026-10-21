@@ -118,6 +118,36 @@ Un solo servidor con un proceso por servicio, con [ops/](ops/):
 `scripts/empaquetar.sh` arma el paquete y `scripts/medir_latencia.py` mide el P95 contra el
 presupuesto del diseño.
 
+## Despliegue en Coolify (staging)
+
+El [Dockerfile](Dockerfile) arma una sola imagen con los once servicios y las dos web-apps. Dentro del
+contenedor cada servicio es un proceso aparte; solo se expone el API Gateway (8080). El HTTPS y el
+dominio los pone el proxy de Coolify.
+
+1. En Coolify: *New Resource → Public/Private Repository*, rama a desplegar, build pack **Dockerfile**.
+2. *Ports Exposes*: `8080`. *Domains*: el dominio de staging.
+3. *Persistent Storage*: un volumen montado en `/datos` (base SQLite, fotos y tokens).
+4. Variables de entorno:
+
+| Variable | Valor |
+|---|---|
+| `MAIDOTOUCH_URL_PUBLICA` | `https://<dominio-de-staging>` (enlaces de los tags NFC y QR) |
+| `MAIDOTOUCH_DEMO` | `piloto` para cargar el catálogo piloto, cuentas demo y los puestos M1, M2 y B1 |
+| `MAIDOTOUCH_CLAVE` | Clave de las cuentas demo (mínimo 10 caracteres) |
+| `ANTHROPIC_API_KEY` | Opcional; sin ella el asistente usa el ranking por reglas. Solo la recibe el Adaptador de IA |
+
+Los tokens de servicio se generan solos en el primer arranque (`/datos/tokens.env`). El contenedor
+tiene healthcheck sobre `/api/salud` y se detiene si cualquier servicio cae, para que Coolify lo
+reinicie. Memoria: unos 1.1 GB; conviene un servidor de 2 GB o más.
+
+Probarlo en local:
+
+```bash
+docker build -t maidotouch .
+docker run -p 8080:8080 -v maidotouch-datos:/datos -e MAIDOTOUCH_DEMO=piloto \
+  -e MAIDOTOUCH_CLAVE=una-clave-larga -e MAIDOTOUCH_URL_PUBLICA=http://localhost:8080 maidotouch
+```
+
 ## Estructura
 
 ```

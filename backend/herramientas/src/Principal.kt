@@ -42,7 +42,8 @@ Uso: maidotouch-herramientas <comando>
                                           de cocina que hizo las evaluaciones de restricciones
   verificar                               Revisa los criterios de Go/No-Go comprobables (sale con código 1 si alguno falla)
   reporte-diario [AAAA-MM-DD]             Resumen del día (hora de Lima) para el monitoreo del piloto
-  demo                                    Crea datos FICTICIOS de desarrollo en una base vacía
+  demo [catalogo.json]                    Base de desarrollo o de demostración: cuentas demo, el catálogo indicado
+                                          (por defecto db/catalogo/ficticio.json) validado y disponible, y tres puestos
 
 Salvo migrar y tokens, los comandos hablan con los servicios en ejecución (usan las URL y los tokens de
 MAIDOTOUCH_URL_* y MAIDOTOUCH_TOKEN_*). La clave se lee de MAIDOTOUCH_CLAVE o se pide por consola.
@@ -107,7 +108,7 @@ fun main(args: Array<String>) {
                 val fecha = args.getOrNull(1)?.let { "?fecha=$it" }.orEmpty()
                 print(Operacion().piloto.get<TextoPlano>("/interno/piloto/reporte-diario$fecha").texto)
             }
-            "demo" -> demo()
+            "demo" -> demo(args.getOrNull(1) ?: "db/catalogo/ficticio.json")
             "ayuda", "--help", "-h" -> println(AYUDA.trimIndent())
             else -> {
                 System.err.println(AYUDA.trimIndent())
@@ -178,14 +179,18 @@ fun migrar(rutaBase: String, directorioMigraciones: String) {
 }
 
 /**
- * Datos de DESARROLLO, todos ficticios: cuentas demo, el catálogo db/catalogo/ficticio.json validado y
- * disponible, y tres puestos. Se niega a correr si la base ya tiene productos que no son ficticios.
+ * Base de desarrollo o de demostración: cuentas demo, el catálogo [archivo] validado por cocina-demo y
+ * disponible, y tres puestos. Se niega a correr si la base ya tiene productos que no son de ese archivo,
+ * para no tocar nunca una base con el catálogo cargado por el Responsable de Datos.
  */
-private fun demo() {
-    val reales = ArchivoSqlite(Entorno.rutaBaseDatos()).usar { conn ->
-        conn.consultar("SELECT count(*) FROM productos WHERE codigo NOT LIKE 'FICTICIO-%'") { it.getInt(1) }.single()
+private fun demo(archivo: String) {
+    val contenido = File(archivo).readText()
+    val codigos = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
+        .decodeFromString(comun.contratos.ArchivoCatalogo.serializer(), contenido).productos.map { it.codigo }.toSet()
+    val ajenos = ArchivoSqlite(Entorno.rutaBaseDatos()).usar { conn ->
+        conn.consultar("SELECT codigo FROM productos") { it.getString(1) }.filter { it !in codigos }
     }
-    check(reales == 0) { "La base tiene productos reales; el comando demo solo se usa en una base de desarrollo" }
+    check(ajenos.isEmpty()) { "La base tiene productos que no son de $archivo (${ajenos.take(5).joinToString()}); usa una base nueva" }
 
     val op = Operacion()
     val clave = System.getenv("MAIDOTOUCH_CLAVE")?.takeIf { it.length >= 10 } ?: aleatorio(12)
@@ -199,24 +204,24 @@ private fun demo() {
         }
     }
 
-    op.importar(File("db/catalogo/ficticio.json").readText(), "cocina-demo")
+    op.importar(contenido, "cocina-demo")
     val cocina = op.como("cocina-demo")
     val admin = op.como("admin-demo")
-    op.catalogo.get<List<ProductoDemo>>("/api/backoffice/productos", cocina).filter { it.codigo.startsWith("FICTICIO-") }.forEach { producto ->
+    op.catalogo.get<List<ProductoDemo>>("/api/backoffice/productos", cocina).filter { it.codigo in codigos }.forEach { producto ->
         if (!producto.validado) op.catalogo.enviar("POST", "/api/backoffice/productos/${producto.id}/validar", null, kotlinx.serialization.json.JsonElement.serializer(), cocina)
         if (!producto.disponible) {
             op.catalogo.post<DisponibilidadPeticion, kotlinx.serialization.json.JsonElement>(
-                "/api/backoffice/productos/${producto.id}/disponibilidad", DisponibilidadPeticion(true, "FICTICIO: datos de demostración"), admin,
+                "/api/backoffice/productos/${producto.id}/disponibilidad", DisponibilidadPeticion(true, "Carga inicial del catálogo de demostración"), admin,
             )
         }
     }
 
     val existentes = op.sesion.get<List<PuestoConEnlacesDemo>>("/api/backoffice/puestos", admin).map { it.puesto.codigo }.toSet()
-    listOf("FICTICIO-M1" to "mesa", "FICTICIO-M2" to "mesa", "FICTICIO-B1" to "barra").forEach { (codigo, tipo) ->
+    listOf("M1" to "mesa", "M2" to "mesa", "B1" to "barra").forEach { (codigo, tipo) ->
         if (codigo !in existentes) op.sesion.post<PuestoPeticion, PuestoConEnlacesDemo>("/api/backoffice/puestos", PuestoPeticion(codigo, tipo), admin)
     }
 
-    println("Datos FICTICIOS de desarrollo listos en ${Entorno.rutaBaseDatos()}.")
+    println("Catálogo $archivo (${codigos.size} productos) validado y disponible en ${Entorno.rutaBaseDatos()}.")
     println("Cuentas del back-office (${cuentas.joinToString { it.first }}), clave: $clave")
     op.sesion.get<List<PuestoConEnlacesDemo>>("/api/backoffice/puestos", admin).forEach { println("  ${it.puesto.codigo}: ${it.enlaceNfc}") }
 }
