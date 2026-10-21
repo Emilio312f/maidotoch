@@ -144,12 +144,21 @@ function LineaPedido({ item, invalido, cambiar }: { item: ItemPedido; invalido: 
   );
 }
 
+/** Estado visible del pedido según sus comandas: a quién se espera todavía, o si ya está en preparación. */
+function estadoVisible(pedido: TipoPedido): Clave {
+  if (pedido.estado === "completado") return "pedido.estado.completado";
+  const pendientes = pedido.comandas.filter((c) => c.estado === "pendiente").map((c) => c.destino);
+  if (pendientes.length === 0) return "pedido.estado.preparando";
+  if (pendientes.length > 1) return "pedido.estado.esperandoAmbos";
+  return pendientes[0] === "cocina" ? "pedido.estado.esperandoCocina" : "pedido.estado.esperandoBarra";
+}
+
 function PedidoEnviado({ pedido }: { pedido: TipoPedido }) {
   const { t } = useComensal();
   return (
     <article className="tarjeta">
       <div className="fila entre">
-        <strong>{t(`pedido.estado.${pedido.estado}` as Clave)}</strong>
+        <strong>{t(estadoVisible(pedido))}</strong>
         <span className="precio">{soles(pedido.totalCentimos)}</span>
       </div>
       <ul className="suave" style={{ paddingLeft: 18, margin: "8px 0" }}>

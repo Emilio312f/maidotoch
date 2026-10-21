@@ -9,6 +9,8 @@ export function Carta() {
   const { api, idioma, t, manejarError } = useComensal();
   const [carta, setCarta] = useState<CartaSesion | null>(null);
   const [categoria, setCategoria] = useState<number | null>(null);
+  // Con alergias o dietas declaradas, los platos no aptos se ocultan; el comensal puede ver la carta completa.
+  const [mostrarTodos, setMostrarTodos] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,7 +19,9 @@ export function Carta() {
 
   if (!carta) return <p className="cargando">{error ?? "…"}</p>;
 
-  const visibles = carta.productos.filter((p) => categoria === null || p.producto.categoriaId === categoria);
+  const deCategoria = carta.productos.filter((p) => categoria === null || p.producto.categoriaId === categoria);
+  const noAptos = deCategoria.filter((p) => p.aptitud === "no_apto").length;
+  const visibles = mostrarTodos ? deCategoria : deCategoria.filter((p) => p.aptitud !== "no_apto");
 
   return (
     <section>
@@ -32,6 +36,15 @@ export function Carta() {
         ))}
       </div>
       {error && <p className="aviso peligro">{error}</p>}
+      {noAptos > 0 && (
+        <p className="aviso alerta fila entre">
+          <span>{mostrarTodos ? t("carta.mostrandoTodos") : t("carta.ocultos", { n: noAptos })}</span>
+          <button className="enlace" onClick={() => setMostrarTodos(!mostrarTodos)}>
+            {mostrarTodos ? t("carta.ocultarNoAptos") : t("carta.verTodos")}
+          </button>
+        </p>
+      )}
+      {visibles.length === 0 && <p className="suave">{t("carta.sinAptos")}</p>}
       <div className="lista">
         {visibles.map(({ producto, aptitud }) => (
           <TarjetaProducto key={producto.id} producto={producto} aptitud={aptitud} />
