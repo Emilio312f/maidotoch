@@ -46,7 +46,7 @@ Estas reglas vienen del Acta, del SRS y del Diseño Arquitectónico. Ninguna tar
    (token NFC/QR) y el idioma. Nada de nombres, correos, teléfonos ni cuentas (RNF02,
    Ley N.° 29733). Si algo personal llegara a guardarse, va cifrado (RNF07). El envío de
    datos del catálogo y de la consulta al servidor de casa fue aprobado por el equipo el
-   2026-10-19; sigue sujeto a este punto y a la regla 9.
+   2026-10-19, y a Gemini (Google) el 2026-10-20; sigue sujeto a este punto y a la regla 9.
 7. **Nunca debilitar la base de datos.** No desactivar `foreign_keys`, no borrar ni
    saltarse triggers, no editar `db/migrations/001_esquema_inicial.sql`.
 8. **El pedido no se envía sin confirmación explícita** del comensal (RF10, RPR09) y no
@@ -80,11 +80,15 @@ Restricciones fijas, sea cual sea el stack:
   Dos aplicaciones: comensal (`/`, `/m/<token>`) y back-office (`/admin`).
 - API **REST sobre HTTPS**, con un único punto de entrada: el **API Gateway**.
 - Despliegue: **un solo servidor en la nube** con un proceso por servicio (systemd
-  `maidotouch@<servicio>`). Nada de serverless en esta fase.
+  `maidotouch@<servicio>`). Nada de serverless en esta fase. Staging en Coolify: una imagen Docker
+  (`Dockerfile`) con los mismos procesos por servicio y la base en el volumen `/datos`.
 - Proveedores de IA admitidos (aprobado por el equipo, 2026-10-19): **Claude (Anthropic)** y el **servidor de IA de
-  casa** del equipo (Qwen3-4B, API compatible con OpenAI, expuesta por HTTPS a través de un túnel). Se elige con
-  `MAIDOTOUCH_IA_PROVEEDOR` (`claude` por defecto). El servidor de casa no cambia el despliegue: sigue siendo un solo
-  servidor en la nube, y el servidor de casa solo recibe el DTO mínimo del punto 2.4.
+  casa** del equipo (Qwen3-4B, API compatible con OpenAI, expuesta por HTTPS a través de un túnel). El 2026-10-20 el
+  equipo aprobó también **Gemini (Google)**, usado por su API compatible con OpenAI con el mismo adaptador que el
+  servidor de casa (`MAIDOTOUCH_IA_PROVEEDOR=servidor-casa`, URL
+  `https://generativelanguage.googleapis.com/v1beta/openai` y un modelo Gemini). Se elige con
+  `MAIDOTOUCH_IA_PROVEEDOR` (`claude` por defecto). Ningún proveedor cambia el despliegue: sigue siendo un solo
+  servidor en la nube, y el proveedor solo recibe el DTO mínimo del punto 2.4.
 - Interfaz en **español e inglés** (RF04, RNF06).
 
 ---
@@ -103,7 +107,7 @@ cuando se necesita respuesta, y **bus de eventos** para comandas y llamados.
 | Catálogo | Carta con disponibilidad (caché), back-office de disponibilidad y validación, fotos | `productos`, `producto_textos`, `categorias`, `preferencias`, `producto_preferencias`, `disponibilidad_historial` |
 | **Seguridad Alimentaria** | **Motor de Restricciones** (Seguro / Inseguro / Sin dato), sin IA | `ingredientes`, `alergenos`, `restricciones`, `producto_ingredientes`, `ingrediente_alergenos`, `producto_alergenos`, `producto_restricciones` |
 | Recomendación | **Orquestador**: disponibilidad → restricciones → ranking → explicación; fallback | `recomendaciones`, `consultas_asistente` |
-| Adaptador de IA | Única frontera con el proveedor (Claude o servidor de casa): DTO mínimo, timeout 5 s, circuit breaker, validación de ids | — |
+| Adaptador de IA | Única frontera con el proveedor (Claude, servidor de casa o Gemini): DTO mínimo, timeout 5 s, circuit breaker, validación de ids | — |
 | Pedido | Carrito, confirmación, comandas | `pedidos`, `pedido_items`, `comandas` |
 | Atención | Llamados al mozo y derivaciones | `llamados_mozo` |
 | Trazabilidad | Eventos mostrada / aceptada / modificada / rechazada | `recomendacion_eventos` |
@@ -220,9 +224,9 @@ duplicarlos ni esquivarlos. Fechas en UTC (ISO 8601) e importes en **céntimos d
    fila en `producto_restricciones`). Si la consulta del comensal depende de ellos, ofrecer
    la derivación al mozo (`restriccion_incierta`).
 3. Si no quedan candidatos, no recomendar nada y ofrecer el llamado al mozo.
-4. Enviar al proveedor de IA (Claude o servidor de casa) un **DTO mínimo**: id, nombre, descripción y etiquetas de
-   preferencia de los candidatos seguros, más el texto de la consulta. Sin alérgenos, sin
-   restricciones, sin id de sesión. Esto aplica igual a los dos proveedores.
+4. Enviar al proveedor de IA (Claude, servidor de casa o Gemini) un **DTO mínimo**: id, nombre, descripción y
+   etiquetas de preferencia de los candidatos seguros, más el texto de la consulta. Sin alérgenos, sin
+   restricciones, sin id de sesión. Esto aplica igual a todos los proveedores.
 5. Validar la respuesta: conservar solo ids que estaban en el DTO; descartar el resto.
 6. Si la IA no responde en 5 s o falla, usar el ranking por reglas (preferencias declaradas,
    sin sesgo de precio). Registrar el motor usado (`motor = 'ia' | 'fallback'`).
@@ -258,8 +262,8 @@ restaurante, explicando por qué. No es un chatbot libre ni decide qué es segur
 **Meta de latencia:** respuesta completa del asistente en 3 s (P95), con timeout del proveedor de 5 s y
 ranking de respaldo de hasta 1 s (sección 7).
 
-**Proveedor:** el documento de arquitectura no fija proveedor ni modelo. Están admitidos Claude y el servidor
-de casa, elegidos con `MAIDOTOUCH_IA_PROVEEDOR`; el proveedor concreto del despliegue lo decide el equipo.
+**Proveedor:** el documento de arquitectura no fija proveedor ni modelo. Están admitidos Claude, el servidor
+de casa y Gemini, elegidos con `MAIDOTOUCH_IA_PROVEEDOR`; el proveedor concreto del despliegue lo decide el equipo.
 
 ---
 
