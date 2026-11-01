@@ -2,7 +2,26 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); versionado semántico.
 
-## [Sin publicar]
+## [1.0.0-rc.1] - 2026-10-31
+
+### Agregado
+- `MAIDOTOUCH_IA_RAZONAMIENTO` (opcional): `none` desactiva el razonamiento del modelo en Claude y se envía como
+  `reasoning_effort` al servidor de casa o a Gemini, para bajar la latencia del asistente a la meta de 3 s en el
+  P95 (RNF04). La medición del 20/10/2026 en staging dio 7.3 s en el P95.
+
+## [0.3.0] - 2026-10-30
+
+Activación NFC/QR por puesto, comandas a cocina y barra por el bus de eventos, llamado al mozo y derivación por
+restricción no validable.
+
+## [0.2.0] - 2026-10-20
+
+Asistente de IA con timeout de 5 s, circuit breaker, validación de ids, fallback por reglas, explicaciones del
+dominio y trazabilidad.
+
+## [0.1.0] - 2026-10-15
+
+Primera versión en staging. Incluye todo lo siguiente:
 
 ### Cambiado
 - Arquitectura de servicios independientes según el Diseño Arquitectónico v1.1 (pendiente de

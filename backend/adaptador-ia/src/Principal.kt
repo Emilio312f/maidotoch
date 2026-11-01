@@ -36,19 +36,21 @@ fun servidor(entorno: Map<String, String> = System.getenv()): EmbeddedServer<Net
     // Las claves de los proveedores solo están en el entorno de este servicio (/etc/maidotouch/adaptador-ia.env).
     val timeoutMs = Entorno.timeoutIaMs(entorno)
     val proveedor = Entorno.texto("MAIDOTOUCH_IA_PROVEEDOR", entorno) ?: "claude"
+    // Nivel de razonamiento del modelo: `none` lo desactiva para cumplir la meta de 3 s (RNF04).
+    val razonamiento = Entorno.texto("MAIDOTOUCH_IA_RAZONAMIENTO", entorno)
     val (ordenador, modelo) = when (proveedor) {
         "claude" -> {
             val clave = Entorno.texto("ANTHROPIC_API_KEY", entorno)
             val modelo = Entorno.texto("MAIDOTOUCH_IA_MODELO", entorno) ?: "claude-opus-5-5"
             if (clave == null) println("ANTHROPIC_API_KEY no definida: el asistente usará solo el ranking por reglas.")
-            clave?.let { AdaptadorClaude(it, modelo, timeoutMs) } to modelo
+            clave?.let { AdaptadorClaude(it, modelo, timeoutMs, razonamiento) } to modelo
         }
         "servidor-casa" -> {
             val url = Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_URL", entorno)
             val modelo = Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_MODELO", entorno) ?: "qwen3-4b"
             if (url == null) println("MAIDOTOUCH_IA_SERVIDOR_URL no definida: el asistente usará solo el ranking por reglas.")
             url?.let {
-                AdaptadorServidorCasa(it, Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_CLAVE", entorno), modelo, timeoutMs)
+                AdaptadorServidorCasa(it, Entorno.texto("MAIDOTOUCH_IA_SERVIDOR_CLAVE", entorno), modelo, timeoutMs, razonamiento)
             } to modelo
         }
         else -> error("MAIDOTOUCH_IA_PROVEEDOR desconocido: '$proveedor' (use 'claude' o 'servidor-casa')")

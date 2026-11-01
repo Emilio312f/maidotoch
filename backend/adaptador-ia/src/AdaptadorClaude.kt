@@ -7,6 +7,7 @@ import com.anthropic.models.messages.JsonOutputFormat
 import com.anthropic.models.messages.MessageCreateParams
 import com.anthropic.models.messages.OutputConfig
 import com.anthropic.models.messages.StopReason
+import com.anthropic.models.messages.ThinkingConfigDisabled
 import comun.contratos.SolicitudOrdenamiento
 import kotlinx.coroutines.future.await
 import java.time.Duration
@@ -18,7 +19,13 @@ import java.time.Duration
  * El tiempo máximo y el circuit breaker los aplica [OrdenadorProtegido]; aquí no hay reintentos
  * para no exceder el presupuesto de latencia.
  */
-class AdaptadorClaude(apiKey: String, private val modelo: String, timeoutMs: Long) : OrdenadorExterno {
+class AdaptadorClaude(
+    apiKey: String,
+    private val modelo: String,
+    timeoutMs: Long,
+    /** `none` desactiva el razonamiento del modelo (más rápido); null deja el comportamiento por defecto. */
+    private val razonamiento: String? = null,
+) : OrdenadorExterno {
 
     private val cliente: AnthropicClientAsync = AnthropicOkHttpClientAsync.builder()
         .apiKey(apiKey)
@@ -52,6 +59,7 @@ class AdaptadorClaude(apiKey: String, private val modelo: String, timeoutMs: Lon
             // Si el modelo rechaza la solicitud, el servidor reintenta con un modelo de respaldo.
             .putAdditionalHeader("anthropic-beta", "server-side-fallback-2026-07-01")
             .putAdditionalBodyProperty("fallbacks", JsonValue.from("default"))
+            .apply { if (razonamiento == "none") thinking(ThinkingConfigDisabled.builder().build()) }
             .build()
 
         val respuesta = cliente.messages().create(params).await()

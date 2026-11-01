@@ -30,6 +30,8 @@ class AdaptadorServidorCasa(
     private val claveApi: String?,
     private val modelo: String,
     timeoutMs: Long,
+    /** `reasoning_effort` de la API compatible con OpenAI (p. ej. `none` en Gemini); null no lo envía. */
+    private val razonamiento: String? = null,
 ) : OrdenadorExterno {
 
     private val destino: URI = URI.create(urlBase.trimEnd('/') + "/chat/completions")
@@ -58,6 +60,7 @@ class AdaptadorServidorCasa(
         put("model", modelo)
         put("temperature", 0.2)
         put("max_tokens", 200)
+        razonamiento?.let { put("reasoning_effort", it) }
         putJsonArray("messages") {
             add(mensaje("system", PayloadIA.instrucciones(solicitud.maximo)))
             add(mensaje("user", PayloadIA.json(solicitud)))
