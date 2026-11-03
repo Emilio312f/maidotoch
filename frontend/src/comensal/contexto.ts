@@ -14,6 +14,8 @@ export interface ContextoComensal {
   setEstado: (e: EstadoSesion) => void;
   llamado: Llamado | null;
   llamarMozo: (motivo: MotivoLlamado, productoId?: number) => Promise<void>;
+  /** Mensaje breve en la parte superior (agregado al pedido, mozo avisado). */
+  avisar: (texto: string) => void;
 }
 
 export const Contexto = createContext<ContextoComensal | null>(null);

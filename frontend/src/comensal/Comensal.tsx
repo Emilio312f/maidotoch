@@ -3,10 +3,12 @@ import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { ErrorApi, apiComensal, type Carrito, type EstadoSesion, type Idioma, type Llamado, type MotivoLlamado } from "../comun/api";
 import { textoError, traducir, type Clave } from "../comun/i18n";
 import { Asistente } from "./Asistente";
+import { Bienvenida, SinSesion } from "./Bienvenida";
 import { Carta } from "./Carta";
-import { Contexto, guardarSesion, idiomaDelNavegador, leerSesion, useComensal, type ContextoComensal } from "./contexto";
+import { Contexto, guardarSesion, idiomaDelNavegador, leerSesion, type ContextoComensal } from "./contexto";
 import { Pedido } from "./Pedido";
 import { Perfil } from "./Perfil";
+import { Icono } from "./piezas";
 
 export function Comensal() {
   const [sesion, setSesion] = useState<string | null>(leerSesion);
@@ -14,6 +16,7 @@ export function Comensal() {
   const [aviso, setAviso] = useState<string | null>(null);
   const [carrito, setCarrito] = useState<Carrito | null>(null);
   const [llamado, setLlamado] = useState<Llamado | null>(null);
+  const [toast, setToast] = useState<{ texto: string; n: number } | null>(null);
 
   const idioma: Idioma = estado?.idioma ?? idiomaDelNavegador();
   const api = useMemo(() => (sesion ? apiComensal(sesion) : null), [sesion]);
@@ -36,6 +39,13 @@ export function Comensal() {
     [idioma, terminar],
   );
 
+  const avisar = useCallback((texto: string) => setToast((t) => ({ texto, n: (t?.n ?? 0) + 1 })), []);
+  useEffect(() => {
+    if (!toast) return;
+    const reloj = setTimeout(() => setToast(null), 2600);
+    return () => clearTimeout(reloj);
+  }, [toast]);
+
   useEffect(() => {
     if (!api) return;
     api.estado().then(setEstado).catch(manejarError);
@@ -50,23 +60,28 @@ export function Comensal() {
     return () => clearInterval(intervalo);
   }, [api, llamado?.estado]);
 
-  if (!sesion || !api) {
+  useEffect(() => {
+    document.documentElement.lang = idioma;
+  }, [idioma]);
+
+  if (!sesion || !api) return <SinSesion idioma={idioma} aviso={aviso} />;
+  if (!estado) {
     return (
-      <div className="centro">
-        <h1>{traducir(idioma, "inicio.titulo")}</h1>
-        {aviso && <p className="aviso alerta">{aviso}</p>}
-        <p>{traducir(idioma, "inicio.instruccion")}</p>
-        <p className="suave">{traducir(idioma, "app.mozoSiempre")}</p>
+      <div className="mt">
+        <div className="mt-app mt-centro">
+          <span className="mt-enso" aria-hidden="true" />
+          <p className="mt-muted">{traducir(idioma, "activacion.cargando")}</p>
+        </div>
       </div>
     );
   }
-  if (!estado) return <p className="cargando">{traducir(idioma, "activacion.cargando")}</p>;
 
+  const t = (clave: Clave, valores?: Record<string, string | number>) => traducir(idioma, clave, valores);
   const contexto: ContextoComensal = {
     api,
     estado,
     idioma,
-    t: (clave: Clave, valores?: Record<string, string | number>) => traducir(idioma, clave, valores),
+    t,
     manejarError,
     carrito,
     setCarrito,
@@ -75,21 +90,23 @@ export function Comensal() {
     llamarMozo: async (motivo: MotivoLlamado, productoId?: number) => {
       try {
         setLlamado(await api.llamar(motivo, productoId));
+        avisar(t("mozo.avisado"));
       } catch (e) {
-        alert(manejarError(e));
+        avisar(manejarError(e));
       }
     },
+    avisar,
   };
 
   const articulos = carrito?.borrador?.items.reduce((n, i) => n + i.cantidad, 0) ?? 0;
+  const mozoEnCamino = llamado?.estado === "pendiente";
 
   return (
     <Contexto.Provider value={contexto}>
-      <div className="app">
-        <Cabecera />
-        <main className="contenido">
-          {llamado && <AvisoLlamado llamado={llamado} />}
+      <div className="mt">
+        <div className="mt-app">
           <Routes>
+            <Route path="bienvenida" element={<Bienvenida />} />
             <Route path="perfil" element={<Perfil />} />
             {estado.perfilCompleto ? (
               <>
@@ -99,68 +116,40 @@ export function Comensal() {
                 <Route path="*" element={<Navigate to="/carta" replace />} />
               </>
             ) : (
-              <Route path="*" element={<Navigate to="/perfil" replace />} />
+              <Route path="*" element={<Navigate to="/bienvenida" replace />} />
             )}
           </Routes>
-        </main>
-        {estado.perfilCompleto && (
-          <div className="navegacion">
-            <nav>
-              <NavLink to="/carta">{contexto.t("nav.carta")}</NavLink>
-              <NavLink to="/asistente">{contexto.t("nav.asistente")}</NavLink>
-              <NavLink to="/pedido">
-                {contexto.t("nav.pedido")}
-                {articulos > 0 && <span className="contador">{articulos}</span>}
+
+          {estado.perfilCompleto && (
+            <nav className="mt-nav" aria-label={t("app.nombre")}>
+              <NavLink to="/carta">
+                <Icono.carta />
+                <span>{t("nav.carta")}</span>
               </NavLink>
+              <NavLink to="/asistente">
+                <Icono.chispa />
+                <span>{t("nav.paraTi")}</span>
+              </NavLink>
+              <NavLink to="/pedido">
+                {articulos > 0 && <span className="mt-badge">{articulos}</span>}
+                <Icono.bolsa />
+                <span>{t("nav.pedido")}</span>
+              </NavLink>
+              {/* RF06: el llamado al mozo está siempre a mano. */}
+              <button className={mozoEnCamino ? "llamado" : ""} onClick={() => contexto.llamarMozo("asistencia")} aria-label={t("mozo.llamar")}>
+                <Icono.campana />
+                <span>{mozoEnCamino ? "✓ " + t("nav.mozo") : t("nav.mozo")}</span>
+              </button>
             </nav>
+          )}
+        </div>
+        {toast && (
+          <div className="mt-toast" role="status" aria-live="polite" key={toast.n}>
+            <span aria-hidden="true">✓</span>
+            <span>{toast.texto}</span>
           </div>
         )}
       </div>
     </Contexto.Provider>
   );
-}
-
-function Cabecera() {
-  const { api, estado, idioma, t, setEstado, llamarMozo, manejarError } = useComensal();
-  const cambiarIdioma = async () => {
-    try {
-      setEstado(await api.cambiarIdioma(idioma === "es" ? "en" : "es"));
-    } catch (e) {
-      alert(manejarError(e));
-    }
-  };
-  return (
-    <header className="cabecera">
-      <div className="marca">
-        <Logo />
-        <div>
-          {t("app.nombre")}
-          <span className="puesto">{estado.puestoCodigo.replace(/^FICTICIO-/i, "")}</span>
-        </div>
-      </div>
-      <button className="boton claro" onClick={cambiarIdioma} lang={idioma === "es" ? "en" : "es"}>
-        {t("idioma.cambiar")}
-      </button>
-      {/* RF06: el llamado al mozo está en todas las pantallas. */}
-      <button className="boton peque" onClick={() => llamarMozo("asistencia")}>
-        {t("mozo.llamar")}
-      </button>
-    </header>
-  );
-}
-
-/**
- * Logo de Maido: se toma de /logo-maido.svg (carpeta comensal/public). Mientras ese archivo no
- * exista se muestra una letra M en el color de la marca.
- */
-function Logo() {
-  const [sinArchivo, setSinArchivo] = useState(false);
-  if (sinArchivo) return <span className="logo logo-letra" aria-hidden="true">M</span>;
-  return <img className="logo" src="/logo-maido.svg" alt="Maido" onError={() => setSinArchivo(true)} />;
-}
-
-function AvisoLlamado({ llamado }: { llamado: Llamado }) {
-  const { t } = useComensal();
-  if (llamado.estado === "pendiente") return <p className="aviso ok" role="status">{t("mozo.llamado")}</p>;
-  return null;
 }

@@ -28,16 +28,18 @@ export function Activacion() {
   }, [token, idioma, navegar]);
 
   return (
-    <div className="centro">
-      <h1>{traducir(idioma, "app.nombre")}</h1>
-      {error ? (
-        <>
-          <p className="aviso alerta">{error}</p>
-          <p className="suave">{traducir(idioma, "app.mozoSiempre")}</p>
-        </>
-      ) : (
-        <p className="cargando">{traducir(idioma, "activacion.cargando")}</p>
-      )}
+    <div className="mt">
+      <div className="mt-app mt-centro">
+        <span className="mt-enso" aria-hidden="true" />
+        {error ? (
+          <>
+            <p className="mt-nota alerta">{error}</p>
+            <p className="mt-muted">{traducir(idioma, "app.mozoSiempre")}</p>
+          </>
+        ) : (
+          <p className="mt-muted">{traducir(idioma, "activacion.cargando")}</p>
+        )}
+      </div>
     </div>
   );
 }
